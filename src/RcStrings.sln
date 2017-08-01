@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.16
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RcStrings.VsPackage", "RcStrings\RcStrings.VsPackage.csproj", "{1016C69D-09DB-449C-A2B8-9F76F9664E42}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RcStrings.StringEnhancer", "StringEnhancer\RcStrings.StringEnhancer.csproj", "{CFFA7A93-2D59-4774-8F8E-421B22CB85F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RcStrings.VSIX", "VSIX\RcStrings.VSIX.csproj", "{FDD7EFB3-C40B-496E-82B1-2E5ED4365654}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1016C69D-09DB-449C-A2B8-9F76F9664E42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1016C69D-09DB-449C-A2B8-9F76F9664E42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1016C69D-09DB-449C-A2B8-9F76F9664E42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1016C69D-09DB-449C-A2B8-9F76F9664E42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFFA7A93-2D59-4774-8F8E-421B22CB85F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFFA7A93-2D59-4774-8F8E-421B22CB85F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFFA7A93-2D59-4774-8F8E-421B22CB85F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFFA7A93-2D59-4774-8F8E-421B22CB85F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDD7EFB3-C40B-496E-82B1-2E5ED4365654}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDD7EFB3-C40B-496E-82B1-2E5ED4365654}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDD7EFB3-C40B-496E-82B1-2E5ED4365654}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDD7EFB3-C40B-496E-82B1-2E5ED4365654}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

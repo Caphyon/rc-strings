@@ -1,0 +1,135 @@
+﻿<platformUI:DialogWindow x:Class="Caphyon.RcStrings.VsPackage.EditStringResourceDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Caphyon.RcStrings.VsPackage"
+             xmlns:platformUI="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.15.0"
+             mc:Ignorable="d" 
+             Height="300" Width="400"
+             Title="Add String Resource"
+             WindowStartupLocation="CenterOwner"
+             ShowInTaskbar="False"
+             Loaded="DialogWindow_Loaded">
+  <platformUI:DialogWindow.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Colors.xaml" />
+        <ResourceDictionary Source="CommonControlsStyles.xaml" />
+        <ResourceDictionary Source="ScrollBarStyles.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+
+      <Style TargetType="TextBox" BasedOn="{StaticResource vsTextBoxStyle}">
+        <Style.Triggers>
+          <Trigger Property="Validation.HasError" Value="True">
+            <Setter Property="ToolTip" Value="{Binding RelativeSource={x:Static RelativeSource.Self}, 
+            Path=(Validation.Errors).CurrentItem.ErrorContent}"/>
+          </Trigger>
+        </Style.Triggers>
+      </Style>
+    </ResourceDictionary>
+  </platformUI:DialogWindow.Resources>
+  <Grid Background="{StaticResource WndowBackground}">
+    <Grid Margin="10" Background="{StaticResource WndowBackground}">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="90"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="30"/>
+        <RowDefinition Height="30"/>
+        <RowDefinition Height="60*"/>
+        <RowDefinition Height="30"/>
+        <RowDefinition Height="30"/>
+        <RowDefinition Height="50"/>
+      </Grid.RowDefinitions>
+
+      <TextBlock Text="Name" Grid.Column="0" 
+                 Grid.Row="0" 
+                 VerticalAlignment="Center" 
+                 HorizontalAlignment="Left" />
+      <TextBox Grid.Column="1" 
+               Grid.Row="0" 
+               VerticalAlignment="Center" 
+               HorizontalAlignment="Stretch"
+               IsEnabled="{Binding AddMode}"
+               x:Name="tbxResourceName"
+               Text="{Binding ResourceName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"/>
+
+      <TextBlock Text="Id" 
+                 Grid.Column="0" 
+                 Grid.Row="1"
+                 VerticalAlignment="Center" 
+                 HorizontalAlignment="Left" />
+      <TextBox Grid.Column="1" 
+               Grid.Row="1" 
+               VerticalAlignment="Center" 
+               HorizontalAlignment="Stretch"
+               IsEnabled="{Binding AddMode}"
+               Text="{Binding ResourceIdTemp, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"/>
+
+      <TextBlock Text="Value" 
+                 Grid.Column="0" 
+                 Grid.Row="2"
+                 VerticalAlignment="Top" 
+                 HorizontalAlignment="Left" />
+      <DockPanel Grid.Column="1" Grid.Row="2" HorizontalAlignment="Stretch" >
+        <TextBox TextWrapping="Wrap"
+                 Text="{Binding ResourceValue, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
+                 x:Name="tbxResourceValue"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+      </DockPanel>
+
+      <CheckBox Content="Replace with" 
+                Grid.Column="0" 
+                Grid.Row="3"
+                VerticalAlignment="Center" 
+                HorizontalAlignment="Left" 
+                IsEnabled="{Binding AddMode}"
+                IsChecked="{Binding ReplaceCode}"/>
+      <TextBox Grid.Column="1" 
+               Grid.Row="3" 
+               VerticalAlignment="Center" 
+               HorizontalAlignment="Stretch"
+               IsEnabled="{Binding ReplaceCode}"
+               Text="{Binding ReplaceWithCode}" />
+
+      <TextBlock Text="RC File" Grid.Row="4" VerticalAlignment="Center"/>
+      <ComboBox IsReadOnly="True" 
+                ItemsSource="{Binding RcFiles}" 
+                DisplayMemberPath="DisplayName" 
+                SelectedItem="{Binding SelectedRcFile}"
+                IsEnabled="{Binding AddMode}"
+                Grid.Row="4" Grid.Column="1"  VerticalAlignment="Center" >
+        <ComboBox.ItemContainerStyle>
+          <Style>
+            <Setter Property="Control.ToolTip" Value="{Binding FilePath}" />
+          </Style>
+        </ComboBox.ItemContainerStyle>
+      </ComboBox>
+
+      <StackPanel HorizontalAlignment="Right" 
+                  VerticalAlignment="Bottom" 
+                  Orientation="Horizontal" 
+                  Grid.Row="5" 
+                  Grid.Column="1"  
+                  Grid.ColumnSpan="1"
+                  Margin="10">
+
+        <Button Content="_Done" 
+                Width="60" 
+                Margin="10,0"
+                Click="btnAdd_Click"
+                x:Name="btnAdd"
+                IsDefault="True"/>
+
+        <Button Content="_Cancel" 
+                Width="60" 
+                Margin="10,0"
+                Click="btnCancel_Click" 
+                IsCancel="True"/>
+                
+      </StackPanel>
+    </Grid>
+  </Grid>
+</platformUI:DialogWindow>

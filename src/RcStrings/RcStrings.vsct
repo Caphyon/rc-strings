@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <Extern href="stdidcmd.h" />
+  <Extern href="vsshlids.h" />
+
+  <Commands package="GUID_Package">
+    <Menus>
+      <Menu guid="GUID_Commands" id="ID_StringResourcesMenuItem" priority="0x0100" type="Menu">
+        <Parent guid="GUID_Commands" id="ID_MainMenuGroup"/>
+        <Strings>
+          <ButtonText>String Resources</ButtonText>
+          <CommandName>String Resources</CommandName>
+        </Strings>
+      </Menu>
+    </Menus>
+
+    <Groups>
+      <Group guid="GUID_Commands" id="ID_MenuGroup" priority="0x0000">
+        <Parent guid="GUID_Commands" id="ID_StringResourcesMenuItem" />
+      </Group>
+
+      <Group guid="GUID_Commands" id="ID_MainMenuGroup" priority="0x0000">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN"/>
+      </Group>
+    </Groups>
+    
+    <Buttons>
+      <Button guid="GUID_Commands" id="ID_SetResourceMenuItem" priority="0x0000" type="Button">
+        <Parent guid="GUID_Commands" id="ID_MenuGroup" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>TextChanges</CommandFlag>
+        <Strings>
+          <CommandName>Add String Resource</CommandName>
+          <ButtonText>Add String Resource</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="GUID_Commands" id="ID_EditResourceMenuItem" priority="0x0001" type="Button">
+        <Parent guid="GUID_Commands" id="ID_MenuGroup" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <CommandFlag>TextChanges</CommandFlag>
+        <Strings>
+          <CommandName>Edit String Resource</CommandName>
+          <ButtonText>Edit String Resource</ButtonText>
+        </Strings>
+      </Button>
+    </Buttons>
+  </Commands>
+
+  <KeyBindings>
+    <KeyBinding guid="GUID_Commands" id="ID_SetResourceMenuItem"
+                key1="A" mod1="ALT" editor="guidVSStd97"/>
+    
+    <KeyBinding guid="GUID_Commands" id="ID_EditResourceMenuItem"
+                key1="E" mod1="ALT" editor="guidVSStd97"/>
+  </KeyBindings>
+  
+  <CommandPlacements>
+
+    <CommandPlacement guid="GUID_Commands" id="ID_MenuGroup" priority="0x0000">
+      <Parent guid="HtmlEditorWindows" id="IDMX_HTM_SOURCE_BASIC" />
+    </CommandPlacement>
+    <CommandPlacement guid="GUID_Commands" id="ID_MenuGroup" priority="0x0000">
+      <Parent guid="HtmlEditorWindows" id="IDMX_HTM_SOURCE_HTML" />
+    </CommandPlacement>
+    <CommandPlacement guid="GUID_Commands" id="ID_MenuGroup" priority="0x0000">
+      <Parent guid="HtmlEditorWindows" id="IDMX_HTM_SOURCE_SCRIPT" />
+    </CommandPlacement>
+    <CommandPlacement guid="GUID_Commands" id="ID_MenuGroup" priority="0x0000">
+      <Parent guid="CssEditorWindows" id="IDMX_HTM_SOURCE_CSS" />
+    </CommandPlacement>
+    <CommandPlacement guid="GUID_Commands" id="ID_MenuGroup" priority="0x0000">
+      <Parent guid="XamlEditorWindows" id="IDMX_XAML_SOURCE_BASIC" />
+    </CommandPlacement>
+  
+  </CommandPlacements>
+  
+  <Symbols>
+  
+    <GuidSymbol name="GUID_Package" value="{2daea589-e7c3-4b34-ac2d-1d55f7877813}" />
+  
+    <GuidSymbol name="GUID_Commands" value="{6a3a7992-5baf-4e4a-85ee-3947025c5d92}">
+      <IDSymbol name="ID_MenuGroup" value="0x1000" />
+      <IDSymbol name="ID_MainMenuGroup" value="0x1002" />
+      <IDSymbol name="ID_SetResourceMenuItem" value="0x0102" />
+      <IDSymbol name="ID_EditResourceMenuItem" value="0x0101" />
+      <IDSymbol name="ID_StringResourcesMenuItem" value="0x1100" />
+    </GuidSymbol>
+
+    <GuidSymbol name="HtmlEditorWindows" value="{d7e8c5e1-bdb8-11d0-9c88-0000f8040a53}">
+      <IDSymbol name="IDMX_HTM_SOURCE_BASIC" value="0x32" />
+      <IDSymbol name="IDMX_HTM_SOURCE_HTML" value="0x33" />
+      <IDSymbol name="IDMX_HTM_SOURCE_SCRIPT" value="0x34" />
+      <IDSymbol name="IDMX_HTM_SOURCE_ASMX_CODE_VB" value="0x39" />
+    </GuidSymbol>
+
+    <GuidSymbol name="CssEditorWindows" value="{A764E896-518D-11D2-9A89-00C04F79EFC3}">
+      <IDSymbol name="IDMX_HTM_SOURCE_CSS" value="0x0102" />
+    </GuidSymbol>
+
+    <GuidSymbol name="XamlEditorWindows" value="{4C87B692-1202-46AA-B64C-EF01FAEC53DA}">
+      <IDSymbol name="IDMX_XAML_SOURCE_BASIC" value="0x0103" />
+    </GuidSymbol>
+
+  </Symbols>
+
+</CommandTable>

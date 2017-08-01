@@ -1,0 +1,233 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:theme="clr-namespace:Caphyon.RcStrings">
+  
+  <!-- Theme Colors -->
+  <!--Common-->
+  <SolidColorBrush x:Key="PanelBackground" Color="{theme:VsColor ComboBoxBackgroundKey}" />
+  <SolidColorBrush x:Key="WindowBackground" Color="{theme:VsColor DropDownBackgroundKey}" />
+  <SolidColorBrush x:Key="TextForeground" Color="{theme:VsColor PanelTextKey}" />
+  <SolidColorBrush x:Key="BorderBrush" Color="{theme:VsColor PanelBorderKey}" />
+  <SolidColorBrush x:Key="TabItemContent" Color="{theme:VsColor DropDownBackgroundKey}" />
+  <SolidColorBrush x:Key="GridSplitterBackground" Color="{theme:VsColor ButtonFaceKey}" />
+  <SolidColorBrush x:Key="ComboBoxBorder" Color="{theme:VsColor ComboBoxBorderKey}" />
+  <SolidColorBrush x:Key="WndowBackground" Color="{theme:VsColor ToolWindowBackgroundKey}" />
+  <SolidColorBrush x:Key="ButtonMouseOver" Color="{theme:VsColor StartPageButtonMouseOverBackgroundKey}" />
+  <SolidColorBrush x:Key="ComboBoxPopupBorder" Color="{theme:VsColor ComboBoxPopupBorderKey}" />
+
+  <!--LeftMenuTabItem-->
+  <SolidColorBrush x:Key="TabItemBackground" Color="{theme:VsColor ProjectDesignerTabBackgroundGradientBeginKey}" />
+  <SolidColorBrush x:Key="TabItemForeground" Color="{theme:VsColor PanelTextKey}" />
+  <SolidColorBrush x:Key="TabItemSelectedBackground" Color="{theme:VsColor DropDownBackgroundKey}" />
+  <SolidColorBrush x:Key="TabItemSelectedForeground" Color="{theme:VsColor PanelTextKey}" />
+  <SolidColorBrush x:Key="TabItemHighlightBorder" Color="{theme:VsColor FileTabSelectedBorderKey}" />
+  <SolidColorBrush x:Key="TabItemsHeaderContainer" Color="{theme:VsColor DropDownBackgroundKey}" />
+
+  <!--DataGrid-->
+  <SolidColorBrush x:Key="DataGridBackground" Color="{theme:VsColor ComboBoxBackgroundKey}" />
+  <SolidColorBrush x:Key="DataGridForeground" Color="{theme:VsColor PanelTextKey}" />
+  
+  <!--TextBlock-->
+  <SolidColorBrush x:Key="TextBlockBackground" Color="{theme:VsColor ComboBoxBackgroundKey}" />
+  <SolidColorBrush x:Key="TextBlockForeground" Color="{theme:VsColor PanelTextKey}" />
+
+  <!--Selected-->
+  <SolidColorBrush x:Key="SelectedBackground" Color="{x:Static SystemColors.HighlightColor}" />
+  <SolidColorBrush x:Key="SelectedForeground" Color="{x:Static SystemColors.HighlightTextColor}" />
+
+    <!--Hover-->
+  <SolidColorBrush x:Key="HoverBackground" Color="{x:Static SystemColors.ActiveCaptionColor}" />
+  <SolidColorBrush x:Key="HoverForeground" Color="{x:Static SystemColors.ActiveCaptionTextColor}" />
+
+  <!--DataGrid-->
+  <SolidColorBrush x:Key="ColumnHeaderBackground" Color="{theme:VsColor ToolboxBackgroundKey}" />
+  <SolidColorBrush x:Key="ColumnHeaderForeground" Color="{theme:VsColor GridHeadingTextKey}" />
+  <SolidColorBrush x:Key="ColumnHeaderBorder" Color="{theme:VsColor BrandedUIBorderKey}" />
+  <SolidColorBrush x:Key="ColumnHeaderMouseOver" Color="{theme:VsColor ToolWindowButtonHoverInactiveKey}" />
+  <SolidColorBrush x:Key="ColumnHeaderMousePressed" Color="{theme:VsColor SearchBoxBackgroundKey}" />
+  <SolidColorBrush x:Key="ColumnHeaderSeparator" Color="{theme:VsColor PanelSeparatorKey}" />
+
+  <!--Button-->
+  <SolidColorBrush x:Key="ButtonBackground" Color="{theme:VsColor ButtonFaceKey}" />
+  <SolidColorBrush x:Key="ButtonForeground" Color="{theme:VsColor ButtonTextKey}" />
+  <SolidColorBrush x:Key="ButtonHover" Color="{theme:VsColor ToolWindowButtonHoverActiveKey}" />
+
+  <!--MsiDesigner-->
+  <LinearGradientBrush x:Key="DesignerTabBackground" >
+    <GradientStop Color="{theme:VsColor ProjectDesignerTabBackgroundGradientBeginKey}" />
+    <GradientStop Color="{theme:VsColor ProjectDesignerTabBackgroundGradientEndKey}" />
+  </LinearGradientBrush>
+  <SolidColorBrush x:Key="SelectedTabForeground" Color="{theme:VsColor ProjectDesignerTabSelectedBackgroundKey}" />
+
+    <!--Glyph-->
+  <SolidColorBrush x:Key="GlyphBackground" Color="{theme:VsColor ScrollBarArrowBackgroundKey}"/>
+  <SolidColorBrush x:Key="GlyphBackgroundTwo" Color="{theme:VsColor ScrollBarArrowDisabledBackgroundKey}"/>
+  <SolidColorBrush x:Key="GlyphBackgroundHOver" Color="{theme:VsColor ScrollBarArrowMouseOverBackgroundKey}"/>
+  
+  <!--ScrollBar-->
+  <SolidColorBrush x:Key="ScrollBarBackground" Color="{theme:VsColor ScrollBarBackgroundKey}" />
+  <SolidColorBrush x:Key="ScrollBarBackgroundDisabled" Color="{theme:VsColor ScrollBarDisabledBackgroundKey}" />
+  <SolidColorBrush x:Key="ScrollBar" Color="{theme:VsColor ScrollBarKey}" />
+  <SolidColorBrush x:Key="ScrollBarThumbBackground" Color="{theme:VsColor ScrollBarThumbBackgroundKey}" />
+  <SolidColorBrush x:Key="ScrollBarThumbBorder" Color="{theme:VsColor ScrollBarThumbBorderKey}" />
+  <SolidColorBrush x:Key="ScrollBarThumbGlyph" Color="{theme:VsColor ScrollBarThumbGlyphKey}" />
+  <SolidColorBrush x:Key="ScrollBarThumbMouseOverBackground" Color="{theme:VsColor ScrollBarThumbMouseOverBackgroundKey}" />
+  <SolidColorBrush x:Key="ScrollBarThumbPressedBackground" Color="{theme:VsColor ScrollBarThumbPressedBackgroundKey}" />
+  <SolidColorBrush x:Key="ScrollBarArrowBackground" Color="{theme:VsColor ScrollBarArrowBackgroundKey}" />
+  
+  <!--PropertyGrid-->
+  <SolidColorBrush x:Key="PropertyGridBackground" Color="{theme:VsColor ToolboxBackgroundKey}" />
+  <SolidColorBrush x:Key="PropertyGridBorderBrush" Color="{theme:VsColor ScrollBarDisabledBackgroundKey}" />
+  <SolidColorBrush x:Key="PropertyGridGroupBackground" Color="{theme:VsColor ToolboxBackgroundKey}" />
+  <SolidColorBrush x:Key="PropertyGridGroupForeground" Color="{theme:VsColor PanelTextKey}" />
+  <SolidColorBrush x:Key="PropertyGridSelectedItemBackground" Color="{theme:VsColor ToolboxBackgroundKey}" />
+  <SolidColorBrush x:Key="PropertyGridSelectedItemForeground" Color="{theme:VsColor PanelTextKey}" />
+  <SolidColorBrush x:Key="ListBoxItemGridBackground" Color="{theme:VsColor ComboBoxBackgroundKey}" />
+  <SolidColorBrush x:Key="PropertyGridContentBackground" Color="{theme:VsColor ToolboxBackgroundKey}" />
+
+  <!--Glyph-->
+  <SolidColorBrush x:Key="GlyphBrushExpanded" Color="{theme:VsColor PanelTextKey}" />
+  <SolidColorBrush x:Key="GlyphBrushCollapsed" Color="{theme:VsColor PanelTextKey}" />
+  <SolidColorBrush x:Key="GlyphBrushMouseDown" Color="#FF296CCD" />
+  <SolidColorBrush x:Key="GlyphBrushHover" Color="#FF1B9FC7" />
+  
+  <!--Alternate Brushes-->
+  <SolidColorBrush x:Key="AlternateRowVsColorsFirstColor" Color="{theme:VsColor ButtonFaceKey}"/>
+  <SolidColorBrush x:Key="AlternateRowVsColorsSecondColor" Color="{theme:VsColor ToolboxBackgroundKey}"/>
+
+    <!--Control colors.-->
+    <Color x:Key="WindowColor">#FFFAFAFA</Color>
+    <Color x:Key="ContentAreaColorLight">#FFF8F8F8</Color>
+    <Color x:Key="ContentAreaColorDark">#FFF0F0F0</Color>
+  <Color x:Key="TabPanelBackground">#D0D2D3</Color>
+
+  <SolidColorBrush x:Key="TabPanelBackgroundBrush" Color="{StaticResource TabPanelBackground}"/>
+    <SolidColorBrush x:Key="ContentAreaColorDarkBrush" Color="{StaticResource ContentAreaColorDark}"/>
+
+    <Color x:Key="DisabledControlLightColor">#FFE8EDF9</Color>
+    <Color x:Key="DisabledControlDarkColor">#FFC5CBF9</Color>
+    <Color x:Key="DisabledForegroundColor">#FF888888</Color>
+
+    <Color x:Key="SelectedBackgroundColor">#FFC5CBF9</Color>
+    <Color x:Key="SelectedUnfocusedColor">#FFDDDDDD</Color>
+
+    <Color x:Key="ControlLightColor">White</Color>
+    <Color x:Key="ControlMediumColor">#FFF8F8F8</Color>
+    <Color x:Key="ControlDarkColor">#FFF0F0F0</Color>
+
+    <Color x:Key="ControlMouseOverColor">#FFC0C0C0</Color>
+    <Color x:Key="ControlPressedColor">#FF211AA9</Color>
+
+
+    <Color x:Key="GlyphColor">#FF444444</Color>
+    <Color x:Key="GlyphColorTwo">#FFA0A0A0</Color>
+    <Color x:Key="GlyphMouseOver">sc#1, 0.004391443, 0.002428215, 0.242281124</Color>
+
+    <!--Border colors-->
+    <Color x:Key="BorderLightColor">#DFE0E1</Color>
+    <Color x:Key="BorderMediumColor">#DBDCDC</Color>
+    <Color x:Key="BorderDarkColor">#B6BABf</Color>   
+
+    <Color x:Key="PressedBorderLightColor">#FF888888</Color>
+    <Color x:Key="PressedBorderDarkColor">#FF444444</Color>
+
+    <Color x:Key="DisabledBorderLightColor">#FFAAAAAA</Color>
+    <Color x:Key="DisabledBorderDarkColor">#FF888888</Color>
+
+    <Color x:Key="DefaultBorderBrushDarkColor">Black</Color>
+
+    <!--Control-specific resources.-->
+    <Color x:Key="HeaderTopColor">#FFC5CBF9</Color>
+    <Color x:Key="DatagridCurrentCellBorderColor">Black</Color>
+    <Color x:Key="SliderTrackDarkColor">#FFC5CBF9</Color>
+    <Color x:Key="NavButtonFrameColor">#FF3843C4</Color>
+
+  <LinearGradientBrush x:Key="MenuPopupBrush" EndPoint="0.5,1" StartPoint="0.5,0">
+    <GradientStop Color="{DynamicResource ControlLightColor}" Offset="0" />
+    <GradientStop Color="{DynamicResource ControlMediumColor}" Offset="0.5" />
+    <GradientStop Color="{DynamicResource ControlLightColor}" Offset="1" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="ProgressBarIndicatorAnimatedFill"
+                     StartPoint="0,0"
+                     EndPoint="1,0">
+        <LinearGradientBrush.GradientStops>
+            <GradientStopCollection>
+                <GradientStop Color="#000000FF"
+                    Offset="0" />
+                <GradientStop Color="#600000FF"
+                    Offset="0.4" />
+                <GradientStop Color="#600000FF"
+                    Offset="0.6" />
+                <GradientStop Color="#000000FF"
+                    Offset="1" />
+            </GradientStopCollection>
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
+
+    <SolidColorBrush x:Key="SolidBorderBrush" Color="#888" />
+    <SolidColorBrush x:Key="WindowBackgroundBrush" Color="#FFF" />
+    <SolidColorBrush x:Key="DisabledBackgroundBrush" Color="#EEE" />
+    <SolidColorBrush x:Key="DisabledBorderBrush" Color="#AAA" />
+    <SolidColorBrush x:Key="DisabledForegroundBrush" Color="#888" />
+
+    <SolidColorBrush x:Key="AlternateRowColorsFirstColor" Color="White"/>
+    <SolidColorBrush x:Key="AlternateRowColorsSecondColor" Color="#F9F9F9"/>
+
+  <SolidColorBrush x:Key="TabCtrlBorderGlow" Color="{theme:VsColor BrandedUIBorderKey}" />
+    <SolidColorBrush x:Key="TabCtrlContentBorder" Color="#B6BABF" />
+
+    <SolidColorBrush x:Key="SecondaryButtonImageBackground" Color="#e9ecee" />
+    <SolidColorBrush x:Key="HighlightBorderColor" Color="#ecc365" />
+    <LinearGradientBrush x:Key="HighlightBackgroundColor" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#fffbf0" Offset="0.0" />
+        <GradientStop Color="#fff5d3" Offset="0.5" />
+        <GradientStop Color="#ffecb5" Offset="0.5" />
+        <GradientStop Color="#ffecb5" Offset="1.0" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="SecondaryButtonBackground" StartPoint="0,0" EndPoint="0,1" >
+        <GradientStop Color="#dce1e8" Offset="0.0" />
+        <GradientStop Color="#d1d8e3" Offset="1.0" />
+    </LinearGradientBrush>
+
+
+    <!-- Colors for Tabs representing builds -->
+    <LinearGradientBrush x:Key="MouseOverBackgroundBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#F8F8F8" Offset="0"/>
+        <GradientStop Color="#F8F8F8" Offset="0.1"/>
+        <GradientStop Color="#E0E0E1" Offset="0.1"/>
+        <GradientStop Color="#FBFBFB" Offset="1"/>
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="TabCtrlHeaderBorder" Color="#B5B9BE" />
+
+
+    <!-- Colors for the Tab item template -->
+    <LinearGradientBrush x:Key="LightBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientBrush.GradientStops>
+            <GradientStopCollection>
+                <GradientStop Color="#FFF" Offset="0.0"/>
+                <GradientStop Color="#EEE" Offset="1.0"/>
+            </GradientStopCollection>
+        </GradientBrush.GradientStops>
+    </LinearGradientBrush>
+
+    <!-- Selected tab header styles -->
+    <Color x:Key="TabItem_Margin_Selected_Orange">#FFE8A6</Color>
+    <Color x:Key="TabControl_Border">#A8B3C2</Color>
+    <Color x:Key="TabItem_Border">#DEE1E7</Color>
+
+    <SolidColorBrush x:Key="TabItem_TextBrush_Selected" 
+                   Color="DarkBlue" />
+    <SolidColorBrush x:Key="TabItem_BorderBrush_Selected" 
+                   Color="{StaticResource TabControl_Border}" />
+    <SolidColorBrush x:Key="TabControl_BackgroundBrush" 
+                   Color="{DynamicResource ContentAreaColorDark}" />
+    <SolidColorBrush x:Key="TabControl_BorderBrush" 
+                   Color="{StaticResource TabControl_Border}" />
+    <SolidColorBrush x:Key="TabItem_BorderBrush" 
+                   Color="{StaticResource TabItem_Border}" />
+    <SolidColorBrush x:Key="TabItem_BackgroundBrush_Orange" 
+                   Color="{StaticResource TabItem_Margin_Selected_Orange}" />
+
+</ResourceDictionary>
