@@ -55,6 +55,7 @@ namespace Caphyon.RcStrings.VsPackage
     private const int kIdSetResourceCmd = 0x0102;
     private const int kIdEditResourceCmd = 0x0101;
     private const int kIdStringResourcesMenuItem = 0x1100;
+    private const string kCppProjectKind = "{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}";
     #endregion
 
     #region Fields
@@ -137,11 +138,15 @@ namespace Caphyon.RcStrings.VsPackage
     {
       var command = (OleMenuCommand)sender;
       int id = command.CommandID.ID;
+      bool isActiveDocumentInCppProj = mDte.ActiveDocument != null &&
+        mDte.ActiveDocument.ProjectItem != null &&
+        mDte.ActiveDocument.ProjectItem.ContainingProject != null &&
+        mDte.ActiveDocument.ProjectItem.ContainingProject.Kind == kCppProjectKind;
 
       if (id == kIdEditResourceCmd || id == kIdSetResourceCmd)
       {
         UpdateQueryWord();
-        command.Visible = string.Empty != mSelectedWord;
+        command.Visible = string.Empty != mSelectedWord && isActiveDocumentInCppProj;
       }
     }
 
