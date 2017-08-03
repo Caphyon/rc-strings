@@ -49,7 +49,7 @@ namespace Caphyon.RcStrings.VsPackage
   {
 
     #region Constants
-    private const string kReplaceStringCodeFormated = "StringOrID({0})";
+    private const string kReplaceStringCodeFormated = "{0}";
     private const string kPackageGuidString = "2daea589-e7c3-4b34-ac2d-1d55f7877813";
     private const string kGuidCommands = "6a3a7992-5baf-4e4a-85ee-3947025c5d92";
     private const int kIdSetResourceCmd = 0x0102;
@@ -212,7 +212,7 @@ namespace Caphyon.RcStrings.VsPackage
             rcf => rcf.FileName == userSolutionRc.SelectedRc && 
             rcf.Project.ProjectName == userSolutionRc.ProjectName);
           mSelectedRcFile = currentRcFile;
-          mReplaceWithCodeFormated = userSolutionRc.ReplaceWith;
+          mReplaceWithCodeFormated = HandleEmptyReplaceWithField(userSolutionRc.ReplaceWith);
           mReplaceString = userSolutionRc.IsReplacingWith;
         }
       }
@@ -244,9 +244,12 @@ namespace Caphyon.RcStrings.VsPackage
 
       // Save current values
       mReplaceString = dialog.ReplaceCode;
-      mReplaceWithCodeFormated = dialog.ReplaceStringCodeFormated;
+      mReplaceWithCodeFormated = HandleEmptyReplaceWithField(dialog.ReplaceStringCodeFormated);
       mSelectedRcFile = dialog.SelectedRcFile;
     }
+
+    private string HandleEmptyReplaceWithField(string replaceString) =>
+      String.IsNullOrEmpty(replaceString) ? kReplaceStringCodeFormated : replaceString;
 
     private void EditResourceCommandClick(object sender, EventArgs e)
     {
