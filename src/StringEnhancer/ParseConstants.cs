@@ -8,6 +8,8 @@ namespace Caphyon.RcStrings.StringEnhancer
 {
   public static class ParseConstants
   {
+    #region Constants
+
     public const int kMaximumLengthToWriteASingleLine = 23;
     public const int kIdDefaultValue = -1;
     public const int kRcOrderDefaultValue = -1;
@@ -17,5 +19,7 @@ namespace Caphyon.RcStrings.StringEnhancer
 
     public const int kNumberOfWordsInStringName = 3;
     public const int kLengthOfRelevantWord = 3;
+
+    #endregion
   }
 }

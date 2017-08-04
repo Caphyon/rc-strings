@@ -10,7 +10,7 @@ namespace Caphyon.RcStrings.VsPackage
 {
   public class SilentlyFileChanges
   {
-    #region Private members
+    #region Members
 
     private string mDocumentFileName;
     private bool mIsSuspending;

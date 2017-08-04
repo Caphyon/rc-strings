@@ -49,6 +49,7 @@ namespace Caphyon.RcStrings.VsPackage
   {
 
     #region Constants
+
     private const string kReplaceStringCodeFormated = "{0}";
     private const string kPackageGuidString = "2daea589-e7c3-4b34-ac2d-1d55f7877813";
     private const string kGuidCommands = "6a3a7992-5baf-4e4a-85ee-3947025c5d92";
@@ -56,15 +57,18 @@ namespace Caphyon.RcStrings.VsPackage
     private const int kIdEditResourceCmd = 0x0101;
     private const int kIdStringResourcesMenuItem = 0x1100;
     private const string kCppProjectKind = "{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}";
+
     #endregion
 
-    #region Fields
+    #region Members
+
     private bool mReplaceString = true;
     private EnvDTE.DTE mDte;
     private System.Windows.Window mDteWindow;
     private string mSelectedWord = string.Empty;
     private string mReplaceWithCodeFormated = kReplaceStringCodeFormated;
     private RcFile mSelectedRcFile;
+
     #endregion
 
     #region Properties
@@ -87,6 +91,7 @@ namespace Caphyon.RcStrings.VsPackage
     #endregion
 
     #region Ctor
+
     /// <summary>
     /// Initializes a new instance of the <see cref="RcStringsPackage"/> class.
     /// </summary>
@@ -97,6 +102,7 @@ namespace Caphyon.RcStrings.VsPackage
       // not sited yet inside Visual Studio environment. The place to do all the other
       // initialization is the Initialize method.
     }
+
     #endregion
 
     #region Package Members
@@ -330,6 +336,7 @@ namespace Caphyon.RcStrings.VsPackage
     #endregion
 
     #region Get RC files from solution
+
     /// <summary>
     /// Scan every project in the solution for .rc files.
     /// </summary>
@@ -414,6 +421,7 @@ namespace Caphyon.RcStrings.VsPackage
 
       return outputItems;
     }
+
     #endregion Get RC files from solution
   }
 }

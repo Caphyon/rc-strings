@@ -11,9 +11,20 @@ namespace Caphyon.RcStrings.StringEnhancer
 {
   public class HeadersParser : Parse
   {
+    #region Members
+
     private HeaderFilesContent mHeaderContent;
 
+    #endregion
+
+    #region Ctor
+
     public HeadersParser(HeaderFilesContent aHeaderContent) => mHeaderContent = aHeaderContent;
+
+    #endregion
+
+    #region Public methods
+
 
     public void ReadData(RCFileContent aRcFileContent)
     {
@@ -37,6 +48,10 @@ namespace Caphyon.RcStrings.StringEnhancer
         }
       }
     }
+
+    #endregion
+
+    #region Private methods
 
     private void SaveStringsWithEmptyFields(RCFileContent aRcFileContent)
     {
@@ -105,5 +120,6 @@ namespace Caphyon.RcStrings.StringEnhancer
       }
     }
 
+    #endregion
   }
 }

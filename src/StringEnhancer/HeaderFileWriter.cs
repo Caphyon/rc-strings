@@ -11,12 +11,18 @@ namespace Caphyon.RcStrings.StringEnhancer
 {
   public class HeaderFileWriter
   {
+    #region Public methods
+
     public void WriteFile(RCFileContent aRcFileContent, string aPathHeaderFileRead, string aPathHeaderFileWrite)
     {
       using (StreamReader reader = new StreamReader(aPathHeaderFileRead))
         using (StreamWriter writer = new StreamWriter(aPathHeaderFileWrite))
           Write(reader, writer, aRcFileContent);
     }
+
+    #endregion
+
+    #region Private methods
 
     private void Write(StreamReader aReader, StreamWriter aWriter, RCFileContent aRcFileContent)
     {
@@ -107,5 +113,7 @@ namespace Caphyon.RcStrings.StringEnhancer
         aWriter.WriteLine(TagConstants.kTagDefine + aIterator.Current.Value.Name +
           " " + aIterator.Current.Value.Id);
     }
+
+    #endregion
   }
 }

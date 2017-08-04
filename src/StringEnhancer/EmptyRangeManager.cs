@@ -8,8 +8,14 @@ namespace Caphyon.RcStrings.StringEnhancer
 {
   public class EmptyRangeManager
   {
+    #region Members
+
     private SortedSet<EmptyRange> mEmptyRanges = new SortedSet<EmptyRange>
         (new GenericComparer<EmptyRange>((obj1, obj2) => obj1.StartPosition.CompareTo(obj2.StartPosition)));
+
+    #endregion
+
+    #region Properties
 
     public bool SkipFirst { get; private set; }
     public int PreviousId { get; private set; }
@@ -19,7 +25,15 @@ namespace Caphyon.RcStrings.StringEnhancer
       get => mEmptyRanges.Last().StopPosition;
     }
 
+    #endregion
+
+    #region Ctor
+
     public EmptyRangeManager() => SkipFirst = true;
+
+    #endregion
+
+    #region Public methods
 
     public void FindEmptyRanges(HeaderFilesContent aHeaderContent)
     {
@@ -49,13 +63,19 @@ namespace Caphyon.RcStrings.StringEnhancer
       }
     }
 
+    public SortedSet<EmptyRange> GetEmptyRanges() => mEmptyRanges;
+
+    #endregion
+
+    #region Private methods
+
     private void SaveEmptyRange(int aStart, int aStop)
     {
       EmptyRange emptyRange = new EmptyRange(aStart, aStop);
       mEmptyRanges.Add(emptyRange);
     }
 
-    public SortedSet<EmptyRange> GetEmptyRanges() => mEmptyRanges;
+    #endregion
 
   }
 }

@@ -9,18 +9,28 @@ namespace Caphyon.RcStrings.VsPackage
   [Serializable]
   public class UserSettings
   {
+    #region Members
+
     private List<RcFileInfo> mSolutionsSelectedRc = new List<RcFileInfo>();
+
+    #endregion
+
+    #region Properties
 
     public List<RcFileInfo> SolutionsSelectedRc
     {
       get => mSolutionsSelectedRc;
       set => mSolutionsSelectedRc = value;
     }
+
+    #endregion
   }
 
   [Serializable]
   public class RcFileInfo
   {
+    #region Properties
+
     public string SolutionName { get; set; }
 
     public string ProjectName { get; set; }
@@ -30,6 +40,8 @@ namespace Caphyon.RcStrings.VsPackage
     public string ReplaceWith { get; set; }
 
     public bool IsReplacingWith { get; set; }
+
+    #endregion
   }
 
 }

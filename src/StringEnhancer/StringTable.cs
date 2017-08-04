@@ -10,11 +10,21 @@ namespace Caphyon.RcStrings.StringEnhancer
 {
   public class StringTable
   {
+    #region Members
+
+    private StringLine[] mStringLinesArray = new StringLine[ParseConstants.kMaximumNumberOfStringsInStringTable];
+
+    #endregion
+
+    #region Properties
+
     public int StringTableNumber { get; private set; }  // string id / 16
     public int RcOrder { get; private set; }
     public int ElementsCount { get; private set; }
 
-    private StringLine[] mStringLinesArray = new StringLine[ParseConstants.kMaximumNumberOfStringsInStringTable];
+    #endregion
+
+    #region Ctor
 
     public StringTable(int aStringTableNumber, int aRcOrder)
     {
@@ -22,6 +32,10 @@ namespace Caphyon.RcStrings.StringEnhancer
       StringTableNumber = aStringTableNumber;
       ElementsCount = 0;
     }
+
+    #endregion
+
+    #region Public methods
 
     // id % 16 = position in stringLinesArray 
     public void AddInformation(StringLine aStringLine)
@@ -38,5 +52,6 @@ namespace Caphyon.RcStrings.StringEnhancer
         aStreamWriter.WriteLine(stringLine);
     }
 
+    #endregion
   }
 }

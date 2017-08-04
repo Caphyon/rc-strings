@@ -8,14 +8,24 @@ namespace Caphyon.RcStrings.StringEnhancer
 {
   public class OperationsStringTable
   {
+    #region Members
+
     private RCFileContent mRcFileContent;
     private EmptyRangeManager mEmptyRangeManager;
+
+    #endregion
+
+    #region Ctor
 
     public OperationsStringTable(RCFileContent aRcFileContent, EmptyRangeManager aEmptyRangeManager)
     {
       mRcFileContent = aRcFileContent;
       mEmptyRangeManager = aEmptyRangeManager;
     }
+
+    #endregion
+
+    #region Public methods
 
     public StringLine AddStringResource(string aValue, string aName, int aId)
     {
@@ -31,11 +41,16 @@ namespace Caphyon.RcStrings.StringEnhancer
       return stringLine;
     }
 
+    #endregion
+
+    #region Private methods
+
     private void SaveString(StringLine aStringLine)
     {
       mRcFileContent.AddInStringLines(aStringLine);
       mRcFileContent.AddInStringTables(aStringLine.Id / ParseConstants.kMaximumNumberOfStringsInStringTable, aStringLine);
     }
 
+    #endregion
   }
 }

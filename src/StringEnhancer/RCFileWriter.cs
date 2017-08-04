@@ -9,6 +9,8 @@ namespace Caphyon.RcStrings.StringEnhancer
 {
   public class RCFileWriter
   {
+    #region Public methods
+
     public void WriteData(RCFileContent aContent, string aFilePath)
     {
       var stringTables = aContent.StringTablesDictionary.ToList();
@@ -28,5 +30,7 @@ namespace Caphyon.RcStrings.StringEnhancer
         streamWriter.Write(aContent.EndRcFile);
       }
     }
+    
+    #endregion
   }
 }

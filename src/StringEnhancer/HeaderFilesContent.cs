@@ -8,7 +8,13 @@ namespace Caphyon.RcStrings.StringEnhancer
 {
   public class HeaderFilesContent
   {
+    #region Members
+
     private Dictionary<string, string> mHeaderElements = new Dictionary<string, string>();
+
+    #endregion
+
+    #region Public methods
 
     public void AddElement(string aName, string aId) => mHeaderElements.Add(aName, aId);
 
@@ -31,5 +37,6 @@ namespace Caphyon.RcStrings.StringEnhancer
       return elements;
     }
 
+    #endregion
   }
 }

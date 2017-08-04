@@ -13,6 +13,8 @@ namespace Caphyon.RcStrings.StringEnhancer
 {
   public class RCFileParser : Parse
   {
+    #region Public methods
+
     public void ReadData(RCFileContent aRcFileContent, string aPathRCFile, string aPathRCFileWiter)
     {
       int stringTableOrder = 0;
@@ -84,6 +86,10 @@ namespace Caphyon.RcStrings.StringEnhancer
       }
       return headerFilesPath;
     }
+
+    #endregion
+
+    #region Private methods
 
     private int ExtractCodePage(string aPathRCFile)
     {
@@ -177,6 +183,8 @@ namespace Caphyon.RcStrings.StringEnhancer
         aRcFileContent.EndRcFile += aReadLine + "\r\n";
       } while (!aReadFile.EndOfStream);
     }
+
+    #endregion
   }
 }
 

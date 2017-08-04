@@ -9,10 +9,16 @@ namespace Caphyon.RcStrings.VsPackage
 {
   public class VCppProject
   {
+    #region Properties
+
     public string ProjectName { get; private set; }
     public List<string> AditionalIncludeDirectories { get; }
 
     public Project VsProject { get; private set; }
+
+    #endregion
+
+    #region Ctor
 
     public VCppProject(Project aProject)
     {
@@ -22,5 +28,7 @@ namespace Caphyon.RcStrings.VsPackage
     }
 
     public VCppProject() {}
+
+    #endregion
   }
 }

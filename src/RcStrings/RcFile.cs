@@ -9,6 +9,8 @@ namespace Caphyon.RcStrings.VsPackage
 {
   public class RcFile
   {
+    #region Propertries
+
     public string FilePath { get; private set; }
     public string FileName
     {
@@ -19,7 +21,13 @@ namespace Caphyon.RcStrings.VsPackage
     {
       get => string.Format("{0}: {1}", Project.ProjectName, FileName);
     }
+
+    #endregion
+
+    #region Ctor
+
     public RcFile(string aFilePath) => FilePath = aFilePath;
 
+    #endregion
   }
 }

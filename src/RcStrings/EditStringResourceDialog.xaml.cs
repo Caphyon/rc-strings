@@ -17,7 +17,7 @@ namespace Caphyon.RcStrings.VsPackage
     const string kAddResourceWindowTitle = "Add String Resource"; // ADD_RESOURCE_WINDOW_TITLE
     #endregion
 
-    #region Fields
+    #region Members
     private Dictionary<RcFile, StringResourceContext> mRcFilesContexts;
     private string mReplaceWithCode;
     private string mResourceName;

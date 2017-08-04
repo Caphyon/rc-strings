@@ -8,6 +8,8 @@ namespace Caphyon.RcStrings.StringEnhancer
 {
   public static class TagConstants
   {
+    #region Constants
+
     public const string kTagStringTable = "STRINGTABLE";
     public const string kTagBegin = "BEGIN";
     public const string kTagEnd = "END";
@@ -18,5 +20,7 @@ namespace Caphyon.RcStrings.StringEnhancer
 
     public const string kTagCodePage = "code_page";
     public const string kStringPreffix = "IDS_";
+
+    #endregion
   }
 }

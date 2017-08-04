@@ -8,6 +8,8 @@ namespace Caphyon.RcStrings.VsPackage
 {
   public class StringResourceContext
   {
+    #region Members
+
     private const string kDefaultResourceHeaderFileName = "resource.h";
 
     private OperationsStringTable mOperationsStringTable;
@@ -27,7 +29,20 @@ namespace Caphyon.RcStrings.VsPackage
     private string mTempRcFile;
     private string mTempHeaderFile;
 
+    #endregion
+
+    #region Properties
+
     public RcFile RcFile { get; private set; }
+
+    private string DefaultHeaderFile
+    {
+      get => Path.Combine(Path.GetDirectoryName(RcFile.FilePath), kDefaultResourceHeaderFileName);
+    }
+
+    #endregion
+
+    #region Public methods
 
     /// <summary>
     /// Automatically loads the data from the RC file
@@ -40,10 +55,7 @@ namespace Caphyon.RcStrings.VsPackage
       mIdGenerator = new IdGenerator(mEmptyRangeManager.GetEmptyRanges(), mEmptyRangeManager.GetLastPosition);
     }
 
-    private string DefaultHeaderFile
-    {
-      get => Path.Combine(Path.GetDirectoryName(RcFile.FilePath), kDefaultResourceHeaderFileName);
-    }
+
 
     public void LoadStringResources(RcFile aRcFile)
     {
@@ -129,5 +141,6 @@ namespace Caphyon.RcStrings.VsPackage
     public StringLine GetStringResourceByName(string aStringResourceName) =>
       mRcFileContent.GetStringLine(aStringResourceName);
 
+    #endregion
   }
 }
