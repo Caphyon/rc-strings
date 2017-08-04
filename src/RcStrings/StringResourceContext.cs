@@ -8,7 +8,7 @@ namespace Caphyon.RcStrings.VsPackage
 {
   public class StringResourceContext
   {
-    const string kDefaultResourceHeaderFileName = "resource.h";
+    private const string kDefaultResourceHeaderFileName = "resource.h";
 
     private OperationsStringTable mOperationsStringTable;
     private EmptyRangeManager mEmptyRangeManager = new EmptyRangeManager();
@@ -96,7 +96,7 @@ namespace Caphyon.RcStrings.VsPackage
 
     public bool IdExists(int aId) => mRcFileContent.ExistsId(aId);
 
-    public void UpdateResourceFiles()
+    public void UpdateResourceFiles(RcStringsPackage aRcStringPackage)
     {
       mRcFileWriter.WriteData(mRcFileContent, mTempRcFile);
       mHeaderFileWriter.WriteFile(mRcFileContent, DefaultHeaderFile, mTempHeaderFile);
@@ -104,7 +104,8 @@ namespace Caphyon.RcStrings.VsPackage
       try
       {
         // Replace RC file from solution with the temp RC file created for editing
-        File.Copy(mTempRcFile, RcFile.FilePath, true);
+        using ( var guard = new SilentlyFileChangesGuard(aRcStringPackage, RcFile.FilePath, true) )
+          File.Copy(mTempRcFile, RcFile.FilePath, true);
       }
       catch(Exception ex)
       {
@@ -114,7 +115,8 @@ namespace Caphyon.RcStrings.VsPackage
       try
       {
         // Replace header file from solution with the temp header file created for editing
-        File.Copy(mTempHeaderFile, DefaultHeaderFile, true);
+        using (var guard = new SilentlyFileChangesGuard(aRcStringPackage, DefaultHeaderFile, true))
+          File.Copy(mTempHeaderFile, DefaultHeaderFile, true);
       }
       catch (Exception ex)
       {

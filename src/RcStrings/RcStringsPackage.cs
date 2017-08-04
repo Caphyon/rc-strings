@@ -200,8 +200,7 @@ namespace Caphyon.RcStrings.VsPackage
     private void SetResourceCommandClick(object sender, EventArgs e)
     {
       List<RcFile> rcFiles = GetRCFilesFromSolution();
-
-      if(UserSettings != null && mSelectedRcFile == null)
+      if (UserSettings != null && mSelectedRcFile == null)
       {
         var userSolutionRc = UserSettings.SolutionsSelectedRc
           .FirstOrDefault(src => src.SolutionName == SolutionName);
@@ -230,7 +229,7 @@ namespace Caphyon.RcStrings.VsPackage
           // Save added string resource to RC file
           StringResourceContext resourceContext = dialog.ResourceContext;
           resourceContext.AddResource(dialog.ResourceValue, dialog.ResourceName, dialog.ResourceId);
-          resourceContext.UpdateResourceFiles();
+          resourceContext.UpdateResourceFiles(this);
 
           // Replace selected text
           if (dialog.ReplaceCode)
@@ -279,7 +278,7 @@ namespace Caphyon.RcStrings.VsPackage
         {
           // Save added string resource to RC file
           stringResource.Value = new EscapeCharacters().Format(dialog.ResourceValue);
-          context.UpdateResourceFiles();
+          context.UpdateResourceFiles(this);
         }
         catch (Exception ex)
         {

@@ -216,7 +216,7 @@ namespace Caphyon.RcStrings.VsPackage
 
     #endregion
 
-    #region IDataErrorInfo Members
+    #region IDataErrorInfo Implementation
     public string Error => null;
 
     public string this[string PropertyName]
