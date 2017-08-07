@@ -70,7 +70,7 @@ namespace Caphyon.RcStrings.StringEnhancer
       mStringTables.Add(aStringTableNumber, new StringTable(aStringTableNumber, aRcOrder));
 
     public int GetStringTableNumber(string aName) =>
-      mStringLines[aName].Id / ParseConstants.kMaximumNumberOfStringsInStringTable;
+      mStringLines[aName].Id / ParseConstants.kStringTableCapacity;
 
     public StringLine GetStringLine(string aName)
     {
@@ -96,9 +96,9 @@ namespace Caphyon.RcStrings.StringEnhancer
       mStringTables.ContainsKey(aStringTableNumber);
 
     public bool ExistsId(int aId) =>
-      !ExistsStringTable(aId / ParseConstants.kMaximumNumberOfStringsInStringTable) ||
-        mStringTables[aId / ParseConstants.kMaximumNumberOfStringsInStringTable].
-        IsPositionEmpty(aId % ParseConstants.kMaximumNumberOfStringsInStringTable) == true ? false : true;
+      !ExistsStringTable(aId / ParseConstants.kStringTableCapacity) ||
+        mStringTables[aId / ParseConstants.kStringTableCapacity].
+        IsPositionEmpty(aId % ParseConstants.kStringTableCapacity) == true ? false : true;
 
     public void AddNewStringWithEmptyFields(StringLine aStringLine) =>
       mStringsWithEmptyFields.Add(aStringLine.Name, aStringLine);

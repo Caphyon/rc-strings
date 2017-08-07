@@ -30,11 +30,11 @@ namespace Caphyon.RcStrings.StringEnhancer
     public StringLine AddStringResource(string aValue, string aName, int aId)
     {
       StringLine stringLine = new StringLine(aName, aValue, aId);
-      if (aId % ParseConstants.kMaximumNumberOfStringsInStringTable == 0)
+      if (aId % ParseConstants.kStringTableCapacity == 0)
         stringLine.RcOrder = mRcFileContent.GetStringLinesDictionary.Count + 1;
 
-      if ( !mRcFileContent.ExistsStringTable(aId / ParseConstants.kMaximumNumberOfStringsInStringTable))
-        mRcFileContent.AddNewStringTable(aId / ParseConstants.kMaximumNumberOfStringsInStringTable,
+      if ( !mRcFileContent.ExistsStringTable(aId / ParseConstants.kStringTableCapacity))
+        mRcFileContent.AddNewStringTable(aId / ParseConstants.kStringTableCapacity,
             mRcFileContent.StringTablesDictionary.Count());
 
       SaveString(stringLine);
@@ -48,7 +48,7 @@ namespace Caphyon.RcStrings.StringEnhancer
     private void SaveString(StringLine aStringLine)
     {
       mRcFileContent.AddInStringLines(aStringLine);
-      mRcFileContent.AddInStringTables(aStringLine.Id / ParseConstants.kMaximumNumberOfStringsInStringTable, aStringLine);
+      mRcFileContent.AddInStringTables(aStringLine.Id / ParseConstants.kStringTableCapacity, aStringLine);
     }
 
     #endregion

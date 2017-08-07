@@ -8,7 +8,7 @@ using ShellConstants = Microsoft.VisualStudio.Shell.Interop.Constants;
 
 namespace Caphyon.RcStrings.VsPackage
 {
-  public class SilentlyFileChanges
+  public class SilentFileChanger
   {
     #region Members
 
@@ -25,7 +25,7 @@ namespace Caphyon.RcStrings.VsPackage
 
     #region Public methods
 
-    public SilentlyFileChanges(IServiceProvider aSite, string aDocument, bool aReloadDocument)
+    public SilentFileChanger(IServiceProvider aSite, string aDocument, bool aReloadDocument)
     {
       mSite = aSite;
       mDocumentFileName = aDocument;

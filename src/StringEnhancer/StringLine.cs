@@ -70,12 +70,14 @@ namespace Caphyon.RcStrings.StringEnhancer
       string spacesFromBegin = "    ";
       string spacesAfterName = "                            ";
 
-      //23 is the maximum length to write on a single line 
-      if (aName.Length <= ParseConstants.kMaximumLengthToWriteASingleLine)
+      if (aName.Length <= ParseConstants.kMaximumLengthForMoreSpacesAfterName)
       {
         spacesAfterName = spacesAfterName.Remove(0, aName.Length + spacesFromBegin.Length);
         return string.Format("{0}{1}{2}\"{3}\"", spacesFromBegin, aName, spacesAfterName, aValue);
       }
+      else if (aName.Length <= ParseConstants.kMaximumLengthToWriteASingleLine)
+        return string.Format("{0}{1} \"{2}\"", spacesFromBegin, aName, aValue);
+
       return string.Format("{0}{1} \r\n{2}\"{3}\"", spacesFromBegin, aName, spacesAfterName, aValue);
     }
 

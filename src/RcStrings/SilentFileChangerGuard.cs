@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Caphyon.RcStrings.VsPackage
 {
-  public class SilentlyFileChangesGuard : SilentlyFileChanges, IDisposable
+  public class SilentFileChangerGuard : SilentFileChanger, IDisposable
   {
     #region Public methods
 
-    public SilentlyFileChangesGuard(IServiceProvider aSite, string aDocument, bool aReloadDocument)
+    public SilentFileChangerGuard(IServiceProvider aSite, string aDocument, bool aReloadDocument)
       : base(aSite, aDocument, aReloadDocument) => Suspend();
 
     public void Dispose() => Resume();

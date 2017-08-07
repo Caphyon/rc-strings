@@ -45,7 +45,7 @@ namespace Caphyon.RcStrings.StringEnhancer
     {
       var words = mText
         .Split(Parse.kSplitResourceElementsChars)
-        .Where(x => x.Length > ParseConstants.kLengthOfRelevantWord)
+        .Where(x => x.Length >= ParseConstants.kMinimumRelevantWordLength)
         .ToList();
       if (words.Count == 0)
         words = mText.Split(Parse.kSplitResourceElementsChars).ToList();

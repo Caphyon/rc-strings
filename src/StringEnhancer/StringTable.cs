@@ -12,7 +12,7 @@ namespace Caphyon.RcStrings.StringEnhancer
   {
     #region Members
 
-    private StringLine[] mStringLinesArray = new StringLine[ParseConstants.kMaximumNumberOfStringsInStringTable];
+    private StringLine[] mStringLinesArray = new StringLine[ParseConstants.kStringTableCapacity];
 
     #endregion
 
@@ -41,7 +41,7 @@ namespace Caphyon.RcStrings.StringEnhancer
     public void AddInformation(StringLine aStringLine)
     {
       ElementsCount = ElementsCount + 1;
-      mStringLinesArray[aStringLine.Id % ParseConstants.kMaximumNumberOfStringsInStringTable] = aStringLine;
+      mStringLinesArray[aStringLine.Id % ParseConstants.kStringTableCapacity] = aStringLine;
     }
 
     public bool IsPositionEmpty(int aPosition) => mStringLinesArray[aPosition] == null;

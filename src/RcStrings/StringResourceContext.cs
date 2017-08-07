@@ -116,7 +116,7 @@ namespace Caphyon.RcStrings.VsPackage
       try
       {
         // Replace RC file from solution with the temp RC file created for editing
-        using ( var guard = new SilentlyFileChangesGuard(aRcStringPackage, RcFile.FilePath, true) )
+        using ( var guard = new SilentFileChangerGuard(aRcStringPackage, RcFile.FilePath, true) )
           File.Copy(mTempRcFile, RcFile.FilePath, true);
       }
       catch(Exception ex)
@@ -127,7 +127,7 @@ namespace Caphyon.RcStrings.VsPackage
       try
       {
         // Replace header file from solution with the temp header file created for editing
-        using (var guard = new SilentlyFileChangesGuard(aRcStringPackage, DefaultHeaderFile, true))
+        using (var guard = new SilentFileChangerGuard(aRcStringPackage, DefaultHeaderFile, true))
           File.Copy(mTempHeaderFile, DefaultHeaderFile, true);
       }
       catch (Exception ex)
