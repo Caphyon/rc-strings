@@ -9,15 +9,11 @@ namespace Caphyon.RcStrings.StringEnhancer
   public class NameGenerator : IGenerator<string>
   {
     #region Members
-
     private string mText;
-
     #endregion
 
     #region Ctor
-
     public NameGenerator(string aText) => mText = aText;
-
     #endregion
 
     #region Public methods
@@ -29,7 +25,6 @@ namespace Caphyon.RcStrings.StringEnhancer
         mostRelevantsWords.Count < 2 ? mostRelevantsWords[0] :
         mostRelevantsWords.Aggregate((item1, item2) => item1.ToUpper() + '_' + item2.ToUpper()));
     }
-
     #endregion
 
     #region Private methods
@@ -72,10 +67,8 @@ namespace Caphyon.RcStrings.StringEnhancer
       List<string> words = new List<string>();
       foreach (var w in aWordsTuple)
         words.Add(w.word.ToUpper());
-
       return words;
     }
-
     #endregion
 
   }

@@ -19,11 +19,8 @@ namespace Caphyon.RcStrings.StringEnhancer
 
     public bool SkipFirst { get; private set; }
     public int PreviousId { get; private set; }
-
-    public int GetLastPosition
-    {
-      get => mEmptyRanges.Last().StopPosition;
-    }
+    public int GetLastPosition => mEmptyRanges.Last().StopPosition;
+    public SortedSet<EmptyRange> GetEmptyRanges => mEmptyRanges;
 
     #endregion
 
@@ -38,14 +35,12 @@ namespace Caphyon.RcStrings.StringEnhancer
     public void FindEmptyRanges(HeaderFilesContent aHeaderContent)
     {
       List<KeyValuePair<string, string>> headerElements = aHeaderContent.SortByIdValue();
-
       if (headerElements.Count <= 1)
         return;
 
       foreach( var pairElement in headerElements )
       {
-        int id = -1; 
-        if ( ParseUtility.TransformToDecimal(pairElement.Value, out id) == false )
+        if ( ParseUtility.TransformToDecimal(pairElement.Value, out int id) == false )
           continue;
         if (SkipFirst)
         {
@@ -63,17 +58,12 @@ namespace Caphyon.RcStrings.StringEnhancer
       }
     }
 
-    public SortedSet<EmptyRange> GetEmptyRanges() => mEmptyRanges;
-
     #endregion
 
     #region Private methods
 
-    private void SaveEmptyRange(int aStart, int aStop)
-    {
-      EmptyRange emptyRange = new EmptyRange(aStart, aStop);
-      mEmptyRanges.Add(emptyRange);
-    }
+    private void SaveEmptyRange(int aStart, int aStop) => 
+      mEmptyRanges.Add(new EmptyRange(aStart, aStop));
 
     #endregion
 

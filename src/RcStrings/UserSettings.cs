@@ -10,9 +10,7 @@ namespace Caphyon.RcStrings.VsPackage
   public class UserSettings
   {
     #region Members
-
     private List<RcFileInfo> mSolutionsSelectedRc = new List<RcFileInfo>();
-
     #endregion
 
     #region Properties
@@ -22,7 +20,6 @@ namespace Caphyon.RcStrings.VsPackage
       get => mSolutionsSelectedRc;
       set => mSolutionsSelectedRc = value;
     }
-
     #endregion
   }
 
@@ -32,13 +29,9 @@ namespace Caphyon.RcStrings.VsPackage
     #region Properties
 
     public string SolutionName { get; set; }
-
     public string ProjectName { get; set; }
-
     public string SelectedRc { get; set; }
-
     public string ReplaceWith { get; set; }
-
     public bool IsReplacingWith { get; set; }
 
     #endregion

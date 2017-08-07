@@ -29,9 +29,10 @@ namespace Caphyon.RcStrings.VsPackage
     #endregion
 
     #region Properties
+
     public string ResourceValue { get; set; }
     public string ReplaceStringCodeFormated { get; private set; }
-
+    
     /// <summary>
     /// This property will allow only editing the string value.
     /// </summary>
@@ -69,10 +70,7 @@ namespace Caphyon.RcStrings.VsPackage
       }
     }
 
-    public StringResourceContext ResourceContext
-    {
-      get => mRcFilesContexts[SelectedRcFile];
-    }
+    public StringResourceContext ResourceContext => mRcFilesContexts[SelectedRcFile];
 
     public IEnumerable<RcFile> RcFiles { get; private set; }
 
@@ -92,8 +90,7 @@ namespace Caphyon.RcStrings.VsPackage
           context = new StringResourceContext(mSelectedRcFile);
           mRcFilesContexts[mSelectedRcFile] = context;
         }
-
-        ResourceIdTemp = context.GetId().ToString();
+        ResourceIdTemp = context.GetId.ToString();
       }
     }
 
@@ -179,7 +176,6 @@ namespace Caphyon.RcStrings.VsPackage
           "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         return;
       }
-
       CloseWindow(true);
     }
 

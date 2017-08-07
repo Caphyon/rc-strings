@@ -12,15 +12,9 @@ namespace Caphyon.RcStrings.VsPackage
     #region Propertries
 
     public string FilePath { get; private set; }
-    public string FileName
-    {
-      get => System.IO.Path.GetFileName(FilePath);
-    }
+    public string FileName => System.IO.Path.GetFileName(FilePath);
     public VCppProject Project { get; set; }
-    public string DisplayName
-    {
-      get => string.Format("{0}: {1}", Project.ProjectName, FileName);
-    }
+    public string DisplayName => string.Format("{0}: {1}", Project.ProjectName, FileName);
 
     #endregion
 

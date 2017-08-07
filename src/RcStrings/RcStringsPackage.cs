@@ -78,15 +78,8 @@ namespace Caphyon.RcStrings.VsPackage
       get => Settings.Default.UserSettings;
       set => Settings.Default.UserSettings = value;
     }
-    private EnvDTE.TextSelection EditorSelection
-    {
-      get => (EnvDTE.TextSelection)mDte.ActiveDocument.Selection;
-    }
-
-    public string SolutionName
-    {
-      get => Path.GetFileName(mDte.Solution.FileName);
-    }
+    private EnvDTE.TextSelection EditorSelection => (EnvDTE.TextSelection)mDte.ActiveDocument.Selection;
+    public string SolutionName => Path.GetFileName(mDte.Solution.FileName);
 
     #endregion
 
@@ -102,7 +95,6 @@ namespace Caphyon.RcStrings.VsPackage
       // not sited yet inside Visual Studio environment. The place to do all the other
       // initialization is the Initialize method.
     }
-
     #endregion
 
     #region Package Members
@@ -346,7 +338,6 @@ namespace Caphyon.RcStrings.VsPackage
       List<RcFile> rcFiles = new List<RcFile>();
       for (int i = 1; i <= mDte.Solution.Projects.Count; i++)
         rcFiles.AddRange(GetRcFilesFromProject(mDte.Solution.Projects.Item(i)));
-
       return rcFiles;
     }
 
@@ -356,12 +347,10 @@ namespace Caphyon.RcStrings.VsPackage
         return new List<RcFile>();
 
       var rcFiles = GetRcFiles(aProject.ProjectItems, string.Empty);
-
       // Set Aditional Include Directories collection
       VCProject vcProject = aProject.Object as VCProject;
 
       List<string> aditionalDirectories = new List<string>();
-
       foreach (var toolObject in vcProject.ActiveConfiguration.Tools)
       {
         string aditionalDirsValue;
@@ -390,20 +379,17 @@ namespace Caphyon.RcStrings.VsPackage
         project.AditionalIncludeDirectories.AddRange(aditionalDirectories);
         rcFiles.ForEach(rcf => rcf.Project = project);
       }
-
       return rcFiles;
     }
 
     private List<RcFile> GetRcFiles(EnvDTE.ProjectItems aItems, string aItemPath)
     {
       List<RcFile> outputItems = new List<RcFile>();
-
       foreach (var item in aItems)
       {
         EnvDTE.ProjectItem projItem = item as EnvDTE.ProjectItem;
         if (projItem == null)
           continue;
-
         try
         {
           if (projItem.ProjectItems.Count > 0)
@@ -411,14 +397,12 @@ namespace Caphyon.RcStrings.VsPackage
             outputItems.AddRange(GetRcFiles(projItem.ProjectItems, Path.Combine(aItemPath, projItem.Name)));
             continue;
           }
-
           string filePath = projItem.FileCount > 0 ? projItem.FileNames[0] : string.Empty;
           if (Path.GetExtension(filePath).ToLower() == ".rc")
             outputItems.Add(new RcFile(filePath));
         }
         catch { }
       }
-
       return outputItems;
     }
 

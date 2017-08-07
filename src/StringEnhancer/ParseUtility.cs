@@ -11,15 +11,11 @@ namespace Caphyon.RcStrings.StringEnhancer
   {
     #region Public methods
 
-    static public List<string> BuildListOfStringsFromReadLine(string aReadLine, char[] aDelimiters)
-    {
-      List<string> lineElements = aReadLine.Split(aDelimiters)
-              .Where(l => l != string.Empty)
-              .Select(l => l.Trim())
-              .ToList();
-
-      return lineElements;
-    }
+    static public List<string> BuildListOfStringsFromReadLine(string aReadLine, char[] aDelimiters) =>
+      aReadLine.Split(aDelimiters)
+        .Where(l => l != string.Empty)
+        .Select(l => l.Trim())
+        .ToList();
 
     static public bool TransformToDecimal(string aIdString, out int aId) =>
       aIdString.Contains("0x") == true ? int.TryParse(aIdString.Substring(2), NumberStyles.HexNumber,

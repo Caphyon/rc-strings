@@ -12,7 +12,6 @@ namespace Caphyon.RcStrings.StringEnhancer
 
     private RCFileContent mRcFileContent;
     private EmptyRangeManager mEmptyRangeManager;
-
     #endregion
 
     #region Ctor
@@ -22,7 +21,6 @@ namespace Caphyon.RcStrings.StringEnhancer
       mRcFileContent = aRcFileContent;
       mEmptyRangeManager = aEmptyRangeManager;
     }
-
     #endregion
 
     #region Public methods
@@ -40,7 +38,6 @@ namespace Caphyon.RcStrings.StringEnhancer
       SaveString(stringLine);
       return stringLine;
     }
-
     #endregion
 
     #region Private methods
@@ -50,7 +47,6 @@ namespace Caphyon.RcStrings.StringEnhancer
       mRcFileContent.AddInStringLines(aStringLine);
       mRcFileContent.AddInStringTables(aStringLine.Id / ParseConstants.kStringTableCapacity, aStringLine);
     }
-
     #endregion
   }
 }

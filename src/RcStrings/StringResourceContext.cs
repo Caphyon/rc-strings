@@ -34,16 +34,13 @@ namespace Caphyon.RcStrings.VsPackage
     #region Properties
 
     public RcFile RcFile { get; private set; }
-
-    private string DefaultHeaderFile
-    {
-      get => Path.Combine(Path.GetDirectoryName(RcFile.FilePath), kDefaultResourceHeaderFileName);
-    }
+    public int GetId => mIdGenerator.Generate();
+    private string DefaultHeaderFile => 
+      Path.Combine(Path.GetDirectoryName(RcFile.FilePath), kDefaultResourceHeaderFileName);
 
     #endregion
 
-    #region Public methods
-
+    #region Ctor
     /// <summary>
     /// Automatically loads the data from the RC file
     /// </summary>
@@ -52,15 +49,15 @@ namespace Caphyon.RcStrings.VsPackage
     {
       mHeaderParser = new HeadersParser(mHeaderContent);
       LoadStringResources(aRcFile);
-      mIdGenerator = new IdGenerator(mEmptyRangeManager.GetEmptyRanges(), mEmptyRangeManager.GetLastPosition);
+      mIdGenerator = new IdGenerator(mEmptyRangeManager.GetEmptyRanges, mEmptyRangeManager.GetLastPosition);
     }
+    #endregion
 
-
+    #region Public methods
 
     public void LoadStringResources(RcFile aRcFile)
     {
       RcFile = aRcFile;
-
       mTempRcFile = Path.GetTempFileName();
       mTempHeaderFile = Path.GetTempFileName();
 
@@ -135,8 +132,6 @@ namespace Caphyon.RcStrings.VsPackage
         throw new Exception(string.Format("Unable to save header file {0}. Reason: {1}", DefaultHeaderFile, ex.Message));
       }
     }
-
-    public int GetId() => mIdGenerator.Generate();
 
     public StringLine GetStringResourceByName(string aStringResourceName) =>
       mRcFileContent.GetStringLine(aStringResourceName);

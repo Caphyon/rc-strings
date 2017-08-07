@@ -9,23 +9,15 @@ namespace Caphyon.RcStrings.StringEnhancer
   public class GenericComparer<T> : IComparer<T>
   {
     #region Members
-
     private readonly Func<T, T, int> mPredicate;
+    #endregion
 
+    #region Ctor
+    public GenericComparer(Func<T, T, int> aPredicate) => mPredicate = aPredicate;
     #endregion
 
     #region Public methods
-
-    public GenericComparer(Func<T, T, int> aPredicate)
-    {
-      this.mPredicate = aPredicate;
-    }
-
-    public int Compare(T x, T y)
-    {
-      return mPredicate(x, y);
-    }
-
+    public int Compare(T x, T y) => mPredicate(x, y);
     #endregion
   }
 

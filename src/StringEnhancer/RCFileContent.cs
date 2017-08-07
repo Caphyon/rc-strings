@@ -12,7 +12,6 @@ namespace Caphyon.RcStrings.StringEnhancer
 
     private Dictionary<string, StringLine> mStringsWithEmptyFields = new Dictionary<string, StringLine>();
     private List<string> headerFiles = new List<string>();
-
     #endregion
 
     #region Properties
@@ -20,33 +19,16 @@ namespace Caphyon.RcStrings.StringEnhancer
     public bool NewStringWasAdded { get; internal set; }
     public int CodePage { get; internal set; }
     public string EndRcFile { get; internal set; }
-
-    public Encoding RcEncoding
-    {
-      get => CodePage != 0 ? Encoding.GetEncoding(CodePage) : Encoding.Unicode;
-    }
-
-    public Dictionary<string, StringLine> GetStringLinesDictionary
-    {
-      get => mStringLines;
-    }
-
-    public Dictionary<int, StringTable> StringTablesDictionary
-    {
-      get => mStringTables;
-    }
-
-    public List<string> Headers
-    {
-      get => headerFiles;
-    }
+    public Encoding RcEncoding => CodePage != 0 ? Encoding.GetEncoding(CodePage) : Encoding.Unicode;
+    public Dictionary<string, StringLine> GetStringLinesDictionary => mStringLines;
+    public Dictionary<int, StringTable> StringTablesDictionary => mStringTables;
+    public List<string> Headers => headerFiles;
 
     #endregion
 
     #region Ctor
 
     public RCFileContent() => NewStringWasAdded = false;
-
     #endregion
 
     #region Public methods
@@ -74,23 +56,18 @@ namespace Caphyon.RcStrings.StringEnhancer
 
     public StringLine GetStringLine(string aName)
     {
-      StringLine stringLine;
-      mStringLines.TryGetValue(aName, out stringLine);
-
+      mStringLines.TryGetValue(aName, out StringLine stringLine);
       return stringLine;
     }
 
-    public bool ContainsLine(string aName) =>
-      mStringLines.ContainsKey(aName);
+    public bool ContainsLine(string aName) => mStringLines.ContainsKey(aName);
 
-    public int GetRcOrder(string aName) =>
-      mStringLines[aName].RcOrder;
+    public int GetRcOrder(string aName) => mStringLines[aName].RcOrder;
+
+    public void InitId(string aName, int aId) => mStringLines[aName].Id = aId;
 
     public bool ContainsStringTable(int aStringTableNumber) =>
       mStringTables.ContainsKey(aStringTableNumber);
-
-    public void InitId(string aName, int aId) =>
-      mStringLines[aName].Id = aId;
 
     public bool ExistsStringTable(int aStringTableNumber) =>
       mStringTables.ContainsKey(aStringTableNumber);

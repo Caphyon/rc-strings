@@ -15,22 +15,24 @@ namespace Caphyon.RcStrings.VsPackage
     private string mDocumentFileName;
     private bool mIsSuspending;
     private bool mReloadDocument;
+
     private IServiceProvider mSite;
     private IVsPersistDocData mPersistDocData = null;
     private IVsDocDataFileChangeControl mFileChangeControl;
 
     private IntPtr mDocData = new IntPtr();
-
     #endregion
 
-    #region Public methods
-
+    #region Ctor
     public SilentFileChanger(IServiceProvider aSite, string aDocument, bool aReloadDocument)
     {
       mSite = aSite;
       mDocumentFileName = aDocument;
       mReloadDocument = aReloadDocument;
     }
+    #endregion
+
+    #region Public methods
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily")]
     public void Suspend()
@@ -42,8 +44,6 @@ namespace Caphyon.RcStrings.VsPackage
       try
       {
         IVsRunningDocumentTable rdt = mSite.GetService(typeof(SVsRunningDocumentTable)) as IVsRunningDocumentTable;
-        IVsFileChangeEx fileChange;
-
         if (rdt == null)
           return;
 
@@ -53,29 +53,27 @@ namespace Caphyon.RcStrings.VsPackage
         if ((docCookie == (uint)ShellConstants.VSDOCCOOKIE_NIL) || mDocData == IntPtr.Zero)
           return;
 
-        fileChange = mSite.GetService(typeof(SVsFileChangeEx)) as IVsFileChangeEx;
+        IVsFileChangeEx fileChange = mSite.GetService(typeof(SVsFileChangeEx)) as IVsFileChangeEx;
+        if (fileChange == null)
+          return;
 
-        if (fileChange != null)
-        {
-          mIsSuspending = true;
-          ErrorHandler.ThrowOnFailure(fileChange.IgnoreFile(0, mDocumentFileName, 1));
-          if (mDocData != IntPtr.Zero)
-          {
-            mPersistDocData = null;
-            // if interface is not supported, return null
-            object unknown = Marshal.GetObjectForIUnknown(mDocData);
-            if (unknown is IVsPersistDocData)
-            {
-              mPersistDocData = (IVsPersistDocData)unknown;
-              if (mPersistDocData is IVsDocDataFileChangeControl)
-              {
-                mFileChangeControl = (IVsDocDataFileChangeControl)mPersistDocData;
-                if (mFileChangeControl != null)
-                  ErrorHandler.ThrowOnFailure(mFileChangeControl.IgnoreFileChanges(1));
-              }
-            }
-          }
-        }
+        mIsSuspending = true;
+        ErrorHandler.ThrowOnFailure(fileChange.IgnoreFile(0, mDocumentFileName, 1));
+        if (mDocData == IntPtr.Zero)
+          return;
+
+        mPersistDocData = null;
+        object unknown = Marshal.GetObjectForIUnknown(mDocData);
+        if (!(unknown is IVsPersistDocData))
+          return;
+
+        mPersistDocData = (IVsPersistDocData)unknown;
+        if (!(mPersistDocData is IVsDocDataFileChangeControl))
+          return;
+
+        mFileChangeControl = (IVsDocDataFileChangeControl)mPersistDocData;
+        if (mFileChangeControl != null)
+          ErrorHandler.ThrowOnFailure(mFileChangeControl.IgnoreFileChanges(1));
       }
       catch (InvalidCastException e)
       {
@@ -86,7 +84,6 @@ namespace Caphyon.RcStrings.VsPackage
         if (mDocData != IntPtr.Zero)
           Marshal.Release(mDocData);
       }
-      return;
     }
 
     public void Resume()
@@ -98,21 +95,14 @@ namespace Caphyon.RcStrings.VsPackage
         mPersistDocData.ReloadDocData(0);
 
       IVsFileChangeEx fileChange = mSite.GetService(typeof(SVsFileChangeEx)) as IVsFileChangeEx;
-      if (fileChange != null)
-      {
-        mIsSuspending = false;
+      if (fileChange == null)
+        return;
 
-        #region AI_CODE
-        // Forces the change events to be sent. This ensures the event will not be sent (asynchronously) 
-        // to you after stop ignoring the file.
-        ErrorHandler.ThrowOnFailure(fileChange.SyncFile(mDocumentFileName));
-        // Listening to the events again.
-        #endregion
-
-        ErrorHandler.ThrowOnFailure(fileChange.IgnoreFile(0, mDocumentFileName, 0));
-        if (mFileChangeControl != null)
-          ErrorHandler.ThrowOnFailure(mFileChangeControl.IgnoreFileChanges(0));
-      }
+      mIsSuspending = false;
+      ErrorHandler.ThrowOnFailure(fileChange.SyncFile(mDocumentFileName));
+      ErrorHandler.ThrowOnFailure(fileChange.IgnoreFile(0, mDocumentFileName, 0));
+      if (mFileChangeControl != null)
+        ErrorHandler.ThrowOnFailure(mFileChangeControl.IgnoreFileChanges(0));
     }
     #endregion
   }
