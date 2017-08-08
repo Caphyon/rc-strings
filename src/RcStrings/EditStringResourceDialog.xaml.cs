@@ -241,16 +241,14 @@ namespace Caphyon.RcStrings.VsPackage
             break;
 
           case "ResourceIdTemp":
-            bool validInput = false;
-            if (!string.IsNullOrEmpty(ResourceIdTemp))
-              if (ParseUtility.TransformToDecimal(ResourceIdTemp, out mResourceId))
-                if (mResourceId >= 0 && mResourceId <= IdGenerator.kMaximumId)
-                  validInput = true;
-            if (!validInput)
+            if (string.IsNullOrEmpty(ResourceIdTemp) || 
+              !ParseUtility.TransformToDecimal(ResourceIdTemp, out mResourceId) || 
+              mResourceId < 0 || mResourceId > IdGenerator.kMaximumId)
+
               result = "Positive id less then 65535 is required!";
             break;
         }
-        btnAdd.IsEnabled = (result == String.Empty && IsValid(this as DependencyObject));
+        btnAdd.IsEnabled = (result == String.Empty && IsValid((DependencyObject)this));
         return result;
       }
     }
