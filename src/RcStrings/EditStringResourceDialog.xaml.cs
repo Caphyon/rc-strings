@@ -227,9 +227,11 @@ namespace Caphyon.RcStrings.VsPackage
         {
           case "ResourceName":
             if (string.IsNullOrEmpty(ResourceName) || 
+              ResourceName.Length < TagConstants.kStringPreffix.Length ||
               ResourceName.Length > ParseConstants.kMaximumResourceNameLength ||
-              TagConstants.kStringPreffix.Equals(ResourceName.Substring(0, ResourceName.Length))) 
-              result = "Name with preffix IDS_ and maximum length of 247 is required!";
+              !TagConstants.kStringPreffix.Equals(ResourceName.Substring(0, TagConstants.kStringPreffix.Length)))
+              
+              result = "Name with the IDS_ preffix and maximum length of 247 is required!";
             break;
 
           case "ResourceValue":
