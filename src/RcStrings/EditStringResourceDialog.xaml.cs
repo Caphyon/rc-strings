@@ -18,6 +18,7 @@ namespace Caphyon.RcStrings.VsPackage
     #endregion
 
     #region Members
+
     private Dictionary<RcFile, StringResourceContext> mRcFilesContexts;
     private string mReplaceWithCode;
     private string mResourceName;
@@ -202,6 +203,7 @@ namespace Caphyon.RcStrings.VsPackage
     #endregion
 
     #region INotifyPropertyChanged Implementation
+
     public event PropertyChangedEventHandler PropertyChanged;
 
     private void OnPropertyChanged(string propertyName)
@@ -213,6 +215,7 @@ namespace Caphyon.RcStrings.VsPackage
     #endregion
 
     #region IDataErrorInfo Implementation
+
     public string Error => null;
 
     public string this[string PropertyName]
@@ -223,14 +226,15 @@ namespace Caphyon.RcStrings.VsPackage
         switch (PropertyName)
         {
           case "ResourceName":
-            if (string.IsNullOrEmpty(ResourceName))
-              result = "Resource name is required!";
+            if (string.IsNullOrEmpty(ResourceName) ||
+              ResourceName.Length > ParseConstants.kMaximumResourceNameLength)
+              result = "Name with maximum length of 247 is required!";
             break;
 
           case "ResourceValue":
             if (string.IsNullOrEmpty(ResourceValue) 
               || ResourceValue.Length > ParseConstants.kMaximumResourceValueLength)
-              result = "Resource value with maximum length of 4096 characters is required!";
+              result = "Value with maximum length of 4096 characters is required!";
             break;
 
           case "ResourceIdTemp":

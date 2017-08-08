@@ -13,7 +13,9 @@ namespace Caphyon.RcStrings.StringEnhancer
     public const int kMaximumLengthForMoreSpacesAfterName = 22;
     public const int kMaximumLengthToWriteASingleLine = 64;
 
+    public const int kMaximumResourceNameLength = 247;
     public const int kMaximumResourceValueLength = 4096;
+
     public const int kIdDefaultValue = -1;
     public const int kRcOrderDefaultValue = -1;
 
