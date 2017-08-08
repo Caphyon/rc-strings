@@ -228,8 +228,9 @@ namespace Caphyon.RcStrings.VsPackage
             break;
 
           case "ResourceValue":
-            if (string.IsNullOrEmpty(ResourceValue))
-              result = "Resource value is required!";
+            if (string.IsNullOrEmpty(ResourceValue) 
+              || ResourceValue.Length > ParseConstants.kMaximumResourceValueLength)
+              result = "Resource value with maximum length of 4096 characters is required!";
             break;
 
           case "ResourceIdTemp":
