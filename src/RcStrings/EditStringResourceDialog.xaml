@@ -56,7 +56,7 @@
                x:Name="tbxResourceName"
                Text="{Binding ResourceName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}">
         <TextBox.ToolTip>
-          Name with maximum length of 247 is required!
+          Name with the preffix IDS_ and maximum length of 247 is required!
         </TextBox.ToolTip>
       </TextBox>
 
