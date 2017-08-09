@@ -54,7 +54,7 @@
                HorizontalAlignment="Stretch"
                IsEnabled="{Binding AddMode}"
                x:Name="tbxResourceName"
-               Text="{Binding ResourceName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}">
+               Text="{Binding ResourceName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnDataErrors=True, NotifyOnValidationError=True}">
         <TextBox.ToolTip>
           Name with the IDS_ preffix and maximum length of 247 is required!
         </TextBox.ToolTip>
@@ -70,7 +70,7 @@
                VerticalAlignment="Center" 
                HorizontalAlignment="Stretch"
                IsEnabled="{Binding AddMode}"
-               Text="{Binding ResourceIdTemp, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}">
+               Text="{Binding ResourceIdTemp, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnDataErrors=True, NotifyOnValidationError=True}">
         <TextBox.ToolTip>
           Positive id less then 65535 is required!
         </TextBox.ToolTip>
@@ -83,7 +83,7 @@
                  HorizontalAlignment="Left" />
       <DockPanel Grid.Column="1" Grid.Row="2" HorizontalAlignment="Stretch" >
         <TextBox TextWrapping="Wrap"
-                 Text="{Binding ResourceValue, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
+                 Text="{Binding ResourceValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
                  x:Name="tbxResourceValue"
                  ScrollViewer.VerticalScrollBarVisibility="Auto">
           <TextBox.ToolTip>

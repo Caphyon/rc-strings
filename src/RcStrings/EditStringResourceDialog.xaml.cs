@@ -4,10 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-
 namespace Caphyon.RcStrings.VsPackage
 {
   public partial class EditStringResourceDialog : DialogWindow, INotifyPropertyChanged, IDataErrorInfo
@@ -27,18 +27,18 @@ namespace Caphyon.RcStrings.VsPackage
     private int mResourceId;
     private string mResourceIdTemp;
     private string mInitialStringValue;
+
     #endregion
 
     #region Properties
 
     public string ResourceValue { get; set; }
     public string ReplaceStringCodeFormated { get; private set; }
-    
+
     /// <summary>
     /// This property will allow only editing the string value.
     /// </summary>
     public bool AddMode { get; private set; }
-
     public string ReplaceWithCode
     {
       get => mReplaceWithCode;
@@ -46,11 +46,10 @@ namespace Caphyon.RcStrings.VsPackage
       {
         mReplaceWithCode = value;
         OnPropertyChanged("ReplaceWithCode");
-        if( ResourceName.Length > 0 )
+        if (ResourceName.Length > 0)
           ReplaceStringCodeFormated = mReplaceWithCode.Replace(ResourceName, "{0}");
       }
     }
-
     public string ResourceName
     {
       get => mResourceName;
@@ -60,7 +59,6 @@ namespace Caphyon.RcStrings.VsPackage
         ReplaceWithCode = string.Format(ReplaceStringCodeFormated, mResourceName);
       }
     }
-
     public bool ReplaceCode
     {
       get => mReplaceCode;
@@ -70,21 +68,16 @@ namespace Caphyon.RcStrings.VsPackage
         OnPropertyChanged("ReplaceCode");
       }
     }
-
     public StringResourceContext ResourceContext => mRcFilesContexts[SelectedRcFile];
-
     public IEnumerable<RcFile> RcFiles { get; private set; }
-
     public RcFile SelectedRcFile
     {
       get => mSelectedRcFile;
       set
       {
         mSelectedRcFile = value;
-
         if (mSelectedRcFile == null || !AddMode)
           return;
-
         StringResourceContext context;
         if (!mRcFilesContexts.TryGetValue(mSelectedRcFile, out context))
         {
@@ -94,7 +87,6 @@ namespace Caphyon.RcStrings.VsPackage
         ResourceIdTemp = context.GetId.ToString();
       }
     }
-
     public string ResourceIdTemp
     {
       get => mResourceIdTemp;
@@ -104,36 +96,35 @@ namespace Caphyon.RcStrings.VsPackage
         OnPropertyChanged("ResourceIdTemp");
       }
     }
-
     public int ResourceId
     {
       get => mResourceId;
       set => mResourceId = value;
     }
-    
+
+    private Dictionary<string, string> Errors { get; } = new Dictionary<string, string>();
+
+    public bool HasError => Errors.Any();
+
     #endregion
 
     #region Ctor
+
     public EditStringResourceDialog(List<RcFile> aRcFiles, RcFile aSelectedRcFile,
       string aSelectedText, bool aReplaceCode, string aReplaceWithCodeFormated, StringLine aStringResource = null)
     {
       if (aRcFiles.Count == 0)
         throw new Exception("solution has not rc files");
-
       InitializeComponent();
       DataContext = this;
-
       mRcFilesContexts = new Dictionary<RcFile, StringResourceContext>();
-
       this.AddMode = aStringResource == null;
       this.ReplaceStringCodeFormated = aReplaceWithCodeFormated;
       this.RcFiles = aRcFiles;
-
       this.SelectedRcFile = aSelectedRcFile == null ?
         RcFiles.ElementAt(0) :
         RcFiles.FirstOrDefault(rcf => string.Equals(
           rcf.FilePath, aSelectedRcFile.FilePath, StringComparison.OrdinalIgnoreCase));
-
       if (!AddMode)
       {
         this.mInitialStringValue = aStringResource.Value;
@@ -157,19 +148,25 @@ namespace Caphyon.RcStrings.VsPackage
     #endregion
 
     #region Private methods
+
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {
       CloseWindow(false);
     }
-
     private void btnAdd_Click(object sender, RoutedEventArgs e)
     {
+      if (HasError)
+      {
+        MessageBox.Show(Validation.GetErrors((DependencyObject)this).First().ToString(),
+          "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        return;
+      }
+
       if (!AddMode && ResourceValue == mInitialStringValue)
       {
         CloseWindow(false);
         return;
       }
-
       if (AddMode && ResourceId != 0 && ResourceContext.IdExists(ResourceId))
       {
         MessageBox.Show(
@@ -179,13 +176,11 @@ namespace Caphyon.RcStrings.VsPackage
       }
       CloseWindow(true);
     }
-
     private void CloseWindow(bool aDialogResult)
     {
       DialogResult = aDialogResult;
       this.Close();
     }
-
     private void DialogWindow_Loaded(object sender, RoutedEventArgs e)
     {
       if (AddMode)
@@ -199,67 +194,57 @@ namespace Caphyon.RcStrings.VsPackage
         tbxResourceValue.CaretIndex = tbxResourceValue.Text.Length;
       }
     }
-
     #endregion
 
     #region INotifyPropertyChanged Implementation
 
     public event PropertyChangedEventHandler PropertyChanged;
-
     private void OnPropertyChanged(string propertyName)
     {
       if (PropertyChanged != null)
         PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
     }
-
     #endregion
 
     #region IDataErrorInfo Implementation
 
     public string Error => null;
-
     public string this[string PropertyName]
     {
       get
       {
-        string result = String.Empty;
-        switch (PropertyName)
-        {
-          case "ResourceName":
-            if (string.IsNullOrEmpty(ResourceName) || 
-              ResourceName.Length < TagConstants.kStringPreffix.Length ||
-              ResourceName.Length > ParseConstants.kMaximumResourceNameLength ||
-              !TagConstants.kStringPreffix.Equals(ResourceName.Substring(0, TagConstants.kStringPreffix.Length)))
-              
-              result = "Name with the IDS_ preffix and maximum length of 247 is required!";
-            break;
-
-          case "ResourceValue":
-            if (string.IsNullOrEmpty(ResourceValue) 
-              || ResourceValue.Length > ParseConstants.kMaximumResourceValueLength)
-              result = "Value with maximum length of 4096 characters is required!";
-            break;
-
-          case "ResourceIdTemp":
-            if (string.IsNullOrEmpty(ResourceIdTemp) || 
-              !ParseUtility.TransformToDecimal(ResourceIdTemp, out mResourceId) || 
-              mResourceId < 0 || mResourceId > IdGenerator.kMaximumId)
-
-              result = "Positive id less then 65535 is required!";
-            break;
-        }
-        btnAdd.IsEnabled = (result == String.Empty && IsValid((DependencyObject)this));
-        return result;
+        CollectErrors();
+        return Errors.ContainsKey(PropertyName) ? Errors[PropertyName] : string.Empty;
       }
     }
 
-    private bool IsValid(DependencyObject obj) =>
-      !Validation.GetHasError(obj) &&
-      LogicalTreeHelper.GetChildren(obj)
-        .OfType<DependencyObject>()
-        .All(IsValid);
+    private void CollectErrors()
+    {
+      Errors.Clear();
 
+      if (string.IsNullOrEmpty(ResourceName) ||
+            ResourceName.Length > ParseConstants.kMaximumResourceNameLength ||
+            !ResourceName.StartsWith(TagConstants.kStringPreffix))
+      {
+        Errors.Add(nameof(ResourceName), 
+          "Name with the IDS_ prefix and maximum length of 247 is required!");
+      }
+
+      if (string.IsNullOrEmpty(ResourceValue)
+            || ResourceValue.Length > ParseConstants.kMaximumResourceValueLength)
+      {
+        Errors.Add(nameof(ResourceValue),
+          "Value with maximum length of 4096 characters is required!");
+      }
+
+      if (string.IsNullOrEmpty(ResourceIdTemp) ||
+            !ParseUtility.TransformToDecimal(ResourceIdTemp, out mResourceId) ||
+            mResourceId < 0 || mResourceId > IdGenerator.kMaximumId)
+      {
+        Errors.Add(nameof(ResourceIdTemp),
+          "Positive id less then 65535 is required!");
+      }
+    }
     #endregion
-
   }
 }
