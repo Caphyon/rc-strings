@@ -17,7 +17,8 @@ namespace Caphyon.RcStrings.VsPackage
     const string kAddResourceWindowTitle = "Add String Resource"; // ADD_RESOURCE_WINDOW_TITLE
     #endregion
 
-    #region Fields
+    #region Members
+
     private Dictionary<RcFile, StringResourceContext> mRcFilesContexts;
     private string mReplaceWithCode;
     private string mResourceName;
@@ -29,9 +30,10 @@ namespace Caphyon.RcStrings.VsPackage
     #endregion
 
     #region Properties
+
     public string ResourceValue { get; set; }
     public string ReplaceStringCodeFormated { get; private set; }
-
+    
     /// <summary>
     /// This property will allow only editing the string value.
     /// </summary>
@@ -69,10 +71,7 @@ namespace Caphyon.RcStrings.VsPackage
       }
     }
 
-    public StringResourceContext ResourceContext
-    {
-      get => mRcFilesContexts[SelectedRcFile];
-    }
+    public StringResourceContext ResourceContext => mRcFilesContexts[SelectedRcFile];
 
     public IEnumerable<RcFile> RcFiles { get; private set; }
 
@@ -92,8 +91,7 @@ namespace Caphyon.RcStrings.VsPackage
           context = new StringResourceContext(mSelectedRcFile);
           mRcFilesContexts[mSelectedRcFile] = context;
         }
-
-        ResourceIdTemp = context.GetId().ToString();
+        ResourceIdTemp = context.GetId.ToString();
       }
     }
 
@@ -179,7 +177,6 @@ namespace Caphyon.RcStrings.VsPackage
           "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         return;
       }
-
       CloseWindow(true);
     }
 
@@ -206,6 +203,7 @@ namespace Caphyon.RcStrings.VsPackage
     #endregion
 
     #region INotifyPropertyChanged Implementation
+
     public event PropertyChangedEventHandler PropertyChanged;
 
     private void OnPropertyChanged(string propertyName)
@@ -216,7 +214,8 @@ namespace Caphyon.RcStrings.VsPackage
 
     #endregion
 
-    #region IDataErrorInfo Members
+    #region IDataErrorInfo Implementation
+
     public string Error => null;
 
     public string this[string PropertyName]
@@ -227,26 +226,29 @@ namespace Caphyon.RcStrings.VsPackage
         switch (PropertyName)
         {
           case "ResourceName":
-            if (string.IsNullOrEmpty(ResourceName))
-              result = "Resource name is required!";
+            if (string.IsNullOrEmpty(ResourceName) || 
+              ResourceName.Length < TagConstants.kStringPreffix.Length ||
+              ResourceName.Length > ParseConstants.kMaximumResourceNameLength ||
+              !TagConstants.kStringPreffix.Equals(ResourceName.Substring(0, TagConstants.kStringPreffix.Length)))
+              
+              result = "Name with the IDS_ preffix and maximum length of 247 is required!";
             break;
 
           case "ResourceValue":
-            if (string.IsNullOrEmpty(ResourceValue))
-              result = "Resource value is required!";
+            if (string.IsNullOrEmpty(ResourceValue) 
+              || ResourceValue.Length > ParseConstants.kMaximumResourceValueLength)
+              result = "Value with maximum length of 4096 characters is required!";
             break;
 
           case "ResourceIdTemp":
-            bool validInput = false;
-            if (!string.IsNullOrEmpty(ResourceIdTemp))
-              if (ParseUtility.TransformToDecimal(ResourceIdTemp, out mResourceId))
-                if (mResourceId >= 0 && mResourceId <= IdGenerator.kMaximumId)
-                  validInput = true;
-            if (!validInput)
+            if (string.IsNullOrEmpty(ResourceIdTemp) || 
+              !ParseUtility.TransformToDecimal(ResourceIdTemp, out mResourceId) || 
+              mResourceId < 0 || mResourceId > IdGenerator.kMaximumId)
+
               result = "Positive id less then 65535 is required!";
             break;
         }
-        btnAdd.IsEnabled = (result == String.Empty && IsValid(this as DependencyObject));
+        btnAdd.IsEnabled = (result == String.Empty && IsValid((DependencyObject)this));
         return result;
       }
     }

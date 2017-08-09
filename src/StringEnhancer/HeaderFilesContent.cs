@@ -8,7 +8,11 @@ namespace Caphyon.RcStrings.StringEnhancer
 {
   public class HeaderFilesContent
   {
+    #region Members
     private Dictionary<string, string> mHeaderElements = new Dictionary<string, string>();
+    #endregion
+
+    #region Public methods
 
     public void AddElement(string aName, string aId) => mHeaderElements.Add(aName, aId);
 
@@ -21,15 +25,12 @@ namespace Caphyon.RcStrings.StringEnhancer
       var elements = mHeaderElements.ToList();
       elements.Sort((pair1, pair2) =>
       {
-        int id1 = -1;
-        int id2 = -1;
-        ParseUtility.TransformToDecimal(pair1.Value, out id1);
-        ParseUtility.TransformToDecimal(pair2.Value, out id2);
-
+        ParseUtility.TransformToDecimal(pair1.Value, out int id1);
+        ParseUtility.TransformToDecimal(pair2.Value, out int id2);
         return id1.CompareTo(id2);
       });
       return elements;
     }
-
+    #endregion
   }
 }

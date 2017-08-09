@@ -11,25 +11,29 @@ namespace Caphyon.RcStrings.StringEnhancer
 {
   public class HeadersParser : Parse
   {
+    #region Members
     private HeaderFilesContent mHeaderContent;
+    #endregion
 
+    #region Ctor
     public HeadersParser(HeaderFilesContent aHeaderContent) => mHeaderContent = aHeaderContent;
+    #endregion
+
+    #region Public methods
 
     public void ReadData(RCFileContent aRcFileContent)
     {
       var headers = aRcFileContent.Headers;
       bool wasSaveStringsWithEmptyFields = false;
-
       foreach (var header in headers)
       {
         try
         {
           ReadHeader(aRcFileContent, header);
-          if (wasSaveStringsWithEmptyFields == false)
-          {
-            wasSaveStringsWithEmptyFields = true;
-            SaveStringsWithEmptyFields(aRcFileContent);
-          }
+          if (wasSaveStringsWithEmptyFields)
+            continue;
+          wasSaveStringsWithEmptyFields = true;
+          SaveStringsWithEmptyFields(aRcFileContent);
         }
         catch(FileNotFoundException fileNotFound)
         {
@@ -37,6 +41,9 @@ namespace Caphyon.RcStrings.StringEnhancer
         }
       }
     }
+    #endregion
+
+    #region Private methods
 
     private void SaveStringsWithEmptyFields(RCFileContent aRcFileContent)
     {
@@ -81,7 +88,6 @@ namespace Caphyon.RcStrings.StringEnhancer
     {
       while (mHeaderContent.ContainString(aIdString))
         aIdString = mHeaderContent.GetElement(aIdString);
-
       return aIdString;
     }
 
@@ -104,6 +110,6 @@ namespace Caphyon.RcStrings.StringEnhancer
         aRcFileContent.AddInStringTables(stringTableNumber, stringLine);
       }
     }
-
+    #endregion
   }
 }

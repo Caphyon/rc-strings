@@ -8,12 +8,22 @@ namespace Caphyon.RcStrings.StringEnhancer
 {
   public class StringLine
   {
+    #region Members
+
+    private string mValue;
+    private string mLine;
+
+    #endregion
+
+    #region Properties
+
     public int Id { get; internal set; }
     public int  RcOrder { get; internal set; }
     public string Name { get; private set; }
 
-    private string mValue;
-    private string mLine;
+    #endregion
+
+    #region Ctor
 
     public StringLine(string aName, string aValue, int aId)
     {
@@ -33,6 +43,10 @@ namespace Caphyon.RcStrings.StringEnhancer
       mLine = aLine != null ? aLine : GenerateLine(aName, aValue);
     }
 
+    #endregion
+
+    #region Public methods
+
     public override string ToString() => mLine;
 
     public string Value
@@ -47,18 +61,26 @@ namespace Caphyon.RcStrings.StringEnhancer
       }
     }
 
+    #endregion
+
+    #region Private methods
+
     private string GenerateLine(string aName, string aValue)
     {
       string spacesFromBegin = "    ";
       string spacesAfterName = "                            ";
 
-      //23 is the maximum length to write on a single line 
-      if (aName.Length <= ParseConstants.kMaximumLengthToWriteASingleLine)
+      if (aName.Length <= ParseConstants.kMaximumLengthForMoreSpacesAfterName)
       {
         spacesAfterName = spacesAfterName.Remove(0, aName.Length + spacesFromBegin.Length);
         return string.Format("{0}{1}{2}\"{3}\"", spacesFromBegin, aName, spacesAfterName, aValue);
       }
+      else if (aName.Length <= ParseConstants.kMaximumLengthToWriteASingleLine)
+        return string.Format("{0}{1} \"{2}\"", spacesFromBegin, aName, aValue);
+
       return string.Format("{0}{1} \r\n{2}\"{3}\"", spacesFromBegin, aName, spacesAfterName, aValue);
     }
+
+    #endregion
   }
 }

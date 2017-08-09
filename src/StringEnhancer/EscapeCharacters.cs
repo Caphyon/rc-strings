@@ -8,11 +8,17 @@ namespace Caphyon.RcStrings.StringEnhancer
 {
   public class EscapeCharacters
   {
+    #region Members
+
     private List<Tuple<string, string>> mCharacters = new List<Tuple<string, string>>
     {
       new Tuple<string, string>("\"\"", "\""),
       new Tuple<string, string>("&&", "&")
     };
+
+    #endregion
+
+    #region Public methods
 
     public string Escape(string aText)
     {
@@ -27,5 +33,7 @@ namespace Caphyon.RcStrings.StringEnhancer
         aText = aText.Replace(tuplu.Item2, tuplu.Item1);
       return aText;
     }
+
+    #endregion
   }
 }

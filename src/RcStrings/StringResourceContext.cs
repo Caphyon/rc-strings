@@ -8,7 +8,9 @@ namespace Caphyon.RcStrings.VsPackage
 {
   public class StringResourceContext
   {
-    const string kDefaultResourceHeaderFileName = "resource.h";
+    #region Members
+
+    private const string kDefaultResourceHeaderFileName = "resource.h";
 
     private OperationsStringTable mOperationsStringTable;
     private EmptyRangeManager mEmptyRangeManager = new EmptyRangeManager();
@@ -27,8 +29,18 @@ namespace Caphyon.RcStrings.VsPackage
     private string mTempRcFile;
     private string mTempHeaderFile;
 
-    public RcFile RcFile { get; private set; }
+    #endregion
 
+    #region Properties
+
+    public RcFile RcFile { get; private set; }
+    public int GetId => mIdGenerator.Generate();
+    private string DefaultHeaderFile => 
+      Path.Combine(Path.GetDirectoryName(RcFile.FilePath), kDefaultResourceHeaderFileName);
+
+    #endregion
+
+    #region Ctor
     /// <summary>
     /// Automatically loads the data from the RC file
     /// </summary>
@@ -37,18 +49,15 @@ namespace Caphyon.RcStrings.VsPackage
     {
       mHeaderParser = new HeadersParser(mHeaderContent);
       LoadStringResources(aRcFile);
-      mIdGenerator = new IdGenerator(mEmptyRangeManager.GetEmptyRanges(), mEmptyRangeManager.GetLastPosition);
+      mIdGenerator = new IdGenerator(mEmptyRangeManager.GetEmptyRanges, mEmptyRangeManager.GetLastPosition);
     }
+    #endregion
 
-    private string DefaultHeaderFile
-    {
-      get => Path.Combine(Path.GetDirectoryName(RcFile.FilePath), kDefaultResourceHeaderFileName);
-    }
+    #region Public methods
 
     public void LoadStringResources(RcFile aRcFile)
     {
       RcFile = aRcFile;
-
       mTempRcFile = Path.GetTempFileName();
       mTempHeaderFile = Path.GetTempFileName();
 
@@ -96,7 +105,7 @@ namespace Caphyon.RcStrings.VsPackage
 
     public bool IdExists(int aId) => mRcFileContent.ExistsId(aId);
 
-    public void UpdateResourceFiles()
+    public void UpdateResourceFiles(RcStringsPackage aRcStringPackage)
     {
       mRcFileWriter.WriteData(mRcFileContent, mTempRcFile);
       mHeaderFileWriter.WriteFile(mRcFileContent, DefaultHeaderFile, mTempHeaderFile);
@@ -104,7 +113,8 @@ namespace Caphyon.RcStrings.VsPackage
       try
       {
         // Replace RC file from solution with the temp RC file created for editing
-        File.Copy(mTempRcFile, RcFile.FilePath, true);
+        using ( var guard = new SilentFileChangerGuard(aRcStringPackage, RcFile.FilePath, true) )
+          File.Copy(mTempRcFile, RcFile.FilePath, true);
       }
       catch(Exception ex)
       {
@@ -114,7 +124,8 @@ namespace Caphyon.RcStrings.VsPackage
       try
       {
         // Replace header file from solution with the temp header file created for editing
-        File.Copy(mTempHeaderFile, DefaultHeaderFile, true);
+        using (var guard = new SilentFileChangerGuard(aRcStringPackage, DefaultHeaderFile, true))
+          File.Copy(mTempHeaderFile, DefaultHeaderFile, true);
       }
       catch (Exception ex)
       {
@@ -122,10 +133,9 @@ namespace Caphyon.RcStrings.VsPackage
       }
     }
 
-    public int GetId() => mIdGenerator.Generate();
-
     public StringLine GetStringResourceByName(string aStringResourceName) =>
       mRcFileContent.GetStringLine(aStringResourceName);
 
+    #endregion
   }
 }

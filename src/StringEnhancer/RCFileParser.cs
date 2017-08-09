@@ -13,23 +13,25 @@ namespace Caphyon.RcStrings.StringEnhancer
 {
   public class RCFileParser : Parse
   {
+    #region Public methods
+
     public void ReadData(RCFileContent aRcFileContent, string aPathRCFile, string aPathRCFileWiter)
     {
       int stringTableOrder = 0;
       bool stringTableFound = false;
 
-      if (FileExists(aPathRCFile))
-      {
-        aRcFileContent.CodePage = ExtractCodePage(aPathRCFile);
+      if (!FileExists(aPathRCFile))
+        throw new FileNotFoundException(aPathRCFile);
 
-        using (StreamReader readFile = new StreamReader(aPathRCFile, aRcFileContent.RcEncoding))
+      aRcFileContent.CodePage = ExtractCodePage(aPathRCFile);
+      using (StreamReader readFile = new StreamReader(aPathRCFile, aRcFileContent.RcEncoding))
+      { 
         using (StreamWriter streamWriter = new StreamWriter(aPathRCFileWiter, false, aRcFileContent.RcEncoding))
         {
           string readLine;
           while (!readFile.EndOfStream)
           {
             readLine = readFile.ReadLine();
-
             // STRINGTABLE found
             if (readLine.Trim() == TagConstants.kTagStringTable)
             {
@@ -54,8 +56,6 @@ namespace Caphyon.RcStrings.StringEnhancer
           }
         }
       }
-      else
-        throw new FileNotFoundException(aPathRCFile);
     }
 
     /// <summary>
@@ -71,19 +71,22 @@ namespace Caphyon.RcStrings.StringEnhancer
         while (line != TagConstants.kTagBegin && !reader.EndOfStream)
         {
           line = reader.ReadLine();
-          if (line.Contains(TagConstants.kTagInclude))
-          {
-            // Skip the "#include " tag and the empty space after it 
-            string headerRelativePath = line.Substring(TagConstants.kTagInclude.Length + 1);
-            // Remove escape sequences
-            headerRelativePath = headerRelativePath.Replace("\"", string.Empty);
-            headerRelativePath = headerRelativePath.Replace("/", "\\");
-            headerFilesPath.Add(headerRelativePath);
-          }
+          if (!line.Contains(TagConstants.kTagInclude))
+            continue;
+
+          // Skip the "#include " tag and the empty space after it 
+          string headerRelativePath = line.Substring(TagConstants.kTagInclude.Length + 1);
+          // Remove escape sequences
+          headerRelativePath = headerRelativePath.Replace("\"", string.Empty);
+          headerRelativePath = headerRelativePath.Replace("/", "\\");
+          headerFilesPath.Add(headerRelativePath);
         }
       }
       return headerFilesPath;
     }
+    #endregion
+
+    #region Private methods
 
     private int ExtractCodePage(string aPathRCFile)
     {
@@ -96,11 +99,10 @@ namespace Caphyon.RcStrings.StringEnhancer
         while (!readFile.EndOfStream && readLine != TagConstants.kTagBegin)
         {
           readLine = readFile.ReadLine();
-          if (readLine.Contains(TagConstants.kTagCodePage))
-          {
-            codePage = Regex.Match(readLine, regex).Value;
-            break;
-          }
+          if (!readLine.Contains(TagConstants.kTagCodePage))
+            continue;
+          codePage = Regex.Match(readLine, regex).Value;
+          break;
         }
       }
       return codePage != string.Empty ? (int.Parse(codePage)) : 0;
@@ -109,7 +111,6 @@ namespace Caphyon.RcStrings.StringEnhancer
     private void ReadStringTableContent(RCFileContent aRcFileContent, StreamReader aReadFile, int aStringTableOrder)
     {
       string readLine = string.Empty;
-
       while ((readLine = aReadFile.ReadLine()) != TagConstants.kTagEnd)
       {
         string line = readLine;
@@ -126,8 +127,8 @@ namespace Caphyon.RcStrings.StringEnhancer
       }
     }
 
-    private void ExtractStringValueLine(StreamReader aReadFile, List<string> aLineComponentsList,
-                                          ref string aStringValue, ref string aLine)
+    private void ExtractStringValueLine(StreamReader aReadFile, List<string> aLineComponentsList, 
+      ref string aStringValue, ref string aLine)
     {
       string readLine = string.Empty;
 
@@ -177,6 +178,7 @@ namespace Caphyon.RcStrings.StringEnhancer
         aRcFileContent.EndRcFile += aReadLine + "\r\n";
       } while (!aReadFile.EndOfStream);
     }
+    #endregion
   }
 }
 

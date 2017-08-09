@@ -11,12 +11,17 @@ namespace Caphyon.RcStrings.StringEnhancer
 {
   public class HeaderFileWriter
   {
+    #region Public methods
+
     public void WriteFile(RCFileContent aRcFileContent, string aPathHeaderFileRead, string aPathHeaderFileWrite)
     {
       using (StreamReader reader = new StreamReader(aPathHeaderFileRead))
         using (StreamWriter writer = new StreamWriter(aPathHeaderFileWrite))
           Write(reader, writer, aRcFileContent);
     }
+    #endregion
+
+    #region Private methods
 
     private void Write(StreamReader aReader, StreamWriter aWriter, RCFileContent aRcFileContent)
     {
@@ -32,7 +37,6 @@ namespace Caphyon.RcStrings.StringEnhancer
         //Check if the current element from stringLines collection is not complete/has empty members like ID
         //that elements must be skiped
         int numberPositionsToSkip = hasNext ? NumberPositionToSkip(aRcFileContent, iterator) : 0;
-
         while (numberPositionsToSkip-- > 0)
           hasNext = iterator.MoveNext();
 
@@ -40,7 +44,6 @@ namespace Caphyon.RcStrings.StringEnhancer
         if (LineRepresentString(lineElements.Count, hasNext) == false || 
               ParseUtility.TransformToDecimal(lineElements[2], out stringId) == false)
           aWriter.WriteLine(line);
-
         //if a string was added then move one position forward
         else if (CheckForAddedStrings(aWriter, iterator, line, stringId, aRcFileContent))
           hasNext = iterator.MoveNext();
@@ -51,7 +54,6 @@ namespace Caphyon.RcStrings.StringEnhancer
     {
       var stringLines = aRcFileContent.GetStringLinesDictionary.ToList();
       stringLines.Sort((pair1, pair2) => pair1.Value.Id.CompareTo(pair2.Value.Id));
-
       return stringLines;
     }
 
@@ -82,7 +84,7 @@ namespace Caphyon.RcStrings.StringEnhancer
       bool skipOnePosition = true;
       if (aStringId < aIterator.Current.Value.Id)
         skipOnePosition = false;
-      else if (aStringId > aIterator.Current.Value.Id && aRcFileContent.NewStringWasAdded == false)  //&& iterator.Current.Value.Changed
+      else if (aStringId > aIterator.Current.Value.Id && aRcFileContent.NewStringWasAdded == false) 
       {
         aRcFileContent.NewStringWasAdded = true;
         WriteAddedString(aWriter, aIterator);
@@ -91,11 +93,9 @@ namespace Caphyon.RcStrings.StringEnhancer
       return skipOnePosition;
     }
 
-    //39 characters + 1 empty space = the number of characters until ID
     private void WriteAddedString(StreamWriter aWriter, IEnumerator<KeyValuePair<string, StringLine>> aIterator)
     {
       string emptySpaces = "                                        ";
-
       if ( TagConstants.kTagDefine.Length + aIterator.Current.Value.Name.Length < emptySpaces.Length -1)
       {
         emptySpaces = emptySpaces.Remove(0, TagConstants.kTagDefine.Length + aIterator.Current.Value.Name.Length);
@@ -107,5 +107,6 @@ namespace Caphyon.RcStrings.StringEnhancer
         aWriter.WriteLine(TagConstants.kTagDefine + aIterator.Current.Value.Name +
           " " + aIterator.Current.Value.Id);
     }
+    #endregion
   }
 }

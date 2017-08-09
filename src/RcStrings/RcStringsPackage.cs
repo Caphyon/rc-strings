@@ -49,21 +49,26 @@ namespace Caphyon.RcStrings.VsPackage
   {
 
     #region Constants
-    private const string kReplaceStringCodeFormated = "StringOrID({0})";
+
+    private const string kReplaceStringCodeFormated = "{0}";
     private const string kPackageGuidString = "2daea589-e7c3-4b34-ac2d-1d55f7877813";
     private const string kGuidCommands = "6a3a7992-5baf-4e4a-85ee-3947025c5d92";
     private const int kIdSetResourceCmd = 0x0102;
     private const int kIdEditResourceCmd = 0x0101;
     private const int kIdStringResourcesMenuItem = 0x1100;
+    private const string kCppProjectKind = "{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}";
+
     #endregion
 
-    #region Fields
+    #region Members
+
     private bool mReplaceString = true;
     private EnvDTE.DTE mDte;
     private System.Windows.Window mDteWindow;
     private string mSelectedWord = string.Empty;
     private string mReplaceWithCodeFormated = kReplaceStringCodeFormated;
     private RcFile mSelectedRcFile;
+
     #endregion
 
     #region Properties
@@ -73,19 +78,13 @@ namespace Caphyon.RcStrings.VsPackage
       get => Settings.Default.UserSettings;
       set => Settings.Default.UserSettings = value;
     }
-    private EnvDTE.TextSelection EditorSelection
-    {
-      get => (EnvDTE.TextSelection)mDte.ActiveDocument.Selection;
-    }
-
-    public string SolutionName
-    {
-      get => Path.GetFileName(mDte.Solution.FileName);
-    }
+    private EnvDTE.TextSelection EditorSelection => (EnvDTE.TextSelection)mDte.ActiveDocument.Selection;
+    public string SolutionName => Path.GetFileName(mDte.Solution.FileName);
 
     #endregion
 
     #region Ctor
+
     /// <summary>
     /// Initializes a new instance of the <see cref="RcStringsPackage"/> class.
     /// </summary>
@@ -137,11 +136,15 @@ namespace Caphyon.RcStrings.VsPackage
     {
       var command = (OleMenuCommand)sender;
       int id = command.CommandID.ID;
+      bool isActiveDocumentInCppProj = mDte.ActiveDocument != null &&
+        mDte.ActiveDocument.ProjectItem != null &&
+        mDte.ActiveDocument.ProjectItem.ContainingProject != null &&
+        mDte.ActiveDocument.ProjectItem.ContainingProject.Kind == kCppProjectKind;
 
       if (id == kIdEditResourceCmd || id == kIdSetResourceCmd)
       {
         UpdateQueryWord();
-        command.Visible = string.Empty != mSelectedWord;
+        command.Visible = string.Empty != mSelectedWord && isActiveDocumentInCppProj;
       }
     }
 
@@ -195,8 +198,7 @@ namespace Caphyon.RcStrings.VsPackage
     private void SetResourceCommandClick(object sender, EventArgs e)
     {
       List<RcFile> rcFiles = GetRCFilesFromSolution();
-
-      if(UserSettings != null && mSelectedRcFile == null)
+      if (UserSettings != null && mSelectedRcFile == null)
       {
         var userSolutionRc = UserSettings.SolutionsSelectedRc
           .FirstOrDefault(src => src.SolutionName == SolutionName);
@@ -207,7 +209,7 @@ namespace Caphyon.RcStrings.VsPackage
             rcf => rcf.FileName == userSolutionRc.SelectedRc && 
             rcf.Project.ProjectName == userSolutionRc.ProjectName);
           mSelectedRcFile = currentRcFile;
-          mReplaceWithCodeFormated = userSolutionRc.ReplaceWith;
+          mReplaceWithCodeFormated = HandleEmptyReplaceWithField(userSolutionRc.ReplaceWith);
           mReplaceString = userSolutionRc.IsReplacingWith;
         }
       }
@@ -224,8 +226,8 @@ namespace Caphyon.RcStrings.VsPackage
         {
           // Save added string resource to RC file
           StringResourceContext resourceContext = dialog.ResourceContext;
-          resourceContext.AddResource(dialog.ResourceValue, dialog.ResourceName, dialog.ResourceId);
-          resourceContext.UpdateResourceFiles();
+          resourceContext.AddResource(GetResourceValue(dialog.ResourceValue), dialog.ResourceName, dialog.ResourceId);
+          resourceContext.UpdateResourceFiles(this);
 
           // Replace selected text
           if (dialog.ReplaceCode)
@@ -239,9 +241,12 @@ namespace Caphyon.RcStrings.VsPackage
 
       // Save current values
       mReplaceString = dialog.ReplaceCode;
-      mReplaceWithCodeFormated = dialog.ReplaceStringCodeFormated;
+      mReplaceWithCodeFormated = HandleEmptyReplaceWithField(dialog.ReplaceStringCodeFormated);
       mSelectedRcFile = dialog.SelectedRcFile;
     }
+
+    private string HandleEmptyReplaceWithField(string replaceString) =>
+      String.IsNullOrEmpty(replaceString) ? kReplaceStringCodeFormated : replaceString;
 
     private void EditResourceCommandClick(object sender, EventArgs e)
     {
@@ -271,7 +276,7 @@ namespace Caphyon.RcStrings.VsPackage
         {
           // Save added string resource to RC file
           stringResource.Value = new EscapeCharacters().Format(dialog.ResourceValue);
-          context.UpdateResourceFiles();
+          context.UpdateResourceFiles(this);
         }
         catch (Exception ex)
         {
@@ -322,7 +327,17 @@ namespace Caphyon.RcStrings.VsPackage
 
     #endregion
 
+    #region Private methods
+
+    private string GetResourceValue(string aValue)
+    {
+      return aValue.Length <= ParseConstants.kMaximumResourceValueLength ?
+        aValue : aValue.Substring(0, ParseConstants.kMaximumResourceValueLength);
+    }
+    #endregion
+
     #region Get RC files from solution
+
     /// <summary>
     /// Scan every project in the solution for .rc files.
     /// </summary>
@@ -332,7 +347,6 @@ namespace Caphyon.RcStrings.VsPackage
       List<RcFile> rcFiles = new List<RcFile>();
       for (int i = 1; i <= mDte.Solution.Projects.Count; i++)
         rcFiles.AddRange(GetRcFilesFromProject(mDte.Solution.Projects.Item(i)));
-
       return rcFiles;
     }
 
@@ -342,12 +356,10 @@ namespace Caphyon.RcStrings.VsPackage
         return new List<RcFile>();
 
       var rcFiles = GetRcFiles(aProject.ProjectItems, string.Empty);
-
       // Set Aditional Include Directories collection
       VCProject vcProject = aProject.Object as VCProject;
 
       List<string> aditionalDirectories = new List<string>();
-
       foreach (var toolObject in vcProject.ActiveConfiguration.Tools)
       {
         string aditionalDirsValue;
@@ -376,20 +388,17 @@ namespace Caphyon.RcStrings.VsPackage
         project.AditionalIncludeDirectories.AddRange(aditionalDirectories);
         rcFiles.ForEach(rcf => rcf.Project = project);
       }
-
       return rcFiles;
     }
 
     private List<RcFile> GetRcFiles(EnvDTE.ProjectItems aItems, string aItemPath)
     {
       List<RcFile> outputItems = new List<RcFile>();
-
       foreach (var item in aItems)
       {
         EnvDTE.ProjectItem projItem = item as EnvDTE.ProjectItem;
         if (projItem == null)
           continue;
-
         try
         {
           if (projItem.ProjectItems.Count > 0)
@@ -397,16 +406,15 @@ namespace Caphyon.RcStrings.VsPackage
             outputItems.AddRange(GetRcFiles(projItem.ProjectItems, Path.Combine(aItemPath, projItem.Name)));
             continue;
           }
-
           string filePath = projItem.FileCount > 0 ? projItem.FileNames[0] : string.Empty;
           if (Path.GetExtension(filePath).ToLower() == ".rc")
             outputItems.Add(new RcFile(filePath));
         }
         catch { }
       }
-
       return outputItems;
     }
+
     #endregion Get RC files from solution
   }
 }

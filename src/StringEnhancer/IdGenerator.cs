@@ -8,10 +8,20 @@ namespace Caphyon.RcStrings.StringEnhancer
 {
   public class IdGenerator : IGenerator<int>
   {
+    #region Members
+
     private SortedSet<EmptyRange> mEmptyRanges;
     public static readonly int kMaximumId = 65535;
+    #endregion
+
+    #region Properties
+
     public int ExistingMaximumId { get; private set; }
     public Random RandomNumber { get; private set; }
+
+    #endregion
+
+    #region Ctor
 
     public IdGenerator(SortedSet<EmptyRange> aEmptyRanges, int aId)
     {
@@ -19,6 +29,9 @@ namespace Caphyon.RcStrings.StringEnhancer
       mEmptyRanges = aEmptyRanges;
       ExistingMaximumId = aId;
     }
+    #endregion
+
+    #region Public methods
 
     public int Generate()
     {
@@ -30,6 +43,6 @@ namespace Caphyon.RcStrings.StringEnhancer
       else
         return RandomNumber.Next(ExistingMaximumId, kMaximumId);
     }
-
+    #endregion
   }
 }
