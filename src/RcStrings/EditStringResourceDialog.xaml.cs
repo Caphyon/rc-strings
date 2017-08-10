@@ -1,5 +1,7 @@
 ﻿using Caphyon.RcStrings.StringEnhancer;
 using Microsoft.VisualStudio.PlatformUI;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -27,6 +29,7 @@ namespace Caphyon.RcStrings.VsPackage
     private int mResourceId;
     private string mResourceIdTemp;
     private string mInitialStringValue;
+    private IServiceProvider mServiceProvider;
 
     #endregion
 
@@ -110,7 +113,7 @@ namespace Caphyon.RcStrings.VsPackage
 
     #region Ctor
 
-    public EditStringResourceDialog(List<RcFile> aRcFiles, RcFile aSelectedRcFile,
+    public EditStringResourceDialog(IServiceProvider aServiceProvider, List<RcFile> aRcFiles, RcFile aSelectedRcFile,
       string aSelectedText, bool aReplaceCode, string aReplaceWithCodeFormated, StringLine aStringResource = null)
     {
       if (aRcFiles.Count == 0)
@@ -118,6 +121,7 @@ namespace Caphyon.RcStrings.VsPackage
       InitializeComponent();
       DataContext = this;
       mRcFilesContexts = new Dictionary<RcFile, StringResourceContext>();
+      mServiceProvider = aServiceProvider;
       this.AddMode = aStringResource == null;
       this.ReplaceStringCodeFormated = aReplaceWithCodeFormated;
       this.RcFiles = aRcFiles;
@@ -155,23 +159,21 @@ namespace Caphyon.RcStrings.VsPackage
     }
     private void btnAdd_Click(object sender, RoutedEventArgs e)
     {
-      if (HasError)
-      {
-        MessageBox.Show(Validation.GetErrors((DependencyObject)this).First().ToString(),
-          "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-        return;
-      }
-
       if (!AddMode && ResourceValue == mInitialStringValue)
       {
         CloseWindow(false);
         return;
       }
+      if (HasError)
+      {
+        VsShellUtilities.ShowMessageBox(mServiceProvider, Errors.First().Value, "Invalid input",
+          OLEMSGICON.OLEMSGICON_CRITICAL, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+        return;
+      }
       if (AddMode && ResourceId != 0 && ResourceContext.IdExists(ResourceId))
       {
-        MessageBox.Show(
-          string.Format("String Id {0} already exists.", ResourceId),
-          "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        VsShellUtilities.ShowMessageBox(mServiceProvider, string.Format("String Id {0} already exists.", ResourceId),
+          "Invalid input", OLEMSGICON.OLEMSGICON_CRITICAL, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
         return;
       }
       CloseWindow(true);
@@ -229,20 +231,18 @@ namespace Caphyon.RcStrings.VsPackage
         Errors.Add(nameof(ResourceName), 
           "Name with the IDS_ prefix and maximum length of 247 is required!");
       }
-
-      if (string.IsNullOrEmpty(ResourceValue)
-            || ResourceValue.Length > ParseConstants.kMaximumResourceValueLength)
-      {
-        Errors.Add(nameof(ResourceValue),
-          "Value with maximum length of 4096 characters is required!");
-      }
-
       if (string.IsNullOrEmpty(ResourceIdTemp) ||
             !ParseUtility.TransformToDecimal(ResourceIdTemp, out mResourceId) ||
             mResourceId < 0 || mResourceId > IdGenerator.kMaximumId)
       {
         Errors.Add(nameof(ResourceIdTemp),
           "Positive id less then 65535 is required!");
+      }
+      if (string.IsNullOrEmpty(ResourceValue)
+            || ResourceValue.Length > ParseConstants.kMaximumResourceValueLength)
+      {
+        Errors.Add(nameof(ResourceValue),
+          "Value with maximum length of 4096 characters is required!");
       }
     }
     #endregion

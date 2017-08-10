@@ -105,7 +105,7 @@ namespace Caphyon.RcStrings.VsPackage
 
     public bool IdExists(int aId) => mRcFileContent.ExistsId(aId);
 
-    public void UpdateResourceFiles(RcStringsPackage aRcStringPackage)
+    public void UpdateResourceFiles(IServiceProvider aServiceProvider)
     {
       mRcFileWriter.WriteData(mRcFileContent, mTempRcFile);
       mHeaderFileWriter.WriteFile(mRcFileContent, DefaultHeaderFile, mTempHeaderFile);
@@ -113,7 +113,7 @@ namespace Caphyon.RcStrings.VsPackage
       try
       {
         // Replace RC file from solution with the temp RC file created for editing
-        using ( var guard = new SilentFileChangerGuard(aRcStringPackage, RcFile.FilePath, true) )
+        using ( var guard = new SilentFileChangerGuard(aServiceProvider, RcFile.FilePath, true) )
           File.Copy(mTempRcFile, RcFile.FilePath, true);
       }
       catch(Exception ex)
@@ -124,7 +124,7 @@ namespace Caphyon.RcStrings.VsPackage
       try
       {
         // Replace header file from solution with the temp header file created for editing
-        using (var guard = new SilentFileChangerGuard(aRcStringPackage, DefaultHeaderFile, true))
+        using (var guard = new SilentFileChangerGuard(aServiceProvider, DefaultHeaderFile, true))
           File.Copy(mTempHeaderFile, DefaultHeaderFile, true);
       }
       catch (Exception ex)
