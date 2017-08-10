@@ -21,6 +21,17 @@ namespace Caphyon.RcStrings.StringEnhancer
     public int  RcOrder { get; internal set; }
     public string Name { get; private set; }
 
+    public string Value
+    {
+      get => mValue;
+      set
+      {
+        mValue = string.Format("\"{0}\"", new EscapeCharacters().Format(mValue));
+        mLine = mLine != null ? mLine.Replace(mValue, string.Format("\"{0}\"", value)) 
+          : GenerateLine(Name, mValue);
+        mValue = value;
+      }
+    }
     #endregion
 
     #region Ctor
@@ -39,7 +50,12 @@ namespace Caphyon.RcStrings.StringEnhancer
       Id = ParseConstants.kIdDefaultValue;
       Name = aName;
 
-      mValue = aValue.Trim('"');
+      if (!String.IsNullOrEmpty(aValue) && aValue.First() == '\"')
+        aValue = aValue.Remove(0, 1);
+      if (!String.IsNullOrEmpty(aValue) && aValue.Last() == '\"')
+        aValue = aValue.Remove(aValue.Length - 1, 1);
+
+      mValue = aValue;
       mLine = aLine != null ? aLine : GenerateLine(aName, aValue);
     }
 
@@ -48,18 +64,6 @@ namespace Caphyon.RcStrings.StringEnhancer
     #region Public methods
 
     public override string ToString() => mLine;
-
-    public string Value
-    {
-      get => mValue;
-      set
-      {
-        mValue = new EscapeCharacters().Format(mValue);
-        mLine = mLine != null ? mLine.Replace(mValue, value) : 
-          GenerateLine(Name, mValue);
-        mValue = value;
-      }
-    }
 
     #endregion
 
