@@ -139,7 +139,7 @@ namespace Caphyon.RcStrings.StringEnhancer
           aLine += "\r\n" + readLine;
         } while (string.IsNullOrWhiteSpace(readLine));
       }
-      aStringValue = aLine.Substring(aLine.IndexOf('"') + 1).Trim();
+      aStringValue = aLine.Substring(aLine.IndexOf('"')).Trim();
     }
 
     private void BuildStringValue(ref string aLine, ref string aStringValue, StreamReader aReadFile)

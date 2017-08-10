@@ -256,7 +256,7 @@ namespace Caphyon.RcStrings.VsPackage
       {
         VsShellUtilities.ShowMessageBox((IServiceProvider)this, 
           string.Format("The string resource name \"{0}\" can not be found in RC files in the solution", mSelectedWord),
-          "File not found", OLEMSGICON.OLEMSGICON_CRITICAL, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+          "Resource not found", OLEMSGICON.OLEMSGICON_CRITICAL, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
         return;
       }
 
