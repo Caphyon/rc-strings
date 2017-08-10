@@ -226,7 +226,8 @@ namespace Caphyon.RcStrings.VsPackage
         {
           // Save added string resource to RC file
           StringResourceContext resourceContext = dialog.ResourceContext;
-          resourceContext.AddResource(GetResourceValue(dialog.ResourceValue), dialog.ResourceName, dialog.ResourceId);
+          resourceContext.AddResource(new EscapeCharacters().Format(dialog.ResourceValue), 
+            dialog.ResourceName, dialog.ResourceId);
           resourceContext.UpdateResourceFiles((IServiceProvider)this);
 
           // Replace selected text
@@ -325,15 +326,6 @@ namespace Caphyon.RcStrings.VsPackage
     }
     #endregion Editor
 
-    #endregion
-
-    #region Private methods
-
-    private string GetResourceValue(string aValue)
-    {
-      return aValue.Length <= ParseConstants.kMaximumResourceValueLength ?
-        aValue : aValue.Substring(0, ParseConstants.kMaximumResourceValueLength);
-    }
     #endregion
 
     #region Get RC files from solution

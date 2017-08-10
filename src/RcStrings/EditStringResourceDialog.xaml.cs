@@ -143,9 +143,9 @@ namespace Caphyon.RcStrings.VsPackage
         // Set resource value the text between quotation marks
         int quoteStartIndex = aSelectedText.IndexOf('"');
         int quoteEndIndex = aSelectedText.LastIndexOf('"');
-        this.ResourceValue = quoteStartIndex >= 0 && quoteEndIndex >= 0 && quoteStartIndex != quoteEndIndex ?
+        this.ResourceValue = (quoteStartIndex >= 0 && quoteEndIndex >= 0 && quoteStartIndex != quoteEndIndex ?
                                   @aSelectedText.Substring(quoteStartIndex + 1, quoteEndIndex - quoteStartIndex - 1) :
-                                  @aSelectedText;
+                                  @aSelectedText).Trim(Parse.kSplitResourceElementsChars);
         this.ResourceName = new NameGenerator(this.ResourceValue).Generate();
       }
     }
