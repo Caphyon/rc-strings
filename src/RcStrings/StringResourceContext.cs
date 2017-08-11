@@ -90,7 +90,6 @@ namespace Caphyon.RcStrings.VsPackage
           }
         }
       }
-
       mRcFileContent.Headers.AddRange(headerFiles);
 
       mRcFileParser.ReadData(mRcFileContent, aRcFile.FilePath, mTempRcFile);
@@ -104,6 +103,8 @@ namespace Caphyon.RcStrings.VsPackage
       mOperationsStringTable.AddStringResource(aValue, aName, aId);
 
     public bool IdExists(int aId) => mRcFileContent.ExistsId(aId);
+
+    public bool ResourceNameExists(string name) => mRcFileContent.ResourceExists(name);
 
     public void UpdateResourceFiles(IServiceProvider aServiceProvider)
     {

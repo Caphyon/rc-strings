@@ -226,7 +226,7 @@ namespace Caphyon.RcStrings.VsPackage
         {
           // Save added string resource to RC file
           StringResourceContext resourceContext = dialog.ResourceContext;
-          resourceContext.AddResource(new EscapeCharacters().Format(dialog.ResourceValue), 
+          resourceContext.AddResource(new EscapeSequences().Format(dialog.ResourceValue), 
             dialog.ResourceName, dialog.ResourceId);
           resourceContext.UpdateResourceFiles((IServiceProvider)this);
 
@@ -277,7 +277,7 @@ namespace Caphyon.RcStrings.VsPackage
         try
         {
           // Save added string resource to RC file
-          stringResource.Value = new EscapeCharacters().Format(dialog.ResourceValue);
+          stringResource.Value = new EscapeSequences().Format(dialog.ResourceValue);
           context.UpdateResourceFiles((IServiceProvider)this);
         }
         catch (Exception ex)

@@ -79,7 +79,7 @@ namespace Caphyon.RcStrings.StringEnhancer
           if (!mHeaderContent.ContainString(lineElements[1]))
             mHeaderContent.AddElement(lineElements[1], id.ToString());
 
-          if (aRcFileContent.ContainsLine(lineElements[1]))
+          if (aRcFileContent.ResourceExists(lineElements[1]))
             SaveString(aRcFileContent, lineElements[1], id);
         }
     }

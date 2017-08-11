@@ -23,7 +23,7 @@ namespace Caphyon.RcStrings.StringEnhancer
           streamWriter.WriteLine(TagConstants.kTagStringTable);
           streamWriter.WriteLine(TagConstants.kTagBegin);
 
-          stringTable.Value.Display(streamWriter);
+          stringTable.Value.Write(streamWriter);
 
           streamWriter.WriteLine(TagConstants.kTagEnd + "\r\n");
         }

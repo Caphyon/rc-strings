@@ -32,19 +32,18 @@ namespace Caphyon.RcStrings.StringEnhancer
       while (!aReader.EndOfStream)
       {
         string line = aReader.ReadLine();
-        List<string> lineElements = ParseUtility.BuildListOfStringsFromReadLine(line, HeadersParser.kSplitResourceElementsChars);
+        List<string> lineElements = ParseUtility.BuildListOfStringsFromReadLine(line, Parse.kSplitResourceElementsChars);
 
-        //Check if the current element from stringLines collection is not complete/has empty members like ID
-        //that elements must be skiped
         int numberPositionsToSkip = hasNext ? NumberPositionToSkip(aRcFileContent, iterator) : 0;
         while (numberPositionsToSkip-- > 0)
           hasNext = iterator.MoveNext();
 
-        int stringId = -1;
+        //int stringId = -1;
         if (LineRepresentString(lineElements.Count, hasNext) == false || 
-              ParseUtility.TransformToDecimal(lineElements[2], out stringId) == false)
+              !ParseUtility.TransformToDecimal(lineElements[2], out int stringId))
+        {
           aWriter.WriteLine(line);
-        //if a string was added then move one position forward
+        }
         else if (CheckForAddedStrings(aWriter, iterator, line, stringId, aRcFileContent))
           hasNext = iterator.MoveNext();
       }

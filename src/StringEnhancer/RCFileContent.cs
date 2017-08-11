@@ -60,7 +60,7 @@ namespace Caphyon.RcStrings.StringEnhancer
       return stringLine;
     }
 
-    public bool ContainsLine(string aName) => mStringLines.ContainsKey(aName);
+    public bool ResourceExists(string aName) => mStringLines.ContainsKey(aName);
 
     public int GetRcOrder(string aName) => mStringLines[aName].RcOrder;
 

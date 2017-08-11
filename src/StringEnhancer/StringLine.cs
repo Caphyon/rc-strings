@@ -26,7 +26,7 @@ namespace Caphyon.RcStrings.StringEnhancer
       get => mValue;
       set
       {
-        mValue = string.Format("\"{0}\"", new EscapeCharacters().Format(mValue));
+        mValue = string.Format("\"{0}\"", new EscapeSequences().Format(mValue));
         mLine = mLine != null ? mLine.Replace(mValue, string.Format("\"{0}\"", value)) 
           : GenerateLine(Name, mValue);
         mValue = value;

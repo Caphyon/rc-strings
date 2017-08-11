@@ -18,7 +18,7 @@ namespace Caphyon.RcStrings.StringEnhancer
 
     #region Properties
 
-    public int StringTableNumber { get; private set; }  // string id / 16
+    public int StringTableNumber { get; private set; }
     public int RcOrder { get; private set; }
     public int ElementsCount { get; private set; }
 
@@ -37,7 +37,6 @@ namespace Caphyon.RcStrings.StringEnhancer
 
     #region Public methods
 
-    // id % 16 = position in stringLinesArray 
     public void AddInformation(StringLine aStringLine)
     {
       ElementsCount = ElementsCount + 1;
@@ -46,7 +45,7 @@ namespace Caphyon.RcStrings.StringEnhancer
 
     public bool IsPositionEmpty(int aPosition) => mStringLinesArray[aPosition] == null;
 
-    public void Display(StreamWriter aStreamWriter)
+    public void Write(StreamWriter aStreamWriter)
     {
       foreach (var stringLine in mStringLinesArray.Where(item => item != null))
         aStreamWriter.WriteLine(stringLine);

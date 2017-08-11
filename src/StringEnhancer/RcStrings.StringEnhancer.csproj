@@ -51,7 +51,7 @@
   <ItemGroup>
     <Compile Include="EmptyRange.cs" />
     <Compile Include="EmptyRangeManager.cs" />
-    <Compile Include="EscapeCharacters.cs" />
+    <Compile Include="EscapeSequences.cs" />
     <Compile Include="GenericComparer.cs" />
     <Compile Include="HeaderFilesContent.cs" />
     <Compile Include="HeaderFileWriter.cs" />
