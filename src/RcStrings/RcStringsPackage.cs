@@ -214,7 +214,7 @@ namespace Caphyon.RcStrings.VsPackage
         }
       }
 
-      EditStringResourceDialog dialog = new EditStringResourceDialog(rcFiles, 
+      EditStringResourceDialog dialog = new EditStringResourceDialog((IServiceProvider)this, rcFiles, 
         mSelectedRcFile, mSelectedWord, mReplaceString, mReplaceWithCodeFormated)
       {
         Owner = mDteWindow
@@ -226,8 +226,9 @@ namespace Caphyon.RcStrings.VsPackage
         {
           // Save added string resource to RC file
           StringResourceContext resourceContext = dialog.ResourceContext;
-          resourceContext.AddResource(GetResourceValue(dialog.ResourceValue), dialog.ResourceName, dialog.ResourceId);
-          resourceContext.UpdateResourceFiles(this);
+          resourceContext.AddResource(new EscapeCharacters().Format(dialog.ResourceValue), 
+            dialog.ResourceName, dialog.ResourceId);
+          resourceContext.UpdateResourceFiles((IServiceProvider)this);
 
           // Replace selected text
           if (dialog.ReplaceCode)
@@ -235,7 +236,8 @@ namespace Caphyon.RcStrings.VsPackage
         }
         catch (Exception exception)
         {
-          MessageBox.Show(exception.Message);
+          VsShellUtilities.ShowMessageBox((IServiceProvider)this, exception.Message, "Error", 
+            OLEMSGICON.OLEMSGICON_CRITICAL, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
         }
       }
 
@@ -253,9 +255,9 @@ namespace Caphyon.RcStrings.VsPackage
       var result = FindStringResourceByName(mSelectedWord);
       if (result == null)
       {
-        MessageBox.Show(string.Format(
-          "The string resource name \"{0}\" can not be found in RC files in the solution",
-          mSelectedWord), "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+        VsShellUtilities.ShowMessageBox((IServiceProvider)this, 
+          string.Format("The string resource name \"{0}\" can not be found in RC files in the solution", mSelectedWord),
+          "Resource not found", OLEMSGICON.OLEMSGICON_CRITICAL, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
         return;
       }
 
@@ -263,7 +265,7 @@ namespace Caphyon.RcStrings.VsPackage
       StringResourceContext context = result.Item2;
 
       EditStringResourceDialog dialog = new EditStringResourceDialog(
-        new List<RcFile>() { result.Item2.RcFile },
+        (IServiceProvider) this, new List<RcFile>() { result.Item2.RcFile },
         result.Item2.RcFile, mSelectedWord,
         mReplaceString, mReplaceWithCodeFormated, stringResource)
       {
@@ -276,13 +278,12 @@ namespace Caphyon.RcStrings.VsPackage
         {
           // Save added string resource to RC file
           stringResource.Value = new EscapeCharacters().Format(dialog.ResourceValue);
-          context.UpdateResourceFiles(this);
+          context.UpdateResourceFiles((IServiceProvider)this);
         }
         catch (Exception ex)
         {
-          MessageBox.Show(string.Format(
-          ex.Message,
-          mSelectedWord), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+          VsShellUtilities.ShowMessageBox((IServiceProvider)this, ex.Message, "Error", 
+            OLEMSGICON.OLEMSGICON_CRITICAL, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
         }
       }
     }
@@ -325,15 +326,6 @@ namespace Caphyon.RcStrings.VsPackage
     }
     #endregion Editor
 
-    #endregion
-
-    #region Private methods
-
-    private string GetResourceValue(string aValue)
-    {
-      return aValue.Length <= ParseConstants.kMaximumResourceValueLength ?
-        aValue : aValue.Substring(0, ParseConstants.kMaximumResourceValueLength);
-    }
     #endregion
 
     #region Get RC files from solution

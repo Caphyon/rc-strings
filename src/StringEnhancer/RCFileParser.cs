@@ -116,9 +116,9 @@ namespace Caphyon.RcStrings.StringEnhancer
         string line = readLine;
         string stringValue = string.Empty;
         List<string> lineComponentsList = ParseUtility.BuildListOfStringsFromReadLine(readLine, new char[] { ' ' });
-
-        if (lineComponentsList.Count < 1)
+        if (lineComponentsList.Count == 0)
           continue;
+
         ExtractStringValueLine(aReadFile, lineComponentsList, ref stringValue, ref line);
         BuildStringValue(ref line, ref stringValue, aReadFile);
 
@@ -127,27 +127,19 @@ namespace Caphyon.RcStrings.StringEnhancer
       }
     }
 
-    private void ExtractStringValueLine(StreamReader aReadFile, List<string> aLineComponentsList, 
+    private void ExtractStringValueLine(StreamReader aReadFile, List<string> aLineComponents, 
       ref string aStringValue, ref string aLine)
     {
       string readLine = string.Empty;
-
-      //IDC_RENAME_BUILD
-      //                  "Rename the build"
-      if (aLineComponentsList.Count == 1)
+      if (aLineComponents.Count == 1)
+      {
         do
         {
           readLine += aReadFile.ReadLine();
-          aStringValue = readLine.Trim('"').Trim(' ');
           aLine += "\r\n" + readLine;
-        } while (string.IsNullOrWhiteSpace(aStringValue));
-      //IDC_RENAME_BUILD  "Rename the build"
-      else
-      {
-        for (int index = 1; index < aLineComponentsList.Count; ++index)
-          aStringValue += aLineComponentsList[index] + " ";
-        aStringValue = aStringValue.Trim('"').Trim(' ');
+        } while (string.IsNullOrWhiteSpace(readLine));
       }
+      aStringValue = aLine.Substring(aLine.IndexOf('"')).Trim();
     }
 
     private void BuildStringValue(ref string aLine, ref string aStringValue, StreamReader aReadFile)
