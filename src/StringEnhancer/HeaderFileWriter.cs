@@ -38,9 +38,8 @@ namespace Caphyon.RcStrings.StringEnhancer
         while (numberPositionsToSkip-- > 0)
           hasNext = iterator.MoveNext();
 
-        //int stringId = -1;
         if (LineRepresentString(lineElements.Count, hasNext) == false || 
-              !ParseUtility.TransformToDecimal(lineElements[2], out int stringId))
+          !ParseUtility.TransformToDecimal(lineElements[2], out int stringId))
         {
           aWriter.WriteLine(line);
         }
@@ -76,7 +75,6 @@ namespace Caphyon.RcStrings.StringEnhancer
     private bool LineRepresentString(int aNumberOfLineElements, bool aHasNext) =>
       (aNumberOfLineElements < ParseConstants.kMinimumElementsToDefineString || aHasNext == false) ? false : true;
     
-
     private bool CheckForAddedStrings(StreamWriter aWriter, IEnumerator<KeyValuePair<string, StringLine>> aIterator, 
       string aLine, int aStringId, RCFileContent aRcFileContent)
     {

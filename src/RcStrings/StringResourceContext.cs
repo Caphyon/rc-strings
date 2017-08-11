@@ -49,7 +49,7 @@ namespace Caphyon.RcStrings.VsPackage
     {
       mHeaderParser = new HeadersParser(mHeaderContent);
       LoadStringResources(aRcFile);
-      mIdGenerator = new IdGenerator(mEmptyRangeManager.GetEmptyRanges, mEmptyRangeManager.GetLastPosition);
+      mIdGenerator = new IdGenerator(mEmptyRangeManager.GetEmptyRanges, mRcFileContent.MaximumId);
     }
     #endregion
 

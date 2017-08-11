@@ -23,6 +23,7 @@ namespace Caphyon.RcStrings.StringEnhancer
     public Dictionary<string, StringLine> GetStringLinesDictionary => mStringLines;
     public Dictionary<int, StringTable> StringTablesDictionary => mStringTables;
     public List<string> Headers => headerFiles;
+    public int MaximumId { get; private set; }
 
     #endregion
 
@@ -41,8 +42,7 @@ namespace Caphyon.RcStrings.StringEnhancer
       if (mStringTables.Count == 0)
         AddNewStringTable(0, 0);
 
-      StringTable existingTable;
-      if (!mStringTables.TryGetValue(aStringTableNumber, out existingTable))
+      if (!mStringTables.TryGetValue(aStringTableNumber, out StringTable existingTable))
         AddNewStringTable(aStringTableNumber, aStringTableNumber);
 
       mStringTables[aStringTableNumber].AddInformation(aStringLine);
@@ -82,6 +82,8 @@ namespace Caphyon.RcStrings.StringEnhancer
 
     public bool IsStringWithEmptyFields(string aStringName) =>
       mStringsWithEmptyFields.ContainsKey(aStringName);
+
+    public void SaveId(int aId) => MaximumId = aId;
 
     #endregion
   }
