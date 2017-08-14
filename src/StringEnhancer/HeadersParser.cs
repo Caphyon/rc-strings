@@ -71,16 +71,17 @@ namespace Caphyon.RcStrings.StringEnhancer
 
           string idString = lineElements[2];
           idString = ExtractId(idString);
-
-          int id = ParseConstants.kIdDefaultValue;
-          if (ParseUtility.TransformToDecimal(idString, out id) == false)
+          if ( !ParseUtility.TransformToDecimal(idString, out int id))
             continue;
 
           if (!mHeaderContent.ContainString(lineElements[1]))
             mHeaderContent.AddElement(lineElements[1], id.ToString());
 
-          if (aRcFileContent.ContainsLine(lineElements[1]))
+          if (aRcFileContent.ResourceExists(lineElements[1]))
+          {
             SaveString(aRcFileContent, lineElements[1], id);
+            FindMaximumId(aRcFileContent, id);
+          }
         }
     }
 
@@ -95,6 +96,12 @@ namespace Caphyon.RcStrings.StringEnhancer
     {
         aRcFileContent.InitId(aStringName, aId);
         InitStringTable(aRcFileContent, aStringName);
+    }
+
+    private void FindMaximumId(RCFileContent aRcFileContent, int aId)
+    {
+      if( aRcFileContent.MaximumId < aId )
+        aRcFileContent.SaveId(aId);
     }
 
     private void InitStringTable(RCFileContent aRcFileContent, string aName)

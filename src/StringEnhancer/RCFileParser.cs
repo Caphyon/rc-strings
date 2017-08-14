@@ -32,7 +32,7 @@ namespace Caphyon.RcStrings.StringEnhancer
           while (!readFile.EndOfStream)
           {
             readLine = readFile.ReadLine();
-            // STRINGTABLE found
+            // StringTable found
             if (readLine.Trim() == TagConstants.kTagStringTable)
             {
               stringTableFound = true;
@@ -42,14 +42,12 @@ namespace Caphyon.RcStrings.StringEnhancer
               ReadStringTableContent(aRcFileContent, readFile, stringTableOrder);
               ++stringTableOrder;
             }
-
             //Read the informations after the last StringTable
             if (stringTableFound && readLine.Contains(TagConstants.kTagEndif))
             {
               ReadEndOfRcFile(aRcFileContent, readFile, readLine);
               break;
             }
-
             //Write all until the first StringTable
             if (!stringTableFound)
               streamWriter.WriteLine(readLine);
@@ -115,23 +113,23 @@ namespace Caphyon.RcStrings.StringEnhancer
       {
         string line = readLine;
         string stringValue = string.Empty;
-        List<string> lineComponentsList = ParseUtility.BuildListOfStringsFromReadLine(readLine, new char[] { ' ' });
-        if (lineComponentsList.Count == 0)
+        List<string> lineElements = ParseUtility.BuildListOfStringsFromReadLine(readLine, new char[] { ' ' });
+        if (lineElements.Count == 0)
           continue;
 
-        ExtractStringValueLine(aReadFile, lineComponentsList, ref stringValue, ref line);
+        ExtractStringValueLine(aReadFile, lineElements, ref stringValue, ref line);
         BuildStringValue(ref line, ref stringValue, aReadFile);
 
-        stringValue = new EscapeCharacters().Escape(stringValue);
-        SaveData(aRcFileContent, lineComponentsList[0], stringValue, line, aStringTableOrder);
+        stringValue = new EscapeSequences().Escape(stringValue);
+        SaveData(aRcFileContent, lineElements[0], stringValue, line, aStringTableOrder);
       }
     }
 
-    private void ExtractStringValueLine(StreamReader aReadFile, List<string> aLineComponents, 
+    private void ExtractStringValueLine(StreamReader aReadFile, List<string> aLineElements, 
       ref string aStringValue, ref string aLine)
     {
       string readLine = string.Empty;
-      if (aLineComponents.Count == 1)
+      if (aLineElements.Count == 1)
       {
         do
         {

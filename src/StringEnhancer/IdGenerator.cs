@@ -16,9 +16,9 @@ namespace Caphyon.RcStrings.StringEnhancer
 
     #region Properties
 
-    public int ExistingMaximumId { get; private set; }
-    public Random RandomNumber { get; private set; }
-
+    private int ExistingMaximumId { get; set; }
+    private Random RandomNumber { get; set; }
+    public static bool RandomId { get; set; }
     #endregion
 
     #region Ctor
@@ -35,13 +35,27 @@ namespace Caphyon.RcStrings.StringEnhancer
 
     public int Generate()
     {
-      if ( mEmptyRanges.Count != 0 )
+      return RandomId ? Random() : Next();
+    }
+    #endregion
+
+    #region Public Methods
+
+    private int Random()
+    {
+      if (mEmptyRanges.Count != 0)
       {
         var emptyRange = mEmptyRanges.ElementAt(RandomNumber.Next(mEmptyRanges.Count));
         return RandomNumber.Next(emptyRange.StartPosition, emptyRange.StopPosition + 1);
       }
       else
         return RandomNumber.Next(ExistingMaximumId, kMaximumId);
+    }
+
+    private int Next()
+    {
+      return mEmptyRanges.Count != 0 ?
+        mEmptyRanges.First().StartPosition : ExistingMaximumId + 1;
     }
     #endregion
   }

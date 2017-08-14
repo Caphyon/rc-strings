@@ -81,8 +81,8 @@ namespace Caphyon.RcStrings.VsPackage
         mSelectedRcFile = value;
         if (mSelectedRcFile == null || !AddMode)
           return;
-        StringResourceContext context;
-        if (!mRcFilesContexts.TryGetValue(mSelectedRcFile, out context))
+
+        if (!mRcFilesContexts.TryGetValue(mSelectedRcFile, out StringResourceContext context))
         {
           context = new StringResourceContext(mSelectedRcFile);
           mRcFilesContexts[mSelectedRcFile] = context;
@@ -107,7 +107,7 @@ namespace Caphyon.RcStrings.VsPackage
 
     private Dictionary<string, string> Errors { get; } = new Dictionary<string, string>();
 
-    public bool HasError => Errors.Any();
+    private bool HasError => Errors.Any();
 
     #endregion
 
@@ -229,20 +229,26 @@ namespace Caphyon.RcStrings.VsPackage
             !ResourceName.StartsWith(TagConstants.kStringPreffix))
       {
         Errors.Add(nameof(ResourceName), 
-          "Name with the IDS_ prefix and maximum length of 247 is required!");
+          string.Format("Name with the IDS_ prefix and maximum length of {0} is required!",
+          ParseConstants.kMaximumResourceNameLength));
       }
+
+      if(string.IsNullOrEmpty(ResourceName) || ResourceContext.ResourceNameExists(ResourceName))
+        Errors.Add(nameof(ResourceName), string.Format("Name \"{0}\" already exists!", ResourceName));
+
       if (string.IsNullOrEmpty(ResourceIdTemp) ||
             !ParseUtility.TransformToDecimal(ResourceIdTemp, out mResourceId) ||
             mResourceId < 0 || mResourceId > IdGenerator.kMaximumId)
       {
         Errors.Add(nameof(ResourceIdTemp),
-          "Positive id less then 65535 is required!");
+          string.Format("Positive id less then {0} is required!", IdGenerator.kMaximumId));
       }
-      if (string.IsNullOrEmpty(ResourceValue)
-            || ResourceValue.Length > ParseConstants.kMaximumResourceValueLength)
+      if (string.IsNullOrEmpty(ResourceValue) || 
+        ResourceValue.Length > ParseConstants.kMaximumResourceValueLength)
       {
-        Errors.Add(nameof(ResourceValue),
-          "Value with maximum length of 4096 characters is required!");
+        Errors.Add(nameof(ResourceValue), 
+          string.Format("Value with maximum length of {0} characters is required!", 
+          ParseConstants.kMaximumResourceValueLength));
       }
     }
     #endregion

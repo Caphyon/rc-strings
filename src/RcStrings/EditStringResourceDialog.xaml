@@ -54,11 +54,7 @@
                HorizontalAlignment="Stretch"
                IsEnabled="{Binding AddMode}"
                x:Name="tbxResourceName"
-               Text="{Binding ResourceName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnDataErrors=True, NotifyOnValidationError=True}">
-        <TextBox.ToolTip>
-          Name with the IDS_ preffix and maximum length of 247 is required!
-        </TextBox.ToolTip>
-      </TextBox>
+               Text="{Binding ResourceName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"/>
 
       <TextBlock Text="Id" 
                  Grid.Column="0" 
@@ -70,11 +66,7 @@
                VerticalAlignment="Center" 
                HorizontalAlignment="Stretch"
                IsEnabled="{Binding AddMode}"
-               Text="{Binding ResourceIdTemp, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnDataErrors=True, NotifyOnValidationError=True}">
-        <TextBox.ToolTip>
-          Positive id less then 65535 is required!
-        </TextBox.ToolTip>
-      </TextBox>
+               Text="{Binding ResourceIdTemp, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"/>
 
       <TextBlock Text="Value" 
                  Grid.Column="0" 
@@ -85,11 +77,7 @@
         <TextBox TextWrapping="Wrap"
                  Text="{Binding ResourceValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
                  x:Name="tbxResourceValue"
-                 ScrollViewer.VerticalScrollBarVisibility="Auto">
-          <TextBox.ToolTip>
-            Value with maximum length of 4096 characters is required!
-          </TextBox.ToolTip>
-        </TextBox>
+                 ScrollViewer.VerticalScrollBarVisibility="Auto"/>
       </DockPanel>
 
       <CheckBox Content="Replace with" 

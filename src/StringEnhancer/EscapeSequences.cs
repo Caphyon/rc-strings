@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Caphyon.RcStrings.StringEnhancer
 {
-  public class EscapeCharacters
+  public class EscapeSequences
   {
     #region Members
 
-    private List<Tuple<string, string>> mCharacters = new List<Tuple<string, string>>
+    private List<Tuple<string, string>> mResourceValueSequences = new List<Tuple<string, string>>
     {
       new Tuple<string, string>("\"\"", "\""),
       new Tuple<string, string>("&&", "&")
@@ -22,14 +22,14 @@ namespace Caphyon.RcStrings.StringEnhancer
 
     public string Escape(string aText)
     {
-      foreach (var tuplu in mCharacters)
+      foreach (var tuplu in mResourceValueSequences)
         aText = aText.Replace(tuplu.Item1, tuplu.Item2);
       return aText;
     }
 
     public string Format(string aText)
     {
-      foreach (var tuplu in mCharacters)
+      foreach (var tuplu in mResourceValueSequences)
         aText = aText.Replace(tuplu.Item2, tuplu.Item1);
       return aText;
     }

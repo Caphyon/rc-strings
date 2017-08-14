@@ -40,7 +40,7 @@ namespace Caphyon.RcStrings.StringEnhancer
 
       foreach( var pairElement in headerElements )
       {
-        if ( ParseUtility.TransformToDecimal(pairElement.Value, out int id) == false )
+        if ( !ParseUtility.TransformToDecimal(pairElement.Value, out int id))
           continue;
         if (SkipFirst)
         {

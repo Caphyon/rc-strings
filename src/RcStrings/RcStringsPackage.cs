@@ -19,6 +19,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
+using System.ComponentModel;
 
 namespace Caphyon.RcStrings.VsPackage
 {
@@ -43,6 +44,7 @@ namespace Caphyon.RcStrings.VsPackage
   [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)] // Info on this package for Help/About
   [Guid(RcStringsPackage.kPackageGuidString)]
   [ProvideMenuResource("Menus.ctmenu", 1)]
+  [ProvideOptionPage(typeof(RandomIdOption), "RC Strings", "RC Strings Page", 0, 0, true)]
   [ProvideAutoLoad(UIContextGuids.SolutionExists)]
   [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
   public sealed class RcStringsPackage : Package
@@ -81,6 +83,15 @@ namespace Caphyon.RcStrings.VsPackage
     private EnvDTE.TextSelection EditorSelection => (EnvDTE.TextSelection)mDte.ActiveDocument.Selection;
     public string SolutionName => Path.GetFileName(mDte.Solution.FileName);
 
+    public bool RandomIdOption
+    {
+      get
+      {
+        RandomIdOption optionPage = (RandomIdOption)GetDialogPage(typeof(RandomIdOption));
+        return optionPage.RandomId;
+      }
+    }
+
     #endregion
 
     #region Ctor
@@ -118,7 +129,6 @@ namespace Caphyon.RcStrings.VsPackage
       {
         var menuItem = new MenuCommand(null, 
           new CommandID(new Guid(kGuidCommands), kIdStringResourcesMenuItem));
-
         var setResourceCommand = new OleMenuCommand(SetResourceCommandClick,
            new CommandID(new Guid(kGuidCommands), kIdSetResourceCmd));
         var editResourceCommand = new OleMenuCommand(EditResourceCommandClick,
@@ -198,6 +208,8 @@ namespace Caphyon.RcStrings.VsPackage
     private void SetResourceCommandClick(object sender, EventArgs e)
     {
       List<RcFile> rcFiles = GetRCFilesFromSolution();
+      IdGenerator.RandomId = RandomIdOption;
+
       if (UserSettings != null && mSelectedRcFile == null)
       {
         var userSolutionRc = UserSettings.SolutionsSelectedRc
@@ -226,7 +238,7 @@ namespace Caphyon.RcStrings.VsPackage
         {
           // Save added string resource to RC file
           StringResourceContext resourceContext = dialog.ResourceContext;
-          resourceContext.AddResource(new EscapeCharacters().Format(dialog.ResourceValue), 
+          resourceContext.AddResource(new EscapeSequences().Format(dialog.ResourceValue), 
             dialog.ResourceName, dialog.ResourceId);
           resourceContext.UpdateResourceFiles((IServiceProvider)this);
 
@@ -263,6 +275,7 @@ namespace Caphyon.RcStrings.VsPackage
 
       StringLine stringResource = result.Item1;
       StringResourceContext context = result.Item2;
+      IdGenerator.RandomId = RandomIdOption;
 
       EditStringResourceDialog dialog = new EditStringResourceDialog(
         (IServiceProvider) this, new List<RcFile>() { result.Item2.RcFile },
@@ -277,7 +290,7 @@ namespace Caphyon.RcStrings.VsPackage
         try
         {
           // Save added string resource to RC file
-          stringResource.Value = new EscapeCharacters().Format(dialog.ResourceValue);
+          stringResource.Value = new EscapeSequences().Format(dialog.ResourceValue);
           context.UpdateResourceFiles((IServiceProvider)this);
         }
         catch (Exception ex)
