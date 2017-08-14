@@ -126,9 +126,8 @@ namespace Caphyon.RcStrings.VsPackage
       this.ReplaceStringCodeFormated = aReplaceWithCodeFormated;
       this.RcFiles = aRcFiles;
       this.SelectedRcFile = aSelectedRcFile == null ?
-        RcFiles.ElementAt(0) :
-        RcFiles.FirstOrDefault(rcf => string.Equals(
-          rcf.FilePath, aSelectedRcFile.FilePath, StringComparison.OrdinalIgnoreCase));
+        RcFiles.ElementAt(0) : RcFiles.FirstOrDefault(rcf => 
+        string.Equals(rcf.FilePath, aSelectedRcFile.FilePath, StringComparison.OrdinalIgnoreCase));
       if (!AddMode)
       {
         this.mInitialStringValue = aStringResource.Value;
@@ -147,6 +146,8 @@ namespace Caphyon.RcStrings.VsPackage
                                   @aSelectedText.Substring(quoteStartIndex + 1, quoteEndIndex - quoteStartIndex - 1) :
                                   @aSelectedText).Trim(Parse.kSplitResourceElementsChars);
         this.ResourceName = new NameGenerator(this.ResourceValue).Generate();
+        if(ResourceContext.ResourceNameExists(this.ResourceName))
+          this.ResourceName = string.Format("{0}{1}", this.ResourceName, this.ResourceIdTemp);
       }
     }
     #endregion
