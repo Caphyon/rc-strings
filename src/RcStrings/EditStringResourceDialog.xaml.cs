@@ -234,8 +234,11 @@ namespace Caphyon.RcStrings.VsPackage
           ParseConstants.kMaximumResourceNameLength));
       }
 
-      if(string.IsNullOrEmpty(ResourceName) || ResourceContext.ResourceNameExists(ResourceName))
+      if(AddMode && (string.IsNullOrEmpty(ResourceName) ||
+        ResourceContext.ResourceNameExists(ResourceName)))
+      {
         Errors.Add(nameof(ResourceName), string.Format("Name \"{0}\" already exists!", ResourceName));
+      }
 
       if (string.IsNullOrEmpty(ResourceIdTemp) ||
             !ParseUtility.TransformToDecimal(ResourceIdTemp, out mResourceId) ||
