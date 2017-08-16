@@ -117,7 +117,7 @@ namespace Caphyon.RcStrings.VsPackage
       string aSelectedText, bool aReplaceCode, string aReplaceWithCodeFormated, StringLine aStringResource = null)
     {
       if (aRcFiles.Count == 0)
-        throw new Exception("solution has not rc files");
+        throw new Exception("No RC files detected");
       InitializeComponent();
       DataContext = this;
       mRcFilesContexts = new Dictionary<RcFile, StringResourceContext>();
