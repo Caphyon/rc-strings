@@ -103,7 +103,7 @@ namespace Caphyon.RcStrings.VsPackage
       set => mResourceId = value;
     }
 
-    private Dictionary<string, string> Errors { get; } = new Dictionary<string, string>();
+    private Dictionary<string, List<string>> Errors { get; } = new Dictionary<string, List<string>>();
 
     private bool HasError => Errors.Any();
 
@@ -114,8 +114,6 @@ namespace Caphyon.RcStrings.VsPackage
     public EditStringResourceDialog(IServiceProvider aServiceProvider, List<RcFile> aRcFiles, RcFile aSelectedRcFile,
       string aSelectedText, bool aReplaceCode, string aReplaceWithCodeFormated, StringLine aStringResource = null)
     {
-      if (aRcFiles.Count == 0)
-        throw new Exception("No RC files detected");
       InitializeComponent();
       DataContext = this;
       mRcFilesContexts = new Dictionary<RcFile, StringResourceContext>();
@@ -165,7 +163,7 @@ namespace Caphyon.RcStrings.VsPackage
       }
       if (HasError)
       {
-        VsShellUtilities.ShowMessageBox(mServiceProvider, Errors.First().Value, "Invalid input",
+        VsShellUtilities.ShowMessageBox(mServiceProvider, Errors.First().Value.First(), "Invalid input",
           OLEMSGICON.OLEMSGICON_CRITICAL, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
         return;
       }
@@ -215,7 +213,8 @@ namespace Caphyon.RcStrings.VsPackage
       get
       {
         CollectErrors();
-        return Errors.ContainsKey(PropertyName) ? Errors[PropertyName] : string.Empty;
+        return Errors.ContainsKey(PropertyName) ? 
+          String.Join("\n", Errors[PropertyName]) : string.Empty;
       }
     }
 
@@ -224,33 +223,43 @@ namespace Caphyon.RcStrings.VsPackage
       Errors.Clear();
 
       if (string.IsNullOrEmpty(ResourceName) ||
-            ResourceName.Length > ParseConstants.kMaximumResourceNameLength ||
-            !ResourceName.StartsWith(TagConstants.kStringPreffix))
+        ResourceName.Length > ParseConstants.kMaximumResourceNameLength ||
+        !ResourceName.StartsWith(TagConstants.kStringPreffix))
       {
-        Errors.Add(nameof(ResourceName), 
-          string.Format("Name with the IDS_ prefix and maximum length of {0} is required!",
-          ParseConstants.kMaximumResourceNameLength));
+        if (!Errors.ContainsKey(nameof(ResourceName)))
+          Errors[nameof(ResourceName)] = new List<string>();
+
+        Errors[nameof(ResourceName)].Add(string.Format(
+          $"Name with the IDS_ prefix and maximum length of {ParseConstants.kMaximumResourceNameLength} is required!"));
       }
 
       if(AddMode && (string.IsNullOrEmpty(ResourceName) ||
         ResourceContext.ResourceNameExists(ResourceName)))
       {
-        Errors.Add(nameof(ResourceName), string.Format("Name \"{0}\" already exists!", ResourceName));
+        if (!Errors.ContainsKey(nameof(ResourceName)))
+          Errors[nameof(ResourceName)] = new List<string>();
+
+        Errors[nameof(ResourceName)].Add(string.Format($"Name \"{ResourceName}\" already exists!"));
       }
 
       if (string.IsNullOrEmpty(ResourceIdTemp) ||
-            !ParseUtility.TransformToDecimal(ResourceIdTemp, out mResourceId) ||
-            mResourceId < 0 || mResourceId > IdGenerator.kMaximumId)
+        !ParseUtility.TransformToDecimal(ResourceIdTemp, out mResourceId) ||
+        mResourceId < 0 || mResourceId > IdGenerator.kMaximumId)
       {
-        Errors.Add(nameof(ResourceIdTemp),
-          string.Format("Positive id less then {0} is required!", IdGenerator.kMaximumId));
+        if (!Errors.ContainsKey(nameof(ResourceIdTemp)))
+          Errors[nameof(ResourceIdTemp)] = new List<string>();
+
+        Errors[nameof(ResourceIdTemp)].Add(string.Format($"Positive id less then {IdGenerator.kMaximumId} is required!"));
       }
+
       if (string.IsNullOrEmpty(ResourceValue) || 
         ResourceValue.Length > ParseConstants.kMaximumResourceValueLength)
       {
-        Errors.Add(nameof(ResourceValue), 
-          string.Format("Value with maximum length of {0} characters is required!", 
-          ParseConstants.kMaximumResourceValueLength));
+        if (!Errors.ContainsKey(nameof(ResourceValue)))
+          Errors[nameof(ResourceValue)] = new List<string>();
+
+        Errors[nameof(ResourceValue)].Add(
+          string.Format($"Value with maximum length of {ParseConstants.kMaximumResourceValueLength} characters is required!"));
       }
     }
     #endregion
