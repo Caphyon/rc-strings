@@ -9,7 +9,6 @@ using Caphyon.RcStrings.VsPackage.Properties;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.VCProjectEngine;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
@@ -18,6 +17,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
+using Microsoft.Build.Evaluation;
 
 namespace Caphyon.RcStrings.VsPackage
 {
@@ -224,6 +224,9 @@ namespace Caphyon.RcStrings.VsPackage
         }
       }
 
+      if (rcFiles.Count == 0)
+        throw new Exception("No RC files detected");
+
       EditStringResourceDialog dialog = new EditStringResourceDialog((IServiceProvider)this, rcFiles, 
         mSelectedRcFile, mSelectedWord, mReplaceString, mReplaceWithCodeFormated)
       {
@@ -353,27 +356,30 @@ namespace Caphyon.RcStrings.VsPackage
       return rcFiles;
     }
 
-    private List<RcFile> GetRcFilesFromProject(Project aProject)
+    private List<RcFile> GetRcFilesFromProject(EnvDTE.Project aProject)
     {
-      if (!(aProject.Object is VCProject))
+      if (aProject.Kind != kCppProjectKind)
         return new List<RcFile>();
 
       var rcFiles = GetRcFiles(aProject.ProjectItems, string.Empty);
-      // Set Aditional Include Directories collection
-      VCProject vcProject = aProject.Object as VCProject;
+      if (rcFiles.Count == 0)
+        return rcFiles;
 
-      List<string> aditionalDirectories = new List<string>();
-      foreach (var toolObject in vcProject.ActiveConfiguration.Tools)
+      ProjectCollection projectCollection = new ProjectCollection();
+      var project = projectCollection.LoadProject(aProject.FullName);
+      HashSet<string> aditionalDirectories = new HashSet<string>();
+
+      // Set Aditional Include Directories collection
+      foreach (var item in project.Items)
       {
-        string aditionalDirsValue;
-        if (toolObject is VCResourceCompilerTool)
-          aditionalDirsValue = (toolObject as VCResourceCompilerTool).AdditionalIncludeDirectories;
-        else if (toolObject is VCCLCompilerTool)
-          aditionalDirsValue = (toolObject as VCCLCompilerTool).AdditionalIncludeDirectories;
-        else
+        if (item.ItemType != "ResourceComplile" && item.ItemType != "ClCompile")
           continue;
 
-        string[] aditionalDirs = aditionalDirsValue.Split(';');
+        var aditionalDirsProp = item.GetMetadata("AdditionalIncludeDirectories");
+        if (aditionalDirsProp == null)
+          continue;
+
+        string[] aditionalDirs = aditionalDirsProp.EvaluatedValue.Split(';');
         foreach (string dirRelativePath in aditionalDirs)
         {
           try
@@ -384,13 +390,13 @@ namespace Caphyon.RcStrings.VsPackage
             if (Directory.Exists(dirAbsolutePath))
               aditionalDirectories.Add(dirAbsolutePath);
           }
-          catch{ }
+          catch { }
         }
-
-        VCppProject project = new VCppProject(aProject);
-        project.AditionalIncludeDirectories.AddRange(aditionalDirectories);
-        rcFiles.ForEach(rcf => rcf.Project = project);
       }
+      VCppProject cppProject = new VCppProject(aProject);
+      cppProject.AditionalIncludeDirectories.AddRange(aditionalDirectories);
+      rcFiles.ForEach(rcf => rcf.Project = cppProject);
+
       return rcFiles;
     }
 
