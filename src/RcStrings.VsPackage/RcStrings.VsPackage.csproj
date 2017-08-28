@@ -75,6 +75,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AutomationUtil.cs" />
     <Compile Include="RcStringsOptionPage.cs">
       <SubType>Component</SubType>
     </Compile>

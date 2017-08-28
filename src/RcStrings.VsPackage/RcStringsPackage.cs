@@ -18,6 +18,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
 using Microsoft.Build.Evaluation;
+using Microsoft.VisualStudio;
 
 namespace Caphyon.RcStrings.VsPackage
 {
@@ -57,6 +58,7 @@ namespace Caphyon.RcStrings.VsPackage
     private const int kIdEditResourceCmd = 0x0101;
     private const int kIdStringResourcesMenuItem = 0x1100;
     private const string kCppProjectKind = "{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}";
+    private const string kUnloadedProjectKind = "{67294A52-A4F0-11D2-AA88-00C04F688DDE}";
 
     #endregion
 
@@ -351,14 +353,25 @@ namespace Caphyon.RcStrings.VsPackage
     private List<RcFile> GetRCFilesFromSolution()
     {
       List<RcFile> rcFiles = new List<RcFile>();
-      for (int i = 1; i <= mDte.Solution.Projects.Count; i++)
-        rcFiles.AddRange(GetRcFilesFromProject(mDte.Solution.Projects.Item(i)));
+      List<EnvDTE.Project> solutionProjects = AutomationUtil.GetAllProjects(mDte);
+      foreach( EnvDTE.Project project in solutionProjects )
+        rcFiles.AddRange(GetRcFilesFromProject(project));
       return rcFiles;
     }
 
     private List<RcFile> GetRcFilesFromProject(EnvDTE.Project aProject)
     {
-      if (aProject.Kind != kCppProjectKind)
+      if (string.Compare(EnvDTE.Constants.vsProjectKindUnmodeled, aProject.Kind,
+          System.StringComparison.OrdinalIgnoreCase) == 0)
+      {
+        IVsSolution4 solution = base.GetService(typeof(SVsSolution)) as IVsSolution4;
+        Guid projGuid = AutomationUtil.GetProjectGuid(this, aProject);
+        solution.ReloadProject(projGuid);
+        aProject = AutomationUtil.FindProjectByGuid(this, projGuid);
+      }
+
+      if (string.Compare(kCppProjectKind, aProject.Kind,
+          System.StringComparison.OrdinalIgnoreCase) != 0)
         return new List<RcFile>();
 
       var rcFiles = GetRcFiles(aProject.ProjectItems, string.Empty);
