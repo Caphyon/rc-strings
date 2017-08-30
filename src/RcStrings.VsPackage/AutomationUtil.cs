@@ -2,9 +2,7 @@
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using EnvDTE;
 
 namespace Caphyon.RcStrings.VsPackage
 {
@@ -12,19 +10,6 @@ namespace Caphyon.RcStrings.VsPackage
   {
 
     #region Methods
-    public static int GetProjectFromIVsHierarchy(IVsHierarchy pHierarchy, out EnvDTE.Project aProject)
-    {
-      aProject = null;
-      if (null == pHierarchy)
-        return VSConstants.E_INVALIDARG;
-
-      int err = pHierarchy.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_ExtObject, out object projObj);
-      if (VSConstants.S_OK != err)
-        return err;
-
-      aProject = projObj as EnvDTE.Project;
-      return VSConstants.S_OK;
-    }
 
     public static List<EnvDTE.Project> GetAllProjects(EnvDTE.DTE aDTE)
     {
@@ -42,42 +27,34 @@ namespace Caphyon.RcStrings.VsPackage
       return list;
     }
 
-    public static EnvDTE.Project FindProjectByGuid(IServiceProvider aServiceProvider, Guid aGuid)
+    public static Project ReloadProject(IServiceProvider aServiceProvider, EnvDTE.Project aProject)
     {
-      var solution = aServiceProvider.GetService(typeof(SVsSolution)) as IVsSolution;
-      if (null == solution)
-        return null;
-
-      int err = solution.GetProjectOfGuid(aGuid, out IVsHierarchy hierarchy);
+      IVsSolution4 solution = aServiceProvider.GetService(typeof(SVsSolution)) as IVsSolution4;
+      int err = ((IVsSolution)solution).GetProjectOfUniqueName(aProject.UniqueName, out IVsHierarchy hierarchy);
       if (VSConstants.S_OK != err)
         return null;
 
-      err = GetProjectFromIVsHierarchy(hierarchy, out EnvDTE.Project project);
+      uint itemId = (uint)VSConstants.VSITEMID.Root;
+      err = hierarchy.GetGuidProperty(itemId, (int)__VSHPROPID.VSHPROPID_ProjectIDGuid, out Guid projectGuid);
       if (VSConstants.S_OK != err)
         return null;
 
-      return project;
+      err = solution.EnsureProjectIsLoaded(projectGuid, (uint)__VSBSLFLAGS.VSBSLFLAGS_None);
+      if (VSConstants.S_OK != err)
+        return null;
+
+      err = ((IVsSolution)solution).GetProjectOfGuid(projectGuid, out IVsHierarchy loadedProject);
+      if (VSConstants.S_OK != err)
+        return null;
+
+      loadedProject.GetProperty(itemId, (int)__VSHPROPID.VSHPROPID_ExtObject, out object objProject);
+      return objProject as EnvDTE.Project;
     }
 
-    public static Guid GetProjectGuid(IServiceProvider aServiceProvider, EnvDTE.Project aProject)
-    {
-      var solution = aServiceProvider.GetService(typeof(SVsSolution)) as IVsSolution;
-      if (null == solution)
-        return Guid.Empty;
-
-      int err = solution.GetProjectOfUniqueName(aProject.UniqueName, out IVsHierarchy hierarchy);
-      if (VSConstants.S_OK != err)
-        return Guid.Empty;
-
-      err = hierarchy.GetGuidProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_ProjectIDGuid, out Guid projectGuid);
-      if (VSConstants.S_OK != err)
-        return Guid.Empty;
-
-      return projectGuid;
-    }
     #endregion
 
     #region Helpers
+
     private static IEnumerable<EnvDTE.Project> GetSolutionFolderProjects(EnvDTE.Project aSolutionFolderItem)
     {
       List<EnvDTE.Project> list = new List<EnvDTE.Project>();
@@ -94,6 +71,7 @@ namespace Caphyon.RcStrings.VsPackage
       }
       return list;
     }
+
     #endregion
   }
 }

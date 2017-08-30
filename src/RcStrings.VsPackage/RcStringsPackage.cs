@@ -18,7 +18,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
 using Microsoft.Build.Evaluation;
-using Microsoft.VisualStudio;
 
 namespace Caphyon.RcStrings.VsPackage
 {
@@ -362,17 +361,16 @@ namespace Caphyon.RcStrings.VsPackage
     private List<RcFile> GetRcFilesFromProject(EnvDTE.Project aProject)
     {
       if (string.Compare(EnvDTE.Constants.vsProjectKindUnmodeled, aProject.Kind,
-          System.StringComparison.OrdinalIgnoreCase) == 0)
+        System.StringComparison.OrdinalIgnoreCase) == 0)
       {
-        IVsSolution4 solution = base.GetService(typeof(SVsSolution)) as IVsSolution4;
-        Guid projGuid = AutomationUtil.GetProjectGuid(this, aProject);
-        solution.ReloadProject(projGuid);
-        aProject = AutomationUtil.FindProjectByGuid(this, projGuid);
+        aProject = AutomationUtil.ReloadProject(this, aProject);
       }
 
-      if (string.Compare(kCppProjectKind, aProject.Kind,
-          System.StringComparison.OrdinalIgnoreCase) != 0)
+      if (aProject == null || string.Compare(kCppProjectKind, aProject.Kind,
+        System.StringComparison.OrdinalIgnoreCase) != 0)
+      {
         return new List<RcFile>();
+      }
 
       var rcFiles = GetRcFiles(aProject.ProjectItems, string.Empty);
       if (rcFiles.Count == 0)
@@ -380,10 +378,20 @@ namespace Caphyon.RcStrings.VsPackage
 
       ProjectCollection projectCollection = new ProjectCollection();
       var project = projectCollection.LoadProject(aProject.FullName);
-      HashSet<string> aditionalDirectories = new HashSet<string>();
+      HashSet<string> aditionalDirectories = GetAdditionalIncludeDirectories(project.Items, aProject);
 
-      // Set Aditional Include Directories collection
-      foreach (var item in project.Items)
+      VCppProject cppProject = new VCppProject(aProject);
+      cppProject.AditionalIncludeDirectories.AddRange(aditionalDirectories);
+      rcFiles.ForEach(rcf => rcf.Project = cppProject);
+
+      return rcFiles;
+    }
+
+    private HashSet<string> GetAdditionalIncludeDirectories(
+      ICollection<Microsoft.Build.Evaluation.ProjectItem> aProjectItems, EnvDTE.Project aProject)
+    {
+      HashSet<string> additionalDirectories = new HashSet<string>();
+      foreach (var item in aProjectItems)
       {
         if (item.ItemType != "ResourceComplile" && item.ItemType != "ClCompile")
           continue;
@@ -399,18 +407,13 @@ namespace Caphyon.RcStrings.VsPackage
           {
             string dirFullPath = Path.Combine(Path.GetDirectoryName(aProject.FileName), dirRelativePath);
             string dirAbsolutePath = Path.GetFullPath((new Uri(dirFullPath)).LocalPath);
-
             if (Directory.Exists(dirAbsolutePath))
-              aditionalDirectories.Add(dirAbsolutePath);
+              additionalDirectories.Add(dirAbsolutePath);
           }
           catch { }
         }
       }
-      VCppProject cppProject = new VCppProject(aProject);
-      cppProject.AditionalIncludeDirectories.AddRange(aditionalDirectories);
-      rcFiles.ForEach(rcf => rcf.Project = cppProject);
-
-      return rcFiles;
+      return additionalDirectories;
     }
 
     private List<RcFile> GetRcFiles(EnvDTE.ProjectItems aItems, string aItemPath)
