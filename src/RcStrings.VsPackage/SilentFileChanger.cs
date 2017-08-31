@@ -91,7 +91,7 @@ namespace Caphyon.RcStrings.VsPackage
       if (!mIsSuspending || mPersistDocData == null)
         return;
 
-      if( mPersistDocData != null && mReloadDocument )
+      if (mPersistDocData != null && mReloadDocument)
         mPersistDocData.ReloadDocData(0);
 
       IVsFileChangeEx fileChange = mSite.GetService(typeof(SVsFileChangeEx)) as IVsFileChangeEx;

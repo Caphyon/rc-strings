@@ -7,6 +7,7 @@
 using Caphyon.RcStrings.StringEnhancer;
 using Caphyon.RcStrings.VsPackage.Properties;
 using EnvDTE;
+using Microsoft.Build.Evaluation;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
@@ -17,7 +18,6 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
-using Microsoft.Build.Evaluation;
 
 namespace Caphyon.RcStrings.VsPackage
 {
@@ -119,14 +119,14 @@ namespace Caphyon.RcStrings.VsPackage
 
       mDte = (EnvDTE.DTE)GetService(typeof(EnvDTE.DTE));
       mDteWindow = (System.Windows.Window)HwndSource.FromHwnd((IntPtr)mDte.MainWindow.HWnd).RootVisual;
-      
+
       var mSolutionEvent = mDte.Events.SolutionEvents;
       mSolutionEvent.BeforeClosing += SolutionEvent_BeforeClosing;
 
       var service = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
       if (null != service)
       {
-        var menuItem = new MenuCommand(null, 
+        var menuItem = new MenuCommand(null,
           new CommandID(new Guid(kGuidCommands), kIdStringResourcesMenuItem));
         var setResourceCommand = new OleMenuCommand(SetResourceCommandClick,
            new CommandID(new Guid(kGuidCommands), kIdSetResourceCmd));
@@ -214,10 +214,10 @@ namespace Caphyon.RcStrings.VsPackage
         var userSolutionRc = UserSettings.SolutionsSelectedRc
           .FirstOrDefault(src => src.SolutionName == SolutionName);
 
-        if(userSolutionRc != null)
+        if (userSolutionRc != null)
         {
           var currentRcFile = rcFiles.FirstOrDefault(
-            rcf => rcf.FileName == userSolutionRc.SelectedRc && 
+            rcf => rcf.FileName == userSolutionRc.SelectedRc &&
             rcf.Project.ProjectName == userSolutionRc.ProjectName);
           mSelectedRcFile = currentRcFile;
           mReplaceWithCodeFormated = HandleEmptyReplaceWithField(userSolutionRc.ReplaceWith);
@@ -228,7 +228,7 @@ namespace Caphyon.RcStrings.VsPackage
       if (rcFiles.Count == 0)
         throw new Exception("No RC files detected");
 
-      EditStringResourceDialog dialog = new EditStringResourceDialog((IServiceProvider)this, rcFiles, 
+      EditStringResourceDialog dialog = new EditStringResourceDialog((IServiceProvider)this, rcFiles,
         mSelectedRcFile, mSelectedWord, mReplaceString, mReplaceWithCodeFormated)
       {
         Owner = mDteWindow
@@ -240,7 +240,7 @@ namespace Caphyon.RcStrings.VsPackage
         {
           // Save added string resource to RC file
           StringResourceContext resourceContext = dialog.ResourceContext;
-          resourceContext.AddResource(new EscapeSequences().Format(dialog.ResourceValue), 
+          resourceContext.AddResource(new EscapeSequences().Format(dialog.ResourceValue),
             dialog.ResourceName, dialog.ResourceId);
           resourceContext.UpdateResourceFiles((IServiceProvider)this);
 
@@ -250,7 +250,7 @@ namespace Caphyon.RcStrings.VsPackage
         }
         catch (Exception exception)
         {
-          VsShellUtilities.ShowMessageBox((IServiceProvider)this, exception.Message, "Error", 
+          VsShellUtilities.ShowMessageBox((IServiceProvider)this, exception.Message, "Error",
             OLEMSGICON.OLEMSGICON_CRITICAL, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
         }
       }
@@ -269,7 +269,7 @@ namespace Caphyon.RcStrings.VsPackage
       var result = FindStringResourceByName(mSelectedWord);
       if (result == null)
       {
-        VsShellUtilities.ShowMessageBox((IServiceProvider)this, 
+        VsShellUtilities.ShowMessageBox((IServiceProvider)this,
           string.Format("The string resource name \"{0}\" can not be found in RC files in the solution", mSelectedWord),
           "Resource not found", OLEMSGICON.OLEMSGICON_CRITICAL, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
         return;
@@ -280,7 +280,7 @@ namespace Caphyon.RcStrings.VsPackage
       IdGenerator.RandomId = RandomIdOption;
 
       EditStringResourceDialog dialog = new EditStringResourceDialog(
-        (IServiceProvider) this, new List<RcFile>() { result.Item2.RcFile },
+        (IServiceProvider)this, new List<RcFile>() { result.Item2.RcFile },
         result.Item2.RcFile, mSelectedWord,
         mReplaceString, mReplaceWithCodeFormated, stringResource)
       {
@@ -297,7 +297,7 @@ namespace Caphyon.RcStrings.VsPackage
         }
         catch (Exception ex)
         {
-          VsShellUtilities.ShowMessageBox((IServiceProvider)this, ex.Message, "Error", 
+          VsShellUtilities.ShowMessageBox((IServiceProvider)this, ex.Message, "Error",
             OLEMSGICON.OLEMSGICON_CRITICAL, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
         }
       }
@@ -353,7 +353,7 @@ namespace Caphyon.RcStrings.VsPackage
     {
       List<RcFile> rcFiles = new List<RcFile>();
       List<EnvDTE.Project> solutionProjects = AutomationUtil.GetAllProjects(mDte);
-      foreach( EnvDTE.Project project in solutionProjects )
+      foreach (EnvDTE.Project project in solutionProjects)
         rcFiles.AddRange(GetRcFilesFromProject(project));
       return rcFiles;
     }

@@ -22,7 +22,7 @@ namespace Caphyon.RcStrings.VsPackage
       AditionalIncludeDirectories = new List<string>();
     }
 
-    public VCppProject() {}
+    public VCppProject() { }
 
     #endregion
   }

@@ -122,7 +122,7 @@ namespace Caphyon.RcStrings.VsPackage
       this.ReplaceStringCodeFormated = aReplaceWithCodeFormated;
       this.RcFiles = aRcFiles;
       this.SelectedRcFile = aSelectedRcFile == null ?
-        RcFiles.ElementAt(0) : RcFiles.FirstOrDefault(rcf => 
+        RcFiles.ElementAt(0) : RcFiles.FirstOrDefault(rcf =>
         string.Equals(rcf.FilePath, aSelectedRcFile.FilePath, StringComparison.OrdinalIgnoreCase));
       if (!AddMode)
       {
@@ -142,7 +142,7 @@ namespace Caphyon.RcStrings.VsPackage
                                   @aSelectedText.Substring(quoteStartIndex + 1, quoteEndIndex - quoteStartIndex - 1) :
                                   @aSelectedText).Trim(Parse.kSplitResourceElementsChars);
         this.ResourceName = new NameGenerator(this.ResourceValue).Generate();
-        if(ResourceContext.ResourceNameExists(this.ResourceName))
+        if (ResourceContext.ResourceNameExists(this.ResourceName))
           this.ResourceName = string.Format("{0}{1}", this.ResourceName, this.ResourceIdTemp);
       }
     }
@@ -213,7 +213,7 @@ namespace Caphyon.RcStrings.VsPackage
       get
       {
         CollectErrors();
-        return Errors.ContainsKey(PropertyName) ? 
+        return Errors.ContainsKey(PropertyName) ?
           String.Join("\n", Errors[PropertyName]) : string.Empty;
       }
     }
@@ -233,7 +233,7 @@ namespace Caphyon.RcStrings.VsPackage
           $"Name with the IDS_ prefix and maximum length of {ParseConstants.kMaximumResourceNameLength} is required!"));
       }
 
-      if(AddMode && (string.IsNullOrEmpty(ResourceName) ||
+      if (AddMode && (string.IsNullOrEmpty(ResourceName) ||
         ResourceContext.ResourceNameExists(ResourceName)))
       {
         if (!Errors.ContainsKey(nameof(ResourceName)))
@@ -252,7 +252,7 @@ namespace Caphyon.RcStrings.VsPackage
         Errors[nameof(ResourceIdTemp)].Add(string.Format($"Positive id less then {IdGenerator.kMaximumId} is required!"));
       }
 
-      if (string.IsNullOrEmpty(ResourceValue) || 
+      if (string.IsNullOrEmpty(ResourceValue) ||
         ResourceValue.Length > ParseConstants.kMaximumResourceValueLength)
       {
         if (!Errors.ContainsKey(nameof(ResourceValue)))

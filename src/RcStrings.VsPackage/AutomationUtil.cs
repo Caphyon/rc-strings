@@ -1,8 +1,8 @@
-﻿using Microsoft.VisualStudio;
+﻿using EnvDTE;
+using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.Collections.Generic;
-using EnvDTE;
 
 namespace Caphyon.RcStrings.VsPackage
 {

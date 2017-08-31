@@ -34,7 +34,7 @@ namespace Caphyon.RcStrings.VsPackage
 
     public RcFile RcFile { get; private set; }
     public int GetId => mIdGenerator.Generate();
-    private string DefaultHeaderFile => 
+    private string DefaultHeaderFile =>
       Path.Combine(Path.GetDirectoryName(RcFile.FilePath), kDefaultResourceHeaderFileName);
 
     #endregion
@@ -60,7 +60,7 @@ namespace Caphyon.RcStrings.VsPackage
       mTempRcFile = Path.GetTempFileName();
       mTempHeaderFile = Path.GetTempFileName();
 
-      if(!File.Exists(mTempHeaderFile))
+      if (!File.Exists(mTempHeaderFile))
         File.Create(mTempHeaderFile);
 
       if (!File.Exists(mTempRcFile))
@@ -113,10 +113,10 @@ namespace Caphyon.RcStrings.VsPackage
       try
       {
         // Replace RC file from solution with the temp RC file created for editing
-        using ( var guard = new SilentFileChangerGuard(aServiceProvider, RcFile.FilePath, true) )
+        using (var guard = new SilentFileChangerGuard(aServiceProvider, RcFile.FilePath, true))
           File.Copy(mTempRcFile, RcFile.FilePath, true);
       }
-      catch(Exception ex)
+      catch (Exception ex)
       {
         throw new Exception(string.Format("Unable to save RC file {0}. Reason: {1}", RcFile, ex.Message));
       }
