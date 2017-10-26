@@ -71,8 +71,11 @@ namespace Caphyon.RcStrings.VsPackage
 
       foreach (string hrp in headersRelativePath)
       {
+        var newHrp = hrp.Replace("<", string.Empty);
+        newHrp = newHrp.Replace(">", string.Empty);
+
         // Handle default header file
-        if (hrp.ToLower() == kDefaultResourceHeaderFileName)
+        if (newHrp.ToLower() == kDefaultResourceHeaderFileName)
         {
           headerFiles.Add(DefaultHeaderFile);
           continue;
@@ -80,7 +83,7 @@ namespace Caphyon.RcStrings.VsPackage
 
         foreach (string dir in RcFile.Project.AditionalIncludeDirectories)
         {
-          string headerFullPath = Path.Combine(dir, hrp);
+          string headerFullPath = Path.Combine(dir, newHrp);
           string headerAbsolutPath = Path.GetFullPath((new Uri(headerFullPath)).LocalPath);
           if (File.Exists(headerAbsolutPath))
           {
