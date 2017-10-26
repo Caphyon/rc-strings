@@ -139,8 +139,7 @@ namespace Caphyon.RcStrings.VsPackage
         int quoteStartIndex = aSelectedText.IndexOf('"');
         int quoteEndIndex = aSelectedText.LastIndexOf('"');
         this.ResourceValue = (quoteStartIndex >= 0 && quoteEndIndex >= 0 && quoteStartIndex != quoteEndIndex ?
-                                  @aSelectedText.Substring(quoteStartIndex + 1, quoteEndIndex - quoteStartIndex - 1) :
-                                  @aSelectedText).Trim(Parse.kSplitResourceElementsChars);
+          @aSelectedText.Substring(quoteStartIndex + 1, quoteEndIndex - quoteStartIndex - 1) : @aSelectedText);
         this.ResourceName = new NameGenerator(this.ResourceValue).Generate();
         if (ResourceContext.ResourceNameExists(this.ResourceName))
           this.ResourceName = string.Format("{0}{1}", this.ResourceName, this.ResourceIdTemp);
