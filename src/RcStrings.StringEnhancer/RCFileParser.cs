@@ -68,6 +68,7 @@ namespace Caphyon.RcStrings.StringEnhancer
           // Skip the "#include " tag and the empty space after it 
           string headerRelativePath = line.Substring(TagConstants.kTagInclude.Length + 1);
           // Remove escape sequences
+
           headerRelativePath = headerRelativePath.Replace("\"", string.Empty);
           headerRelativePath = headerRelativePath.Replace("/", "\\");
           headerFilesPath.Add(headerRelativePath);
