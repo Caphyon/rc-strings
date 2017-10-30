@@ -409,7 +409,7 @@ namespace Caphyon.RcStrings.VsPackage
       HashSet<string> additionalDirectories = new HashSet<string>();
       foreach (var item in aProjectItems)
       {
-        if (item.ItemType != "ResourceComplile" && item.ItemType != "ClCompile")
+        if (item.ItemType != "ResourceCompile" && item.ItemType != "ClCompile")
           continue;
 
         var aditionalDirsProp = item.GetMetadata("AdditionalIncludeDirectories");
