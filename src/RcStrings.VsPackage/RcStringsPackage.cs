@@ -176,6 +176,9 @@ namespace Caphyon.RcStrings.VsPackage
     private void UpdateQueryWord()
     {
       if (EditorSelection.IsEmpty)
+        mDte.ExecuteCommand("Edit.SelectCurrentWord");
+
+      if (EditorSelection.IsEmpty)
       {
         // Detect the query word if nothing is selected.
         mSelectedWord = string.Empty;
