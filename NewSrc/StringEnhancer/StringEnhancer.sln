@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2035
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StringEnhancer", "StringEnhancer\StringEnhancer.csproj", "{75C8DB04-CBA9-416B-AE86-A83B27DBC411}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VSExtension", "VSExtension\VSExtension.csproj", "{5D88320D-DE1E-454B-B7CA-20CD28631178}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{75C8DB04-CBA9-416B-AE86-A83B27DBC411}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75C8DB04-CBA9-416B-AE86-A83B27DBC411}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75C8DB04-CBA9-416B-AE86-A83B27DBC411}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75C8DB04-CBA9-416B-AE86-A83B27DBC411}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D88320D-DE1E-454B-B7CA-20CD28631178}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D88320D-DE1E-454B-B7CA-20CD28631178}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D88320D-DE1E-454B-B7CA-20CD28631178}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D88320D-DE1E-454B-B7CA-20CD28631178}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {35920550-C384-417C-9E72-95D0668CF542}
+	EndGlobalSection
+EndGlobal
