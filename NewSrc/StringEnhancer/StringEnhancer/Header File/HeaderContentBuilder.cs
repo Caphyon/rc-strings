@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace StringEnhancer
 {
@@ -25,10 +26,16 @@ namespace StringEnhancer
         NameToID = new Dictionary<string, string>()
       };
 
-      foreach (var headerName in HeaderNamesExtractor.ExtractHeaderNames(mRCPath, mCodePage))
+      var headerFiles = HeaderNamesExtractor.ExtractHeaderNames(mRCPath, mCodePage);
+
+      foreach (var headerName in headerFiles)
       {
+        if (headerName.StartsWith("<") && headerName.EndsWith(">"))
+          continue;
+
         var absolutePath = Path.Combine(Path.GetDirectoryName(mRCPath), headerName);
-        if (!File.Exists(absolutePath)) continue;
+        if (!File.Exists(absolutePath) || (mHeaderContent.SortedHeaderResults.ContainsKey(absolutePath)))
+          continue;
         ParseHeaderFile(absolutePath, mCodePage);
       }
     }
