@@ -189,10 +189,8 @@ namespace Caphyon.RcStrings.VsPackage
       {
         // Get the text from the textbox
         // Skip new line
-        int retIndex = EditorSelection.Text.IndexOf("\r\n");
-        mSelectedWord = retIndex != -1 ?
-          EditorSelection.Text.Substring(0, retIndex) :
-          EditorSelection.Text.Trim();
+
+        mSelectedWord = EditorSelection.Text.Trim();
       }
     }
 
@@ -344,7 +342,8 @@ namespace Caphyon.RcStrings.VsPackage
     private Tuple<RCFileItem, StringResourceContext> FindStringResourceByName(string aResourceName)
     {
       List<RcFile> rcFiles = GetRCFilesFromSolution();
-      foreach (RcFile rcFile in rcFiles)
+
+      foreach (var rcFile in rcFiles)
       {
         StringResourceContext context = new StringResourceContext(rcFile);
         RCFileItem stringResource = context.GetStringResourceByName(mSelectedWord);
@@ -385,6 +384,9 @@ namespace Caphyon.RcStrings.VsPackage
       List<EnvDTE.Project> solutionProjects = AutomationUtil.GetAllProjects(mDte);
       foreach (EnvDTE.Project project in solutionProjects)
         rcFiles.AddRange(GetRcFilesFromProject(project));
+
+      rcFiles.RemoveAll((rcFile) => !HeaderNamesExtractor.ExtractHeaderNames(rcFile.FilePath, CodePageExtractor.GetCodePage(rcFile.FilePath)).Contains("resource.h"));
+
       return rcFiles;
     }
 
