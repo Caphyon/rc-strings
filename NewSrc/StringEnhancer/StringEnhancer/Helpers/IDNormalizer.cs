@@ -33,6 +33,9 @@ namespace StringEnhancer
         aID = aNameToID[aID];
       }
 
+      if (!Regex.IsMatch(aID, @"^\d+$"))
+        return Constants.kInvalidID;
+
       return aID;
     }
 
