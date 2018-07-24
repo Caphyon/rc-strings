@@ -12,9 +12,9 @@ namespace StringEnhancer
 
     private HeaderContent mHeaderContent;
 
-    public HeaderContentBuilder(string aPath, Encoding aCodePage)
+    public HeaderContentBuilder(string aRCPath, Encoding aCodePage)
     {
-      mRCPath = aPath;
+      mRCPath = aRCPath;
       mCodePage = aCodePage;
     }
 

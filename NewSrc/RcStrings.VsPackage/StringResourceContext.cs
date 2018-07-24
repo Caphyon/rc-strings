@@ -65,7 +65,8 @@ namespace Caphyon.RcStrings.VsPackage
 
       var headerPath = DefaultHeaderFile;
 
-      mIDGenerator = new IDGenerator(mHeaderContent, headerPath);
+      mIDGenerator = new IDGenerator();
+      mIDGenerator.RemoveExistingFromHeader(mHeaderContent, headerPath);
 
       mWriteRCPath = Path.GetTempFileName();
       mWriteHeaderPath = Path.GetTempFileName();
