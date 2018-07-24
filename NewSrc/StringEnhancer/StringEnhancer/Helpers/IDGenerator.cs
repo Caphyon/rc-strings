@@ -16,6 +16,10 @@ namespace StringEnhancer
 
     public void RemoveExistingFromHeader(HeaderContent aHeaderContent, string aHeaderPath)
     {
+      if (aHeaderPath.StartsWith("<") && aHeaderPath.EndsWith(">")
+        || !aHeaderContent.SortedHeaderResults.ContainsKey(aHeaderPath))
+        return;
+
       foreach (var headerItem in aHeaderContent.SortedHeaderResults[aHeaderPath])
       {
         emptyIDs.Remove(Convert.ToInt32(headerItem.ID));

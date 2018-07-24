@@ -72,12 +72,17 @@ namespace Caphyon.RcStrings.VsPackage
     {
       get
       {
-        if (mRcFilesContexts.TryGetValue(SelectedRcFile, out StringResourceContext context))
+        try
         {
+          mRcFilesContexts.TryGetValue(SelectedRcFile, out StringResourceContext context);
           return context;
         }
-
-        return null;
+        catch
+        {
+          VsShellUtilities.ShowMessageBox(mServiceProvider, "Aiurea", "Foarte aiurea", 
+            OLEMSGICON.OLEMSGICON_INFO, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+          return null;
+        }
       }
     }
     public IEnumerable<RcFile> RcFiles { get; private set; }

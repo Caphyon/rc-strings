@@ -25,12 +25,15 @@ namespace StringEnhancer
 
       var startIndex = (stringTableContent[determinedStringTableIndex].Count / Constants.kStringTableCapacity) * Constants.kStringTableCapacity;
 
+      int.TryParse(aTestItem.ID, out var testItemID);
+
       for (int i = startIndex; i < stringTableContent[determinedStringTableIndex].Count; ++i)
       {
         var currentName = stringTableContent[determinedStringTableIndex][i].Name;
-        var currentID = Convert.ToInt32(aNameToID[currentName]);
+        aNameToID.TryGetValue(currentName, out var currentIDString);
+        int.TryParse(currentIDString, out var currentID);
 
-        if (Convert.ToInt32(aTestItem.ID) < currentID)
+        if (testItemID < currentID)
         {
           stringTableContent[determinedStringTableIndex].Insert(i,
           new RCFileItem
