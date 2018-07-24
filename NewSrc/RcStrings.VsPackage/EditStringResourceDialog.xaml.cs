@@ -68,7 +68,18 @@ namespace Caphyon.RcStrings.VsPackage
         OnPropertyChanged("ReplaceCode");
       }
     }
-    public StringResourceContext ResourceContext => mRcFilesContexts[SelectedRcFile];
+    public StringResourceContext ResourceContext
+    {
+      get
+      {
+        if (mRcFilesContexts.TryGetValue(SelectedRcFile, out StringResourceContext context))
+        {
+          return context;
+        }
+
+        return null;
+      }
+    }
     public IEnumerable<RcFile> RcFiles { get; private set; }
     public RcFile SelectedRcFile
     {
