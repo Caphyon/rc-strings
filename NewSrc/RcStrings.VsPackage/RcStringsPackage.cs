@@ -99,6 +99,15 @@ namespace Caphyon.RcStrings.VsPackage
       }
     }
 
+    public bool IDUniquenessPerProject
+    {
+      get
+      {
+        RcStringsOptionPage optionPage = (RcStringsOptionPage)GetDialogPage(typeof(RcStringsOptionPage));
+        return optionPage.IDUniquenessPerProject;
+      }
+    }
+
     #endregion
 
     #region Ctor
@@ -255,12 +264,26 @@ namespace Caphyon.RcStrings.VsPackage
         Owner = mDteWindow
       };
 
+      if (IDUniquenessPerProject)
+      {
+        IDGenerator idGenerator = new IDGenerator();
+        foreach (var rcFile in rcFiles)
+        {
+          if (rcFile.Project.ProjectName == mSelectedRcFile.Project.ProjectName)
+          {
+            idGenerator.RemoveExistingFromRC(rcFile.FilePath);
+          }
+        }
+
+        dialog.ResourceIdTemp = idGenerator.Generate().ToString();
+      }
+
       if (dialog.ShowModal() == true)
       {
         try
         {
           // Save added string resource to RC file
-          
+
           StringResourceContext resourceContext = dialog.ResourceContext;
           resourceContext.AddResource($"\"{ new EscapeSequences().Format(dialog.ResourceValue)}\"",
             dialog.ResourceName, dialog.ResourceId);
