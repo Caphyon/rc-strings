@@ -9,7 +9,7 @@ namespace StringEnhancer
 
     public int GetPosition(string aID, string aHeaderPath)
     {
-      var searchedItem = new HeaderItem { ID = aID };
+      var searchedItem = new HeaderItem { ID = IDNormalizer.NormalizeID(aID) };
 
       var foundIndex = SortedHeaderResults[aHeaderPath].BinarySearch(0, SortedHeaderResults[aHeaderPath].Count, searchedItem, new HeaderResultComparerByID());
 

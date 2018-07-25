@@ -10,7 +10,7 @@ namespace StringEnhancer
     {
       var stringTableContent = aRCFileContent.StringTableContent;
       var stringTableIndexOrder = aRCFileContent.StringTableIndexOrder;
-      var determinedStringTableIndex = StringTableIndexCalculator.CalculateIndex(aTestItem.ID);
+      var determinedStringTableIndex = StringTableIndexCalculator.CalculateIndex(IDNormalizer.NormalizeID(aTestItem.ID));
 
       // Check if StringTable with index currentIdx exists
       if (!stringTableContent.ContainsKey(determinedStringTableIndex))
@@ -25,7 +25,7 @@ namespace StringEnhancer
 
       var startIndex = (stringTableContent[determinedStringTableIndex].Count / Constants.kStringTableCapacity) * Constants.kStringTableCapacity;
 
-      int.TryParse(aTestItem.ID, out var testItemID);
+      int.TryParse(IDNormalizer.NormalizeID(aTestItem.ID), out var testItemID);
 
       for (int i = startIndex; i < stringTableContent[determinedStringTableIndex].Count; ++i)
       {

@@ -79,7 +79,7 @@ namespace Caphyon.RcStrings.VsPackage
         }
         catch
         {
-          VsShellUtilities.ShowMessageBox(mServiceProvider, "Aiurea", "Foarte aiurea", 
+          VsShellUtilities.ShowMessageBox(mServiceProvider, "Aiurea", "Foarte aiurea",
             OLEMSGICON.OLEMSGICON_INFO, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
           return null;
         }
@@ -92,7 +92,7 @@ namespace Caphyon.RcStrings.VsPackage
       set
       {
         mSelectedRcFile = value;
-        if (mSelectedRcFile == null) // || !AddMode)
+        if (mSelectedRcFile == null || !AddMode)
           return;
 
         if (!mRcFilesContexts.TryGetValue(mSelectedRcFile, out StringResourceContext context))
@@ -116,6 +116,8 @@ namespace Caphyon.RcStrings.VsPackage
     {
       get
       {
+        if (IDNormalizer.IsHexaRepresentation(mResourceIdTemp))
+          return mResourceIdTemp;
         return IDNormalizer.NormalizeID(mResourceIdTemp);
       }
     }
@@ -237,58 +239,52 @@ namespace Caphyon.RcStrings.VsPackage
     {
       Errors.Clear();
 
-      if (string.IsNullOrEmpty(ResourceName) ||
-        ResourceName.Contains(" "))
+      if (AddMode)
       {
-        if (!Errors.ContainsKey(nameof(ResourceName)))
-          Errors[nameof(ResourceName)] = new List<string>();
+        if (string.IsNullOrEmpty(ResourceName) ||
+          ResourceName.Contains(" "))
+        {
+          if (!Errors.ContainsKey(nameof(ResourceName)))
+            Errors[nameof(ResourceName)] = new List<string>();
 
-        Errors[nameof(ResourceName)].Add(string.Format(
-          $"Oh Snap! Your name field can't contain whitespaces!"));
-      }
+          Errors[nameof(ResourceName)].Add(string.Format(
+            $"Oh Snap! Your name field can't contain whitespaces!"));
+        }
 
-      if (string.IsNullOrEmpty(ResourceName) ||
-        ResourceName.Length > ParseConstants.kMaximumResourceNameLength)
-      {
-        if (!Errors.ContainsKey(nameof(ResourceName)))
-          Errors[nameof(ResourceName)] = new List<string>();
+        if (string.IsNullOrEmpty(ResourceName) ||
+          ResourceName.Length > ParseConstants.kMaximumResourceNameLength)
+        {
+          if (!Errors.ContainsKey(nameof(ResourceName)))
+            Errors[nameof(ResourceName)] = new List<string>();
 
-        Errors[nameof(ResourceName)].Add(string.Format(
-          $"Name with maximum length of {ParseConstants.kMaximumResourceNameLength} is required!"));
-      }
+          Errors[nameof(ResourceName)].Add(string.Format(
+            $"Name with maximum length of {ParseConstants.kMaximumResourceNameLength} is required!"));
+        }
 
-      if (AddMode && (string.IsNullOrEmpty(ResourceName) ||
-        ResourceContext.ResourceNameExists(ResourceName)))
-      {
-        if (!Errors.ContainsKey(nameof(ResourceName)))
-          Errors[nameof(ResourceName)] = new List<string>();
+        if (AddMode && (string.IsNullOrEmpty(ResourceName) ||
+          ResourceContext.ResourceNameExists(ResourceName)))
+        {
+          if (!Errors.ContainsKey(nameof(ResourceName)))
+            Errors[nameof(ResourceName)] = new List<string>();
 
-        Errors[nameof(ResourceName)].Add(string.Format($"Looks like the name \"{ResourceName}\" already exists!"));
-      }
+          Errors[nameof(ResourceName)].Add(string.Format($"Looks like the name \"{ResourceName}\" already exists!"));
+        }
 
-      //if (string.IsNullOrEmpty(ResourceIdTemp) ||
-      //  ResourceId != StringEnhancer.Constants.kInvalidID)
-      //{
-      //  if (!Errors.ContainsKey(nameof(ResourceIdTemp)))
-      //    Errors[nameof(ResourceIdTemp)] = new List<string>();
+        if (ResourceId == StringEnhancer.Constants.kInvalidID)
+        {
+          if (!Errors.ContainsKey(nameof(ResourceIdTemp)))
+            Errors[nameof(ResourceIdTemp)] = new List<string>();
 
-      //  Errors[nameof(ResourceIdTemp)].Add(string.Format($"Positive ID less then {StringEnhancer.Constants.kMaxID} is required!"));
-      //}
+          Errors[nameof(ResourceIdTemp)].Add(string.Format($"Invalid ID! (Must be integer)"));
+        }
+        else if (string.IsNullOrEmpty(ResourceId) ||
+          (ResourceContext.IdExists(ResourceId) && AddMode))
+        {
+          if (!Errors.ContainsKey(nameof(ResourceIdTemp)))
+            Errors[nameof(ResourceIdTemp)] = new List<string>();
 
-      if (ResourceId == StringEnhancer.Constants.kInvalidID)
-      {
-        if (!Errors.ContainsKey(nameof(ResourceIdTemp)))
-          Errors[nameof(ResourceIdTemp)] = new List<string>();
-
-        Errors[nameof(ResourceIdTemp)].Add(string.Format($"Invalid ID! (Must be integer)"));
-      }
-      else if (string.IsNullOrEmpty(ResourceId) ||
-        (ResourceContext.IdExists(ResourceId) && AddMode))
-      {
-        if (!Errors.ContainsKey(nameof(ResourceIdTemp)))
-          Errors[nameof(ResourceIdTemp)] = new List<string>();
-
-        Errors[nameof(ResourceIdTemp)].Add(string.Format($"Unique ID is required!"));
+          Errors[nameof(ResourceIdTemp)].Add(string.Format($"Unique ID is required!"));
+        }
       }
 
       if (string.IsNullOrEmpty(ResourceValue) ||
