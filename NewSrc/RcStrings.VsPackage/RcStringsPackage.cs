@@ -269,7 +269,7 @@ namespace Caphyon.RcStrings.VsPackage
         IDGenerator idGenerator = new IDGenerator();
         foreach (var rcFile in rcFiles)
         {
-          if (rcFile.Project.ProjectName == mSelectedRcFile.Project.ProjectName)
+          if (rcFile.Project.ProjectName == dialog.SelectedRcFile.Project.ProjectName)
           {
             idGenerator.RemoveExistingFromRC(rcFile.FilePath);
           }
