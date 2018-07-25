@@ -68,7 +68,23 @@ namespace Caphyon.RcStrings.VsPackage
         OnPropertyChanged("ReplaceCode");
       }
     }
-    public StringResourceContext ResourceContext => mRcFilesContexts[SelectedRcFile];
+    public StringResourceContext ResourceContext
+    {
+      get
+      {
+        try
+        {
+          mRcFilesContexts.TryGetValue(SelectedRcFile, out StringResourceContext context);
+          return context;
+        }
+        catch
+        {
+          VsShellUtilities.ShowMessageBox(mServiceProvider, "Aiurea", "Foarte aiurea", 
+            OLEMSGICON.OLEMSGICON_INFO, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+          return null;
+        }
+      }
+    }
     public IEnumerable<RcFile> RcFiles { get; private set; }
     public RcFile SelectedRcFile
     {

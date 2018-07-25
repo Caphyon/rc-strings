@@ -24,6 +24,8 @@ namespace StringEnhancer
           }
           else if (words[0] == "BEGIN")
           {
+            if (!headerNames.Contains("resource.h"))
+              headerNames.Clear();
             return headerNames;
           }
         }

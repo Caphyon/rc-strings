@@ -99,6 +99,15 @@ namespace Caphyon.RcStrings.VsPackage
       }
     }
 
+    public bool IDUniquenessPerProject
+    {
+      get
+      {
+        RcStringsOptionPage optionPage = (RcStringsOptionPage)GetDialogPage(typeof(RcStringsOptionPage));
+        return optionPage.IDUniquenessPerProject;
+      }
+    }
+
     #endregion
 
     #region Ctor
@@ -189,10 +198,8 @@ namespace Caphyon.RcStrings.VsPackage
       {
         // Get the text from the textbox
         // Skip new line
-        int retIndex = EditorSelection.Text.IndexOf("\r\n");
-        mSelectedWord = retIndex != -1 ?
-          EditorSelection.Text.Substring(0, retIndex) :
-          EditorSelection.Text.Trim();
+
+        mSelectedWord = EditorSelection.Text.Trim();
       }
     }
 
@@ -257,12 +264,26 @@ namespace Caphyon.RcStrings.VsPackage
         Owner = mDteWindow
       };
 
+      if (IDUniquenessPerProject)
+      {
+        IDGenerator idGenerator = new IDGenerator();
+        foreach (var rcFile in rcFiles)
+        {
+          if (rcFile.Project.ProjectName == mSelectedRcFile.Project.ProjectName)
+          {
+            idGenerator.RemoveExistingFromRC(rcFile.FilePath);
+          }
+        }
+
+        dialog.ResourceIdTemp = idGenerator.Generate().ToString();
+      }
+
       if (dialog.ShowModal() == true)
       {
         try
         {
           // Save added string resource to RC file
-          
+
           StringResourceContext resourceContext = dialog.ResourceContext;
           resourceContext.AddResource($"\"{ new EscapeSequences().Format(dialog.ResourceValue)}\"",
             dialog.ResourceName, dialog.ResourceId);
@@ -294,42 +315,50 @@ namespace Caphyon.RcStrings.VsPackage
     // Edit resource string
     private void EditResourceCommandClick(object sender, EventArgs e)
     {
-      var result = FindStringResourceByName(mSelectedWord);
-      if (result == null)
+      try
       {
-        VsShellUtilities.ShowMessageBox((IServiceProvider)this,
-          string.Format("The string resource name \"{0}\" can not be found in RC files in the solution", mSelectedWord),
-          "Resource not found", OLEMSGICON.OLEMSGICON_CRITICAL, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
-        return;
+        var result = FindStringResourceByName(mSelectedWord);
+        if (result == null)
+        {
+          VsShellUtilities.ShowMessageBox((IServiceProvider)this,
+            string.Format("The string resource name \"{0}\" can not be found in RC files in the solution", mSelectedWord),
+            "Resource not found", OLEMSGICON.OLEMSGICON_CRITICAL, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+          return;
+        }
+
+        RCFileItem stringResource = result.Item1;
+        StringResourceContext context = result.Item2;
+        IDGenerator.RandomID = RandomIdOption;
+
+        EditStringResourceDialog dialog = new EditStringResourceDialog(
+          (IServiceProvider)this, new List<RcFile>() { result.Item2.RcFile },
+          result.Item2.RcFile, mSelectedWord,
+          mReplaceString, mReplaceWithCodeFormated, stringResource)
+        {
+          Owner = mDteWindow
+        };
+
+        if (dialog.ShowModal() == true)
+        {
+          try
+          {
+            // Save added string resource to RC file
+            stringResource.Value = $"\"{new EscapeSequences().Format(dialog.ResourceValue)}\"";
+
+            // Rewrite updated string resource
+            context.UpdateRCFile((IServiceProvider)this);
+          }
+          catch (Exception ex)
+          {
+            VsShellUtilities.ShowMessageBox((IServiceProvider)this, $"{ex.Message}:{ex.StackTrace}", "Error",
+              OLEMSGICON.OLEMSGICON_CRITICAL, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+          }
+        }
       }
-
-      RCFileItem stringResource = result.Item1;
-      StringResourceContext context = result.Item2;
-      IDGenerator.RandomID = RandomIdOption;
-
-      EditStringResourceDialog dialog = new EditStringResourceDialog(
-        (IServiceProvider)this, new List<RcFile>() { result.Item2.RcFile },
-        result.Item2.RcFile, mSelectedWord,
-        mReplaceString, mReplaceWithCodeFormated, stringResource)
+      catch (Exception ex)
       {
-        Owner = mDteWindow
-      };
-
-      if (dialog.ShowModal() == true)
-      {
-        try
-        {
-          // Save added string resource to RC file
-          stringResource.Value = $"\"{new EscapeSequences().Format(dialog.ResourceValue)}\"";
-
-          // Rewrite updated string resource
-          context.UpdateRCFile((IServiceProvider)this);
-        }
-        catch (Exception ex)
-        {
-          VsShellUtilities.ShowMessageBox((IServiceProvider)this, ex.Message, "Error",
-            OLEMSGICON.OLEMSGICON_CRITICAL, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
-        }
+        VsShellUtilities.ShowMessageBox((IServiceProvider)this, $"{ex.Message}:{ex.StackTrace}", "Error",
+              OLEMSGICON.OLEMSGICON_CRITICAL, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
       }
     }
 
@@ -344,7 +373,8 @@ namespace Caphyon.RcStrings.VsPackage
     private Tuple<RCFileItem, StringResourceContext> FindStringResourceByName(string aResourceName)
     {
       List<RcFile> rcFiles = GetRCFilesFromSolution();
-      foreach (RcFile rcFile in rcFiles)
+
+      foreach (var rcFile in rcFiles)
       {
         StringResourceContext context = new StringResourceContext(rcFile);
         RCFileItem stringResource = context.GetStringResourceByName(mSelectedWord);
@@ -385,6 +415,9 @@ namespace Caphyon.RcStrings.VsPackage
       List<EnvDTE.Project> solutionProjects = AutomationUtil.GetAllProjects(mDte);
       foreach (EnvDTE.Project project in solutionProjects)
         rcFiles.AddRange(GetRcFilesFromProject(project));
+
+      rcFiles.RemoveAll((rcFile) => !HeaderNamesExtractor.ExtractHeaderNames(rcFile.FilePath, CodePageExtractor.GetCodePage(rcFile.FilePath)).Contains("resource.h"));
+
       return rcFiles;
     }
 
