@@ -32,7 +32,9 @@ namespace StringEnhancer
       if (aIsInStringTable)
       {
         mResult = new RCFileItem();
-        string[] words = aLine.Trim().Split();
+        string[] words = aLine.Trim().Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+
+        if (words.Length == 0) return;
 
         mResult.Name = words[0];
 
@@ -42,12 +44,12 @@ namespace StringEnhancer
         {
           if (words.Length == 1)
           {
-            mResult.Value = mFileStream.ReadLine()?.TrimStart();
+            mResult.Value = mFileStream.ReadLine()?.TrimStart(new char[] { ' ', '\t' });
             mResult.PrintStyle = StringTablePrintStyle.NewLine;
           }
           else
           {
-            mResult.Value = String.Join(" ", words, 1, words.Length - 1).TrimStart();
+            mResult.Value = String.Join(" ", words, 1, words.Length - 1).TrimStart(new char[] { ' ', '\t' });
             mResult.PrintStyle = StringTablePrintStyle.Joined;
           }
         }

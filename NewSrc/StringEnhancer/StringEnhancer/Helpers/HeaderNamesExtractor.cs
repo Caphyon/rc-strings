@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace StringEnhancer
@@ -15,9 +16,10 @@ namespace StringEnhancer
         {
           var line = lineParser.GetNext();
 
-          string[] words = line.Name.Split();
+          string[] words = line.Name.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+          if (words.Length == 0) continue;
 
-          if (words[0] == "#include")
+          if (words[0] == "#include" && words.Length >= 2)
           {
             words[1] = words[1].Trim('\"');
             headerNames.Add(words[1]);

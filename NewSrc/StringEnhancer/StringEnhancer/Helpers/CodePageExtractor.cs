@@ -14,7 +14,8 @@ namespace StringEnhancer
         {
           var line = lineParser.GetNext();
 
-          string[] words = line?.Name.Split();
+          string[] words = line?.Name.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+          if (words.Length == 0) continue;
 
           if (words[0] == "#pragma")
           {

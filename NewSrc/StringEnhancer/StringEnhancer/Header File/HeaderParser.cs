@@ -38,7 +38,7 @@ namespace StringEnhancer
 
       if (mIgnoreValue > 0) return;
 
-      string[] words = aLine.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+      string[] words = aLine.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
 
       if (words.Length <= 2 || words[0] != "#define")
         return;
