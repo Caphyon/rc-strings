@@ -9,17 +9,19 @@ namespace StringEnhancer
       var nameToID = aHeaderContent.NameToID;
       var sortedHeaderResults = aHeaderContent.SortedHeaderResults;
 
+      var normalizedID = IDNormalizer.NormalizeID(aTestItem.ID);
+
       // Check Name Unique
       if (nameToID.ContainsKey(aTestItem.Name)) return Constants.kDuplicateID;
 
       // Check ID Unique
-      var insertedItem = new HeaderItem { ID = aTestItem.ID, Name = aTestItem.Name };
+      var insertedItem = new HeaderItem { ID = normalizedID, Name = aTestItem.Name };
 
       var foundIndex = aHeaderContent.GetPosition(insertedItem.ID, aHeaderPath);
       if (foundIndex == Constants.kDuplicateID) return foundIndex;
 
       sortedHeaderResults[aHeaderPath].Insert(foundIndex, insertedItem);
-      nameToID[aTestItem.Name] = aTestItem.ID;
+      nameToID[aTestItem.Name] = normalizedID;
 
       return foundIndex;
     }

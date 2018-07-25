@@ -79,6 +79,7 @@ namespace StringEnhancer
               if (currentStringTableIndex == Constants.kNotDiscovered)
                 unusedElements.Add(obj);
               obj.ID = Constants.kNotFoundID;
+              mNameToID[obj.Name] = obj.ID;
             }
             else
             {
