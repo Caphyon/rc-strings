@@ -9,15 +9,31 @@ namespace StringEnhancer
 
     public RCFileItem GetStringLineForName(string aStringResourceName, string aStringResourceID)
     {
-      var stringTableIndex = StringTableIndexCalculator.CalculateIndex(aStringResourceID);
-
-      if (!StringTableContent.ContainsKey(stringTableIndex)) return null;
-
-      foreach (var element in StringTableContent[stringTableIndex])
+      if (aStringResourceID == Constants.kNotFoundID)
       {
-        if (element.Name == aStringResourceName)
+        foreach (var idx in StringTableContent.Keys)
         {
-          return element;
+          foreach (var element in StringTableContent[idx])
+          {
+            if (element.Name == aStringResourceName)
+            {
+              return element;
+            }
+          }
+        }
+      }
+      else
+      {
+        var stringTableIndex = StringTableIndexCalculator.CalculateIndex(aStringResourceID);
+
+        if (!StringTableContent.ContainsKey(stringTableIndex)) return null;
+
+        foreach (var element in StringTableContent[stringTableIndex])
+        {
+          if (element.Name == aStringResourceName)
+          {
+            return element;
+          }
         }
       }
 
