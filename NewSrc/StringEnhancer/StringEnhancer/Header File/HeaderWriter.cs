@@ -30,19 +30,20 @@ namespace StringEnhancer
 
           //////////////////////////////////////////////
           // Resolve ID (conversions, etc...)
-          //TestItem.ID = IDNormalizer.NormalizeID(TestItem.ID, nameToID);
-          //TestItem.ID = IDNormalizer.NormalizeReccurenceForID(obj.ID, mHeaderContent.NameToID);
 
-          int line_count = -1;
+          int lineCount = -1;
           LineParserResult line = null;
 
           while (lineParser.HasNext())
           {
             line = lineParser.GetNext();
+            var words = line.Name.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
 
-            if (line.Name.Split()[0] == "#define") ++line_count;
+            if (words.Length == 0) continue;
 
-            if (line_count == FoundIndex) break;
+            if (words[0] == "#define") ++lineCount;
+
+            if (lineCount == FoundIndex) break;
             writeFile.WriteLine(line.Serialize());
           }
 
