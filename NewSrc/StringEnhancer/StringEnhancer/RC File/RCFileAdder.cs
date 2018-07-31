@@ -6,11 +6,11 @@ namespace StringEnhancer
   public static class RCFileAdder
   {
     public static void AddItem(TestItem aTestItem,
-      RCFileContent aRCFileContent, Dictionary<string, string> aNameToID)
+      RCFileContent aRCFileContent, HeaderContent aHeaderContent)
     {
       var stringTableContent = aRCFileContent.StringTableContent;
       var stringTableIndexOrder = aRCFileContent.StringTableIndexOrder;
-      var determinedStringTableIndex = StringTableIndexCalculator.CalculateIndex(IDNormalizer.NormalizeID(aTestItem.ID));
+      var determinedStringTableIndex = StringTableIndexCalculator.CalculateIndex(aTestItem.ID);
 
       // Check if StringTable with index currentIdx exists
       if (!stringTableContent.ContainsKey(determinedStringTableIndex))
@@ -25,13 +25,16 @@ namespace StringEnhancer
 
       var startIndex = (stringTableContent[determinedStringTableIndex].Count / Constants.kStringTableCapacity) * Constants.kStringTableCapacity;
 
-      int.TryParse(IDNormalizer.NormalizeID(aTestItem.ID), out var testItemID);
+      int testItemID;
+      if (aTestItem.ID.IsHexa)
+        testItemID = Convert.ToInt32(aTestItem.ID.Value, 16);
+      else testItemID = Convert.ToInt32(aTestItem.ID.Value);
 
       for (int i = startIndex; i < stringTableContent[determinedStringTableIndex].Count; ++i)
       {
         var currentName = stringTableContent[determinedStringTableIndex][i].Name;
-        aNameToID.TryGetValue(currentName, out var currentIDString);
-        int.TryParse(currentIDString, out var currentID);
+        aHeaderContent.NameToID.TryGetValue(currentName, out var currentIDString);
+        int.TryParse(currentIDString.Value, out var currentID);
 
         if (testItemID < currentID)
         {

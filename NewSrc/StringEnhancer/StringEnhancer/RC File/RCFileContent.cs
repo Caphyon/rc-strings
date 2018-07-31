@@ -4,10 +4,12 @@ namespace StringEnhancer
 {
   public class RCFileContent
   {
-    public Dictionary<int, List<RCFileItem>> StringTableContent { get; set; } // Store elements of STable based on index (key = index, val = list of elements)
-    public List<int> StringTableIndexOrder { get; set; } // Stores order of STables based on indices
+    // Store elements of STable based on index (key = index, val = list of elements)
+    public Dictionary<int, List<RCFileItem>> StringTableContent { get; set; } = new Dictionary<int, List<RCFileItem>>();
+    // Stores order of STables based on indices
+    public List<int> StringTableIndexOrder { get; set; } = new List<int>();
 
-    public RCFileItem GetStringLineForName(string aStringResourceName, string aStringResourceID)
+    public RCFileItem GetStringLineForName(string aStringResourceName, HeaderId aStringResourceID)
     {
       if (aStringResourceID == Constants.kNotFoundID)
       {

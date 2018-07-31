@@ -328,7 +328,6 @@ namespace Caphyon.RcStrings.VsPackage
 
         RCFileItem stringResource = result.Item1;
         StringResourceContext context = result.Item2;
-        IDGenerator.RandomID = RandomIdOption;
 
         EditStringResourceDialog dialog = new EditStringResourceDialog(
           (IServiceProvider)this, new List<RcFile>() { result.Item2.RcFile },

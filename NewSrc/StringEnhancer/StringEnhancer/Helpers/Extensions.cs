@@ -8,7 +8,7 @@ namespace StringEnhancer.Serialization
   {
     public static string Serialize(this HeaderItem aResult)
     {
-      return $"ID: {aResult.ID}\r\nName: {aResult.Name}";
+      return $"ID: {aResult.ID.Value}\r\nName: {aResult.Name}";
     }
 
     public static string Serialize(this RCFileItem aResult)
@@ -28,6 +28,11 @@ namespace StringEnhancer.Serialization
     public static string Serialize(this LineParserResult aResult)
     {
       return aResult.Name;
+    }
+
+    public static string Serialize(this HeaderId aResult)
+    {
+      return aResult.Value;
     }
   }
 }

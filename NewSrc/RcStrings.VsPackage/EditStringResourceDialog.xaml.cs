@@ -112,13 +112,13 @@ namespace Caphyon.RcStrings.VsPackage
         OnPropertyChanged("ResourceIdTemp");
       }
     }
-    public string ResourceId
+    public HeaderId ResourceId
     {
       get
       {
-        if (IDNormalizer.IsHexaRepresentation(mResourceIdTemp))
-          return mResourceIdTemp;
-        return IDNormalizer.NormalizeID(mResourceIdTemp);
+        if (IDValidator.IsHexaRepresentation(mResourceIdTemp))
+          return new HeaderId(mResourceIdTemp);
+        return IDNormalizer.NormalizeHexaID(new HeaderId(mResourceIdTemp));
       }
     }
 
@@ -147,7 +147,7 @@ namespace Caphyon.RcStrings.VsPackage
       {
         this.mInitialStringValue = aStringResource.Value;
         this.ResourceName = aStringResource.Name;
-        this.ResourceIdTemp = aStringResource.ID;
+        this.ResourceIdTemp = aStringResource.ID.Value;
         this.ReplaceCode = false;
         this.ResourceValue = aStringResource.Value.TrimSuffix("\"").TrimPrefix("\"");
         ResourceValue = new EscapeSequences().Escape(ResourceValue);
@@ -277,7 +277,7 @@ namespace Caphyon.RcStrings.VsPackage
 
           Errors[nameof(ResourceIdTemp)].Add(string.Format($"Invalid ID! (Must be integer)"));
         }
-        else if (string.IsNullOrEmpty(ResourceId) ||
+        else if (string.IsNullOrEmpty(ResourceId.Value) ||
           (ResourceContext.IdExists(ResourceId) && AddMode))
         {
           if (!Errors.ContainsKey(nameof(ResourceIdTemp)))

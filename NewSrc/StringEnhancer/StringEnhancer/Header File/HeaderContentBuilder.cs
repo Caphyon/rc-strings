@@ -20,11 +20,7 @@ namespace StringEnhancer
 
     public void Build()
     {
-      mHeaderContent = new HeaderContent()
-      {
-        SortedHeaderResults = new Dictionary<string, List<HeaderItem>>(),
-        NameToID = new Dictionary<string, string>()
-      };
+      mHeaderContent = new HeaderContent();
 
       var headerFiles = HeaderNamesExtractor.ExtractHeaderNames(mRCPath, mCodePage);
 
@@ -49,10 +45,14 @@ namespace StringEnhancer
         while (idParser.HasNext())
         {
           var obj = idParser.GetNext();
-          obj.ID = IDNormalizer.NormalizeID(obj.ID);
-          obj.ID = IDNormalizer.NormalizeReccurenceForID(obj.ID, mHeaderContent.NameToID);
 
-          if (obj.ID == Constants.kInvalidID) continue;
+          IDTrimmer.TrimEnd(obj.ID);
+          obj.ID = IDNormalizer.NormalizeRecurrenceForID(obj.ID, mHeaderContent);
+          if (!IDValidator.IsValidWithoutRecurrenceCheck(obj.ID)) continue;
+
+          mHeaderContent.NameToID[obj.Name] = new HeaderId(obj.ID);
+
+          obj.ID = IDNormalizer.NormalizeHexaID(obj.ID);
 
           if (!mHeaderContent.SortedHeaderResults.ContainsKey(aPath))
           {
@@ -60,7 +60,6 @@ namespace StringEnhancer
           }
 
           mHeaderContent.SortedHeaderResults[aPath].Add(obj);
-          mHeaderContent.NameToID[obj.Name] = obj.ID;
         }
       }
     }

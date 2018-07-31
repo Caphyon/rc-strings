@@ -3,6 +3,6 @@
   public class HeaderItem
   {
     public string Name { get; set; }
-    public string ID { get; set; }
+    public HeaderId ID { get; set; }
   }
 }

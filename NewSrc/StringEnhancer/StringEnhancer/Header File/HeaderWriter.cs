@@ -28,9 +28,6 @@ namespace StringEnhancer
           var sortedHeaderResults = mHeaderContent.SortedHeaderResults;
           var nameToID = mHeaderContent.NameToID;
 
-          //////////////////////////////////////////////
-          // Resolve ID (conversions, etc...)
-
           int lineCount = -1;
           LineParserResult line = null;
 
@@ -47,7 +44,7 @@ namespace StringEnhancer
             writeFile.WriteLine(line.Serialize());
           }
 
-          writeFile.WriteLine($@"#define {TestItem.Name.PadRight(Math.Max(TestItem.Name.Length, 31))} {TestItem.ID}");
+          writeFile.WriteLine($@"#define {TestItem.Name.PadRight(Math.Max(TestItem.Name.Length, 31))} {TestItem.ID.Serialize()}");
 
           if (!lineParser.HasNext()) return;
           writeFile.WriteLine(line.Serialize());

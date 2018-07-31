@@ -9,7 +9,8 @@ namespace StringEnhancer
       var nameToID = aHeaderContent.NameToID;
       var sortedHeaderResults = aHeaderContent.SortedHeaderResults;
 
-      var normalizedID = IDNormalizer.NormalizeID(aTestItem.ID);
+      var normalizedID = new HeaderId(aTestItem.ID);
+      IDNormalizer.NormalizeHexaID(normalizedID);
 
       // Check Name Unique
       if (nameToID.ContainsKey(aTestItem.Name)) return Constants.kDuplicateID;

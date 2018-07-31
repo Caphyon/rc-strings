@@ -8,9 +8,14 @@ namespace StringEnhancer
 {
   public static class StringTableIndexCalculator
   {
-    public static int CalculateIndex(string aID)
+    public static int CalculateIndex(HeaderId aID)
     {
-      return Convert.ToInt32(aID) / Constants.kStringTableCapacity;
+      var copiedId = new HeaderId(aID);
+
+      if (copiedId.IsHexa)
+        IDNormalizer.NormalizeHexaID(copiedId);
+
+      return Convert.ToInt32(copiedId.Value) / Constants.kStringTableCapacity;
     }
   }
 }

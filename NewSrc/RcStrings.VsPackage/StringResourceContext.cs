@@ -36,7 +36,7 @@ namespace Caphyon.RcStrings.VsPackage
 
     public RcFile RcFile { get; private set; }
     public int GetId => mIDGenerator.Generate();
-    public Dictionary<string, string> NameToID { get; }
+    public HeaderContent HeaderContent { get; private set; }
     private string DefaultHeaderFile =>
       Path.Combine(Path.GetDirectoryName(RcFile.FilePath), kDefaultResourceHeaderFileName);
     #endregion
@@ -57,9 +57,9 @@ namespace Caphyon.RcStrings.VsPackage
       mHeaderContentBuilder.Build();
       mHeaderContent = mHeaderContentBuilder.GetResult();
 
-      NameToID = mHeaderContent.NameToID;
+      HeaderContent = mHeaderContent;
 
-      mRCFileContentBuilder = new RCFileContentBuilder(rcFilePath, mCodePage, mHeaderContent.NameToID);
+      mRCFileContentBuilder = new RCFileContentBuilder(rcFilePath, mCodePage, mHeaderContent);
       mRCFileContentBuilder.Build();
       mRCFileContent = mRCFileContentBuilder.GetResult();
 
@@ -86,7 +86,7 @@ namespace Caphyon.RcStrings.VsPackage
 
     #region Public methods
 
-    public void AddResource(string aValue, string aName, string aID)
+    public void AddResource(string aValue, string aName, HeaderId aID)
     {
       var item = new TestItem()
       {
@@ -102,10 +102,10 @@ namespace Caphyon.RcStrings.VsPackage
       HeaderWriter.TestItem = item;
 
       if (foundIndex != Constants.kDuplicateID)
-        RCFileAdder.AddItem(item, mRCFileContent, mHeaderContent.NameToID);
+        RCFileAdder.AddItem(item, mRCFileContent, mHeaderContent);
     }
 
-    public bool IdExists(string aID) => 
+    public bool IdExists(HeaderId aID) => 
       mHeaderContent.GetPosition(aID, DefaultHeaderFile) == Constants.kDuplicateID;
 
     public bool ResourceNameExists(string aName) => mHeaderContent.NameToID.ContainsKey(aName);
@@ -144,9 +144,19 @@ namespace Caphyon.RcStrings.VsPackage
 
     public RCFileItem GetStringResourceByName(string aStringResourceName)
     {
-      if (!NameToID.ContainsKey(aStringResourceName)) return null;
+      if (!HeaderContent.NameToID.ContainsKey(aStringResourceName)) return null;
 
-      return mRCFileContent.GetStringLineForName(aStringResourceName, NameToID[aStringResourceName]);
+      var currentResourceID = new HeaderId(HeaderContent.NameToID[aStringResourceName]);
+
+      if (IDValidator.IsRecurrentCase(currentResourceID, HeaderContent))
+        IDNormalizer.NormalizeRecurrenceForID(currentResourceID, HeaderContent);
+      if (IDValidator.IsHexaRepresentation(currentResourceID))
+        IDNormalizer.NormalizeHexaID(currentResourceID);
+
+      if (!IDValidator.IsValid(currentResourceID, HeaderContent))
+        return null;
+
+      return mRCFileContent.GetStringLineForName(aStringResourceName, currentResourceID);
     }
 
     #endregion
