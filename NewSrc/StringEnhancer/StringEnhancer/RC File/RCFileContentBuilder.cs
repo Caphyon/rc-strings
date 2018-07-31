@@ -7,38 +7,34 @@ namespace StringEnhancer
   {
     private readonly string mPath;
     private readonly Encoding mCodePage;
-    private readonly Dictionary<string, string> mNameToID;
+    private readonly HeaderContent mHeaderContent;
 
     private RCFileContent mRCFileContent;
 
-    public RCFileContentBuilder(string aPath, Encoding aCodePage, Dictionary<string, string> aNameToID)
+    public RCFileContentBuilder(string aPath, Encoding aCodePage, HeaderContent aHeaderContent)
     {
       mPath = aPath;
       mCodePage = aCodePage;
-      mNameToID = aNameToID;
+      mHeaderContent = aHeaderContent;
     }
 
     public void Build()
     {
-      mRCFileContent = new RCFileContent()
-      {
-        StringTableContent = new Dictionary<int, List<RCFileItem>>(),
-        StringTableIndexOrder = new List<int>()
-      };
+      mRCFileContent = new RCFileContent();
 
-      ParseRCFile(mPath, mCodePage, mNameToID);
+      ParseRCFile(mPath, mCodePage, mHeaderContent);
     }
 
     public RCFileContent GetResult() => mRCFileContent;
 
-    private void ParseRCFile(string aPath, Encoding aCodePage, Dictionary<string, string> aNameToID)
+    private void ParseRCFile(string aPath, Encoding aCodePage, HeaderContent aHeaderContent)
     {
       using (var stringTableParser = new RCFileParser(aPath, aCodePage))
       {
         int currentStringTableIndex = Constants.kNotDiscovered; // Index of current STable
         int previousStringTableIndex = Constants.kNotDiscovered; // Index of previous STable
 
-        int unusedSTableIndex = -100000;
+        int unusedSTableIndex = 0;
 
         List<RCFileItem> unusedElements = new List<RCFileItem>();
 
@@ -60,7 +56,7 @@ namespace StringEnhancer
             else if (currentStringTableIndex == Constants.kNotDiscovered)
             {
               // Assign a meaningless STable index
-              currentStringTableIndex = unusedSTableIndex++;
+              currentStringTableIndex = --unusedSTableIndex;
               // Add to StringTableIndexOrder
               mRCFileContent.StringTableIndexOrder.Add(currentStringTableIndex);
               // Add all unused to STable
@@ -74,21 +70,21 @@ namespace StringEnhancer
           }
           else // Found new object from current STable
           {
-            if (!aNameToID.ContainsKey(obj.Name)) // If there's no ID for the current Name in current RC's headers
+            if (!aHeaderContent.NameToID.ContainsKey(obj.Name)) // If there's no ID for the current Name in current RC's headers
             {
               if (currentStringTableIndex == Constants.kNotDiscovered)
                 unusedElements.Add(obj);
               obj.ID = Constants.kNotFoundID;
-              mNameToID[obj.Name] = obj.ID;
+              mHeaderContent.NameToID[obj.Name] = obj.ID;
             }
             else
             {
-              obj.ID = aNameToID[obj.Name];
+              obj.ID = aHeaderContent.NameToID[obj.Name];
             }
 
             if (currentStringTableIndex == Constants.kNotDiscovered && obj.ID != Constants.kNotFoundID) // If index is not yet calculated and ID exists
             {
-              currentStringTableIndex = StringTableIndexCalculator.CalculateIndex(aNameToID[obj.Name]); // Get index of current STable
+              currentStringTableIndex = StringTableIndexCalculator.CalculateIndex(aHeaderContent.NameToID[obj.Name]); // Get index of current STable
             }
 
             if (currentStringTableIndex == Constants.kNotDiscovered) continue; // Could not calculate index of current STable

@@ -4,7 +4,7 @@
   {
     public string Name { get; set; }
     public string Value { get; set; }
-    public string ID { get; set; }
+    public HeaderId ID { get; set; }
     public StringTablePrintStyle PrintStyle { get; set; }
   }
 }

@@ -22,7 +22,7 @@ namespace StringEnhancer
 
       foreach (var headerItem in aHeaderContent.SortedHeaderResults[aHeaderPath])
       {
-        emptyIDs.Remove(Convert.ToInt32(headerItem.ID));
+        emptyIDs.Remove(Convert.ToInt32(headerItem.ID.Value));
       }
     }
 

@@ -7,7 +7,7 @@ namespace StringEnhancer
   {
     public int Compare(HeaderItem aFirst, HeaderItem aSecond)
     {
-      return Convert.ToInt32(aFirst.ID).CompareTo(Convert.ToInt32(aSecond.ID));
+      return Convert.ToInt32(aFirst.ID.Value).CompareTo(Convert.ToInt32(aSecond.ID.Value));
     }
   }
 }

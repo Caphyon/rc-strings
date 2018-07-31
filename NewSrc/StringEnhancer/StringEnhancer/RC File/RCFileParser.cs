@@ -32,26 +32,27 @@ namespace StringEnhancer
       if (aIsInStringTable)
       {
         mResult = new RCFileItem();
-        string[] words = aLine.Trim().Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+        aLine = aLine.Trim();
 
-        if (words.Length == 0) return;
+        if (aLine.Length == 0) return;
 
-        mResult.Name = words[0];
+        mResult.Name = aLine.Split(new char[] { ' ', '\t' })[0];
 
         if (aLine == "BEGIN") return;
         if (aLine == "END") aIsInStringTable = false;
-        else // Build Value
+
+        var firstQuote = aLine.IndexOf('\"');
+        var lastQuote = aLine.LastIndexOf('\"');
+
+        if (firstQuote != -1 && lastQuote != -1)
         {
-          if (words.Length == 1)
-          {
-            mResult.Value = mFileStream.ReadLine()?.TrimStart(new char[] { ' ', '\t' });
-            mResult.PrintStyle = StringTablePrintStyle.NewLine;
-          }
-          else
-          {
-            mResult.Value = String.Join(" ", words, 1, words.Length - 1).TrimStart(new char[] { ' ', '\t' });
-            mResult.PrintStyle = StringTablePrintStyle.Joined;
-          }
+          mResult.Value = aLine.Substring(firstQuote, lastQuote - firstQuote + 1);
+          mResult.PrintStyle = StringTablePrintStyle.Joined;
+        }
+        else
+        {
+          mResult.Value = mFileStream.ReadLine()?.TrimStart(new char[] { ' ', '\t' });
+          mResult.PrintStyle = StringTablePrintStyle.NewLine;
         }
       }
     }

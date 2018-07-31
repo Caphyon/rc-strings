@@ -46,7 +46,7 @@ namespace StringEnhancer
       mResult = new HeaderItem
       {
         Name = words[1],
-        ID = words[2]
+        ID = new HeaderId(words[2])
       };
     }
 
