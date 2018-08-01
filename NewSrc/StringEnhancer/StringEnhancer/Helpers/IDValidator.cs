@@ -12,7 +12,7 @@ namespace StringEnhancer
     public static bool IsValidWithoutRecurrenceCheck(HeaderId aID) =>
       IsValidWithoutRecurrenceCheck(aID.Value);
     public static bool IsValidWithoutRecurrenceCheck(string aString) =>
-      aString != Constants.kInvalidID.Value && IsHexaRepresentation(aString) || IsValidInteger(aString);
+      !IsEmpty(aString) && aString != Constants.kInvalidID.Value && (IsHexaRepresentation(aString) || IsValidInteger(aString));
 
     public static bool IsEmpty(HeaderId aID) => IsEmpty(aID.Value);
     public static bool IsEmpty(string aString) => (aString.Length == 0);

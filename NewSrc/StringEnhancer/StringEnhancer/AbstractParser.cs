@@ -11,22 +11,22 @@ namespace StringEnhancer
     protected TParserResult mResult = new TParserResult();
     bool mNextChecked = false;
 
-    public AbstractParser(string aPath)
+    protected AbstractParser(string aPath)
     {
       mFileStream = new StreamReader(aPath);
     }
 
-    public AbstractParser(string aPath, Encoding aCodePage)
+    protected AbstractParser(string aPath, Encoding aCodePage)
     {
       mFileStream = new StreamReader(aPath, aCodePage);
     }
 
     // The method for actual parsing
-    abstract protected void DoParse();
+    protected abstract void DoParse();
     // The condition HasNext() returns
-    abstract protected bool HasNextCondition();
+    protected abstract bool HasNextCondition();
     // The result GetNext() returns
-    abstract protected TParserResult GetResult();
+    protected abstract TParserResult GetResult();
 
     // Check for next by trying to generate next result
     public bool HasNext()

@@ -7,15 +7,13 @@ namespace StringEnhancer
 {
   public class HeaderWriter
   {
-    private HeaderContent mHeaderContent;
-    private string mHeaderPath;
+    private readonly string mHeaderPath;
 
     public static TestItem TestItem { get; set; }
     public static int FoundIndex { get; set; }
 
-    public HeaderWriter(HeaderContent aHeaderContent, string aHeaderPath)
+    public HeaderWriter(string aHeaderPath)
     {
-      mHeaderContent = aHeaderContent;
       mHeaderPath = aHeaderPath;
     }
 
@@ -25,29 +23,31 @@ namespace StringEnhancer
       {
         using (var lineParser = new LineParser(mHeaderPath))
         {
-          var sortedHeaderResults = mHeaderContent.SortedHeaderResults;
-          var nameToID = mHeaderContent.NameToID;
-
-          int lineCount = -1;
-          LineParserResult line = null;
+          var lineCount = -1;
+          var ignoreValue = 0;
 
           while (lineParser.HasNext())
           {
-            line = lineParser.GetNext();
-            var words = line.Name.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+            var line = lineParser.GetNext();
+            var words = line.Name.Split(Constants.kSplitTokens, StringSplitOptions.RemoveEmptyEntries);
 
             if (words.Length == 0) continue;
 
+            writeFile.WriteLine(line.Serialize());
+
+            if (words[0].StartsWith("#if"))
+              ++ignoreValue;
+            else if (words[0].StartsWith("#end") && ignoreValue > 0)
+              --ignoreValue;
+
+            if (ignoreValue > 0) continue;
+
             if (words[0] == "#define") ++lineCount;
 
-            if (lineCount == FoundIndex) break;
-            writeFile.WriteLine(line.Serialize());
+            if (lineCount == FoundIndex - 1) break;
           }
 
           writeFile.WriteLine($@"#define {TestItem.Name.PadRight(Math.Max(TestItem.Name.Length, 31))} {TestItem.ID.Serialize()}");
-
-          if (!lineParser.HasNext()) return;
-          writeFile.WriteLine(line.Serialize());
 
           while (lineParser.HasNext())
           {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
-
-namespace StringEnhancer.Serialization
+﻿namespace StringEnhancer.Serialization
 {
   public static class Extensions
   {

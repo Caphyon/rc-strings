@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace StringEnhancer
 {
@@ -47,12 +46,12 @@ namespace StringEnhancer
           var obj = idParser.GetNext();
 
           IDTrimmer.TrimEnd(obj.ID);
-          obj.ID = IDNormalizer.NormalizeRecurrenceForID(obj.ID, mHeaderContent);
+          IDNormalizer.NormalizeRecurrenceForID(obj.ID, mHeaderContent);
           if (!IDValidator.IsValidWithoutRecurrenceCheck(obj.ID)) continue;
 
           mHeaderContent.NameToID[obj.Name] = new HeaderId(obj.ID);
 
-          obj.ID = IDNormalizer.NormalizeHexaID(obj.ID);
+          IDNormalizer.NormalizeHexaID(obj.ID);
 
           if (!mHeaderContent.SortedHeaderResults.ContainsKey(aPath))
           {

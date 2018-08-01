@@ -33,8 +33,12 @@ namespace StringEnhancer
       for (int i = startIndex; i < stringTableContent[determinedStringTableIndex].Count; ++i)
       {
         var currentName = stringTableContent[determinedStringTableIndex][i].Name;
-        aHeaderContent.NameToID.TryGetValue(currentName, out var currentIDString);
-        int.TryParse(currentIDString.Value, out var currentID);
+
+        if (!aHeaderContent.NameToID.TryGetValue(currentName, out var currentIDString))
+          continue;
+
+        if (!int.TryParse(currentIDString.Value, out var currentID))
+          continue;
 
         if (testItemID < currentID)
         {
@@ -51,9 +55,9 @@ namespace StringEnhancer
         }
       }
 
-      if (notYetAdded)
-      {
-        stringTableContent[determinedStringTableIndex].Add(
+      if (!notYetAdded) return;
+
+      stringTableContent[determinedStringTableIndex].Add(
         new RCFileItem
         {
           Name = aTestItem.Name,
@@ -61,8 +65,7 @@ namespace StringEnhancer
           PrintStyle = printStyle
         });
 
-        notYetAdded = false;
-      }
+      notYetAdded = false;
     }
   }
 }

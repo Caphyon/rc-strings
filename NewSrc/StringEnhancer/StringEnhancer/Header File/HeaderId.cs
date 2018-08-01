@@ -29,9 +29,9 @@
 
     #region Operator Overloading
     public static bool operator ==(HeaderId first, HeaderId second) =>
-      first.Value == second.Value;
+      first?.Value == second?.Value;
     public static bool operator !=(HeaderId first, HeaderId second) =>
-      first.Value != second.Value;
+      first?.Value != second?.Value;
     #endregion
   }
 }

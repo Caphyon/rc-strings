@@ -59,7 +59,6 @@
     <Compile Include="Helpers\IDTrimmer.cs" />
     <Compile Include="Helpers\CodePageExtractor.cs" />
     <Compile Include="Helpers\Constants.cs" />
-    <Compile Include="Helpers\DuplicateKeyComparer.cs" />
     <Compile Include="Header File\HeaderAdder.cs" />
     <Compile Include="Header File\HeaderContent.cs" />
     <Compile Include="Header File\HeaderResultComparerByID.cs" />

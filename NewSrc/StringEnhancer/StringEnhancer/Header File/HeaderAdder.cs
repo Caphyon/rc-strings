@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace StringEnhancer
+﻿namespace StringEnhancer
 {
   public static class HeaderAdder
   {
@@ -9,8 +7,7 @@ namespace StringEnhancer
       var nameToID = aHeaderContent.NameToID;
       var sortedHeaderResults = aHeaderContent.SortedHeaderResults;
 
-      var normalizedID = new HeaderId(aTestItem.ID);
-      IDNormalizer.NormalizeHexaID(normalizedID);
+      var normalizedID = IDNormalizer.CopyNormalizeHexaID(aTestItem.ID);
 
       // Check Name Unique
       if (nameToID.ContainsKey(aTestItem.Name)) return Constants.kDuplicateID;
