@@ -188,19 +188,12 @@ namespace Caphyon.RcStrings.VsPackage
 
     // Get the selected string from active document 
     private void UpdateQueryWord()
-    {
+    { 
+      // Detect the query word if nothing is selected.
       if (EditorSelection.IsEmpty)
-      {
-        // Detect the query word if nothing is selected.
-        mSelectedWord = string.Empty;
-      }
-      else
-      {
-        // Get the text from the textbox
-        // Skip new line
+        mDte.ExecuteCommand("Edit.SelectCurrentWord");
 
-        mSelectedWord = EditorSelection.Text.Trim();
-      }
+      mSelectedWord = EditorSelection.Text;
     }
 
     private void SolutionEvent_BeforeClosing()
