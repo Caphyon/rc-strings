@@ -11,7 +11,7 @@ namespace StringEnhancer
 
     public int GetPosition(HeaderId aID, string aHeaderPath)
     {
-      var searchedItem = new HeaderItem { ID = IDNormalizer.NormalizeHexaID(aID) };
+      var searchedItem = new HeaderItem { ID = IDNormalizer.CopyNormalizeHexaID(aID) };
 
       var foundIndex = SortedHeaderResults[aHeaderPath].BinarySearch(0, SortedHeaderResults[aHeaderPath].Count, searchedItem, new HeaderResultComparerByID());
 
