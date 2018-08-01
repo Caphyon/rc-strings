@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 
 namespace StringEnhancer
 {
@@ -36,7 +35,7 @@ namespace StringEnhancer
 
         if (aLine.Length == 0) return;
 
-        mResult.Name = aLine.Split(new char[] { ' ', '\t' })[0];
+        mResult.Name = aLine.Split(Constants.kSplitTokens)[0];
 
         if (aLine == "BEGIN") return;
         if (aLine == "END") aIsInStringTable = false;
@@ -51,7 +50,7 @@ namespace StringEnhancer
         }
         else
         {
-          mResult.Value = mFileStream.ReadLine()?.TrimStart(new char[] { ' ', '\t' });
+          mResult.Value = mFileStream.ReadLine()?.TrimStart(Constants.kSplitTokens);
           mResult.PrintStyle = StringTablePrintStyle.NewLine;
         }
       }

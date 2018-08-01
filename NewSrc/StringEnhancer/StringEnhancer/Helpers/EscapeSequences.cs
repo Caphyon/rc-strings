@@ -7,7 +7,7 @@ namespace StringEnhancer
   {
     #region Members
 
-    private List<Tuple<string, string>> mResourceValueSequences = new List<Tuple<string, string>>
+    private readonly List<Tuple<string, string>> mResourceValueSequences = new List<Tuple<string, string>>
     {
       new Tuple<string, string>("\"\"", "\""),
       new Tuple<string, string>("&&", "&")

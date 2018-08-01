@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace StringEnhancer
+﻿namespace StringEnhancer
 {
   public static class IDTrimmer
   {

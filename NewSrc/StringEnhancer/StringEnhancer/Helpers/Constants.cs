@@ -8,5 +8,6 @@
     public const int kMaxID = 65535;
     public static HeaderId kNotFoundID = new HeaderId("NOT_EXISTING");
     public const int kNotDiscovered = -1;
+    public static readonly char[] kSplitTokens = { ' ', '\t' };
   }
 }

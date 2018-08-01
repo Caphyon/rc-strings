@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 
 namespace StringEnhancer
 {
@@ -13,8 +12,7 @@ namespace StringEnhancer
       var line = mFileStream.ReadLine();
       if (line != null)
       {
-        mResult = new LineParserResult();
-        mResult.Name = line;
+        mResult = new LineParserResult { Name = line };
       }
     }
 

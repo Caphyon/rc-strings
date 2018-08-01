@@ -1,7 +1,5 @@
-﻿using Microsoft.VisualStudio;
-using StringEnhancer;
+﻿using StringEnhancer;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -77,7 +75,7 @@ namespace Caphyon.RcStrings.VsPackage
       if (!File.Exists(mWriteHeaderPath))
         File.Create(mWriteHeaderPath);
 
-      mHeaderWriter = new HeaderWriter(mHeaderContent, headerPath);
+      mHeaderWriter = new HeaderWriter(headerPath);
       //RCFileEditor.EditValue("test_name", "edited_test_value", mRCFileContent, mHeaderContent.NameToID);
 
       mRCFileWriter = new RCFileWriter(mRCFileContent, rcFilePath);
