@@ -24,10 +24,8 @@ namespace StringEnhancer
 
     private void ParseLine(string aLine)
     {
-      //if (aLine.Length == 0 || aLine[0] != '#') return;
-
-      aLine.TrimStart();
-      if (aLine.StartsWith("#if") && Regex.IsMatch(aLine, "INVOKED"))
+      aLine = aLine.TrimStart();
+      if (aLine.StartsWith("#if"))
       {
         ++mIgnoreValue;
       }
@@ -38,7 +36,7 @@ namespace StringEnhancer
 
       if (mIgnoreValue > 0) return;
 
-      string[] words = aLine.Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+      string[] words = aLine.Split(Constants.kSplitTokens, StringSplitOptions.RemoveEmptyEntries);
 
       if (words.Length <= 2 || words[0] != "#define")
         return;
