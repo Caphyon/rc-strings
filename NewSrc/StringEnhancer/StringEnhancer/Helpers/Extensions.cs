@@ -1,4 +1,6 @@
-﻿namespace StringEnhancer.Serialization
+﻿using System;
+
+namespace StringEnhancer.Serialization
 {
   public static class Extensions
   {
@@ -29,6 +31,11 @@
     public static string Serialize(this HeaderId aResult)
     {
       return aResult.Value;
+    }
+
+    public static string SerializeForHeader(this TestItem aResult)
+    {
+      return $@"#define {aResult.Name.PadRight(Math.Max(aResult.Name.Length, 31))} {aResult.ID.Serialize()}";
     }
   }
 }

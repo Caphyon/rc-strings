@@ -46,8 +46,8 @@ namespace StringEnhancer
 
             if (lineCount == FoundIndex - 1) break;
           }
-
-          writeFile.WriteLine($@"#define {TestItem.Name.PadRight(Math.Max(TestItem.Name.Length, 31))} {TestItem.ID.Serialize()}");
+          
+          writeFile.WriteLine(TestItem.SerializeForHeader());
 
           while (lineParser.HasNext())
           {
