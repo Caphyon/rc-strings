@@ -10,7 +10,7 @@ namespace StringEnhancer
         aID.Value = Convert.ToInt32(aID.Value, 16).ToString();
 
       if (!IDValidator.IsValidInteger(aID))
-        aID = Constants.kInvalidID;
+        aID.Value = Constants.kInvalidID.Value;
 
       return aID;
     }
@@ -21,10 +21,10 @@ namespace StringEnhancer
     public static HeaderId NormalizeRecurrenceForID(HeaderId aID, HeaderContent aHeaderContent)
     {
       while (IDValidator.IsRecurrentCase(aID, aHeaderContent))
-        aID = aHeaderContent.NameToID[aID.Value];
+        aID.Value = aHeaderContent.NameToID[aID.Value].Value;
 
       if (!IDValidator.IsValidWithoutRecurrenceCheck(aID))
-        aID = Constants.kInvalidID;
+        aID.Value = Constants.kInvalidID.Value;
 
       return aID;
     }
