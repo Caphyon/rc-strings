@@ -126,7 +126,7 @@ namespace Caphyon.RcStrings.VsPackage
 
     public void UpdateHeaderFile(IServiceProvider aServiceProvider)
     {
-      mHeaderWriter.Write(mWriteHeaderPath, mCodePage);
+      mHeaderWriter.Write(mWriteHeaderPath, mCodePage, mHeaderContent.SortedHeaderResults[DefaultHeaderFile].Count);
 
       try
       {
