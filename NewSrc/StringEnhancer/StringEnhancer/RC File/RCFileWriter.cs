@@ -52,6 +52,11 @@ namespace StringEnhancer
 
     private void WriteStringTables(StreamWriter aWriteFile, Dictionary<int, List<RCFileItem>> aStringTableContent, List<int> aStringTableIndexOrder)
     {
+      // Building unusedContentFilePath and unusedContentFile
+      var lastIndexOfQuotes = mRCPath.LastIndexOf('\\');
+      var unusedContentFilePath = mRCPath.Substring(0, lastIndexOfQuotes) + "\\unused_content_" + mRCPath.Substring(lastIndexOfQuotes + 1) + ".txt";
+      var unusedContentFile = new StreamWriter(unusedContentFilePath, false, aWriteFile.Encoding);
+
       foreach (var idx in aStringTableIndexOrder)
       {
         for (int i = 0; i < aStringTableContent[idx].Count;)
@@ -65,6 +70,15 @@ namespace StringEnhancer
           var currentItem = aStringTableContent[idx][i];
           aWriteFile.WriteLine(currentItem.Serialize());
 
+          if (currentItem.ID == Constants.kNotFoundID)
+          {
+            // Write in unused_content.txt file if adding
+            var objPrintStyle = currentItem.PrintStyle;
+            currentItem.PrintStyle = StringTablePrintStyle.Debug;
+            unusedContentFile.WriteLine(currentItem.Serialize());
+            currentItem.PrintStyle = objPrintStyle;
+          }
+
           ++i;
 
           if (i % Constants.kStringTableCapacity == 0 || i == aStringTableContent[idx].Count)
@@ -73,9 +87,9 @@ namespace StringEnhancer
           }
         }
       }
-    }
 
-    
+      unusedContentFile.Close();
+    }
 
     private void WriteUntilStringTables(StreamWriter aWriteFile, LineParser aLineParser)
     {

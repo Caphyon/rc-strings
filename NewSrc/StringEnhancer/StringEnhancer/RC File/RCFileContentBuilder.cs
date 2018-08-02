@@ -33,9 +33,6 @@ namespace StringEnhancer
     {
       using (var stringTableParser = new RCFileParser(aPath, aCodePage))
       {
-        var unusedContentFilePath = aPath.Substring(0, aPath.LastIndexOf('\\')) + "\\unused_content.txt";
-        var unusedContentFile = new StreamWriter(unusedContentFilePath, false, aCodePage);
-
         int currentStringTableIndex = Constants.kNotDiscovered; // Index of current STable
         int previousStringTableIndex = Constants.kNotDiscovered; // Index of previous STable
 
@@ -81,12 +78,6 @@ namespace StringEnhancer
                 unusedElements.Add(obj);
               obj.ID = Constants.kNotFoundID;
               mHeaderContent.NameToID[obj.Name] = obj.ID;
-
-              // Write in unused_content.txt file
-              var objPrintStyle = obj.PrintStyle;
-              obj.PrintStyle = StringTablePrintStyle.Debug;
-              unusedContentFile.WriteLine(obj.Serialize());
-              obj.PrintStyle = objPrintStyle;
             }
             else
             {
@@ -107,8 +98,6 @@ namespace StringEnhancer
             mRCFileContent.StringTableContent[currentStringTableIndex].Add(obj); // Add current object to its STable
           }
         }
-
-        unusedContentFile.Close();
       }
     }
   }

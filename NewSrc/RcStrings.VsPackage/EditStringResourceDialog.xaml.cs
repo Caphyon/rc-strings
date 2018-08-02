@@ -79,7 +79,7 @@ namespace Caphyon.RcStrings.VsPackage
         }
         catch
         {
-          VsShellUtilities.ShowMessageBox(mServiceProvider, "Aiurea", "Foarte aiurea",
+          VsShellUtilities.ShowMessageBox(mServiceProvider, "Could not retrieve resource context!", "Error",
             OLEMSGICON.OLEMSGICON_INFO, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
           return null;
         }
