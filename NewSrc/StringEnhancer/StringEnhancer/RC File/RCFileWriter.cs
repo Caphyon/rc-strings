@@ -1,5 +1,6 @@
 ﻿using StringEnhancer.Serialization;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 
@@ -53,9 +54,9 @@ namespace StringEnhancer
     private void WriteStringTables(StreamWriter aWriteFile, Dictionary<int, List<RCFileItem>> aStringTableContent, List<int> aStringTableIndexOrder)
     {
       // Building unusedContentFilePath and unusedContentFile
-      var lastIndexOfQuotes = mRCPath.LastIndexOf('\\');
-      var unusedContentFilePath = mRCPath.Substring(0, lastIndexOfQuotes) + "\\unused_content_" + mRCPath.Substring(lastIndexOfQuotes + 1) + ".txt";
-      var unusedContentFile = new StreamWriter(unusedContentFilePath, false, aWriteFile.Encoding);
+      string unusedContentFilePath = null;
+      StreamWriter unusedContentFile = null;
+      var isUnusedFileEmpty = true;
 
       foreach (var idx in aStringTableIndexOrder)
       {
@@ -66,12 +67,24 @@ namespace StringEnhancer
             aWriteFile.WriteLine("STRINGTABLE");
             aWriteFile.WriteLine("BEGIN");
           }
-          
+
           var currentItem = aStringTableContent[idx][i];
           aWriteFile.WriteLine(currentItem.Serialize());
 
           if (currentItem.ID == Constants.kNotFoundID)
           {
+            if (isUnusedFileEmpty)
+            {
+              unusedContentFilePath = Path.GetTempFileName();
+              unusedContentFile = new StreamWriter(unusedContentFilePath, false, aWriteFile.Encoding);
+              isUnusedFileEmpty = false;
+
+              unusedContentFile.WriteLine("////////////////////////////////////////////////////////////////////////////////////////////////\r\n" +
+                                          "This file is generated when GHOST entries are detected in your current .rc file.\r\n" +
+                                          "GHOST entry means a string resource from the .rc file that has defined ID in any header included\r\n" +
+                                          "////////////////////////////////////////////////////////////////////////////////////////////////\r\n");
+            }
+
             // Write in unused_content.txt file if adding
             var objPrintStyle = currentItem.PrintStyle;
             currentItem.PrintStyle = StringTablePrintStyle.Debug;
@@ -88,7 +101,11 @@ namespace StringEnhancer
         }
       }
 
+      if (isUnusedFileEmpty) return;
       unusedContentFile.Close();
+      var editorProcess = Process.Start("notepad.exe", unusedContentFilePath);
+      editorProcess.EnableRaisingEvents = true;
+      editorProcess.Exited += (sender, args) => File.Delete(unusedContentFilePath);
     }
 
     private void WriteUntilStringTables(StreamWriter aWriteFile, LineParser aLineParser)

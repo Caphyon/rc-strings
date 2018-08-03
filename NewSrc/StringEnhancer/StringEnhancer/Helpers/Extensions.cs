@@ -18,7 +18,7 @@ namespace StringEnhancer.Serialization
       else if (aResult.PrintStyle == StringTablePrintStyle.NewLine)
         toPrint = $"    {aResult.Name} \r\n{aResult.Value.PadLeft(28 + aResult.Value.Length)}";
       else
-        toPrint = $"Name: {aResult.Name}\r\nValue: {aResult.Value}";
+        toPrint = $"Name: {aResult.Name}\r\nValue: {aResult.Value}\r\n";
 
       return toPrint;
     }
