@@ -163,7 +163,7 @@
                 <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}" Value="false"/>
                 <Condition Binding="{Binding IsEditable, RelativeSource={RelativeSource AncestorType={x:Type ComboBox}}}" Value="false"/>
               </MultiDataTrigger.Conditions>
-              <Setter Property="Background" TargetName="templateRoot" Value="{StaticResource ComboBox.Disabled.Background}"/>
+              <Setter Property="Background" TargetName="templateRoot" Value="{StaticResource TextBlockBackground}"/>
               <Setter Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource ComboBox.Disabled.Border}"/>
             </MultiDataTrigger>
             <MultiDataTrigger>
@@ -297,8 +297,8 @@
   <Style TargetType="{x:Type ComboBox}">
     <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
     <Setter Property="Background" Value="{StaticResource PanelBackground}"/>
-    <Setter Property="BorderBrush" Value="{StaticResource ComboBoxBorder}"/>
-    <Setter Property="Foreground" Value="{StaticResource TextBlockForeground}"/>
+    <Setter Property="BorderBrush" Value="{StaticResource PropertyGridBorderBrush}"/>
+    <Setter Property="Foreground" Value="Gray"/>
     <Setter Property="BorderThickness" Value="1"/>
     <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
     <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
