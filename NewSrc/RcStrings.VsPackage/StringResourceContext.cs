@@ -1,6 +1,7 @@
 ﻿using StringEnhancer;
 using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Caphyon.RcStrings.VsPackage
@@ -26,8 +27,8 @@ namespace Caphyon.RcStrings.VsPackage
     private string mWriteRCPath;
     private string mWriteHeaderPath;
 
-    private string kDefaultResourceHeaderFileName = "resource.h";
     private bool mShowGhostFile;
+    //private string kDefaultResourceHeaderFileName = "resource.h";
 
     #endregion
 
@@ -36,8 +37,7 @@ namespace Caphyon.RcStrings.VsPackage
     public RcFile RcFile { get; private set; }
     public int GetId => mIDGenerator.Generate();
     public HeaderContent HeaderContent { get; private set; }
-    private string DefaultHeaderFile =>
-      Path.Combine(Path.GetDirectoryName(RcFile.FilePath), kDefaultResourceHeaderFileName);
+    private string DefaultHeaderFile { get; }
     #endregion
 
     #region Ctor
@@ -63,7 +63,17 @@ namespace Caphyon.RcStrings.VsPackage
       mRCFileContentBuilder.Build();
       mRCFileContent = mRCFileContentBuilder.GetResult();
 
-      var headerPath = DefaultHeaderFile;
+      var headerNames = HeaderNamesExtractor.ExtractHeaderNames(RcFile.FilePath, mCodePage);
+      var rcFileDirectory = Path.GetDirectoryName(RcFile.FilePath);
+      var headerPath = Path.Combine(rcFileDirectory, headerNames.FirstOrDefault(
+                                                                headerName => headerName.Contains("resource.h") 
+                                                                              && File.Exists(Path.Combine(rcFileDirectory, headerName))
+                                                                ) ?? headerNames.FirstOrDefault(
+                                                                headerName => File.Exists(Path.Combine(rcFileDirectory, headerName))
+                                                                ) ?? headerNames.First());
+      if (!File.Exists(headerPath))
+        File.Create(headerPath);
+      DefaultHeaderFile = headerPath;
 
       mIDGenerator = new IDGenerator();
       mIDGenerator.RemoveExistingFromHeader(mHeaderContent, headerPath);
