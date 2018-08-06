@@ -10,11 +10,13 @@ namespace StringEnhancer
   {
     private RCFileContent mRCFileContent;
     private readonly string mRCPath;
+    private readonly bool mShowGhostFile;
 
-    public RCFileWriter(RCFileContent aRcFileContent, string aRCPath)
+    public RCFileWriter(RCFileContent aRcFileContent, string aRCPath, bool aShowGhostFile)
     {
       mRCFileContent = aRcFileContent;
       mRCPath = aRCPath;
+      mShowGhostFile = aShowGhostFile;
     }
 
     public void Write(string aWritePath, Encoding aCodePage)
@@ -100,8 +102,8 @@ namespace StringEnhancer
           }
         }
       }
-
-      if (isUnusedFileEmpty) return;
+      
+      if (isUnusedFileEmpty || !mShowGhostFile) return;
       unusedContentFile.Close();
       var editorProcess = Process.Start("notepad.exe", unusedContentFilePath);
       editorProcess.EnableRaisingEvents = true;

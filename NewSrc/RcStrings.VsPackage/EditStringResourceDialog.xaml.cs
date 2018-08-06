@@ -97,7 +97,7 @@ namespace Caphyon.RcStrings.VsPackage
 
         if (!mRcFilesContexts.TryGetValue(mSelectedRcFile, out StringResourceContext context))
         {
-          context = new StringResourceContext(mSelectedRcFile);
+          context = new StringResourceContext(mSelectedRcFile, ShowGhostFile);
           mRcFilesContexts[mSelectedRcFile] = context;
         }
         ResourceIdTemp = context.GetId.ToString();
@@ -122,8 +122,10 @@ namespace Caphyon.RcStrings.VsPackage
       }
     }
 
-    private Dictionary<string, List<string>> Errors { get; } = new Dictionary<string, List<string>>();
+    public bool ShowGhostFile { get; set; }
 
+    private Dictionary<string, List<string>> Errors { get; } = new Dictionary<string, List<string>>();
+    
     private bool HasError => Errors.Any();
 
     #endregion
@@ -131,12 +133,13 @@ namespace Caphyon.RcStrings.VsPackage
     #region Ctor
 
     public EditStringResourceDialog(IServiceProvider aServiceProvider, List<RcFile> aRcFiles, RcFile aSelectedRcFile,
-      string aSelectedText, bool aReplaceCode, string aReplaceWithCodeFormated, RCFileItem aStringResource = null)
+      string aSelectedText, bool aReplaceCode, string aReplaceWithCodeFormated, bool aShowGhostFile, RCFileItem aStringResource = null)
     {
       InitializeComponent();
       DataContext = this;
       mRcFilesContexts = new Dictionary<RcFile, StringResourceContext>();
       mServiceProvider = aServiceProvider;
+      this.ShowGhostFile = aShowGhostFile;
       this.AddMode = (aStringResource == null);
       this.ReplaceStringCodeFormated = aReplaceWithCodeFormated;
       this.RcFiles = aRcFiles;

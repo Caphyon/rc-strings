@@ -14,5 +14,10 @@ namespace Caphyon.RcStrings.VsPackage
     [DisplayName("ID uniqueness per project")]
     [Description("If set to True the ID will be generated uniquely for all RCs in the project. Otherwise the ID will be generated uniquely for selected RC.")]
     public bool IDUniquenessPerProject { get; set; } = true;
+
+    [Category("String resource")]
+    [DisplayName("Show Ghost Entries File")]
+    [Description("If set to True the Ghost Entries File will be showed whenever an add operation is executed. Otherwise, it will not.")]
+    public bool ShowGhostFile { get; set; } = true;
   }
 }
