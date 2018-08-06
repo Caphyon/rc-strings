@@ -19,15 +19,13 @@ namespace StringEnhancer
           string[] words = line.Name.Split(Constants.kSplitTokens, StringSplitOptions.RemoveEmptyEntries);
           if (words.Length == 0) continue;
 
-          if (words[0] == "#include" && words.Length >= 2)
+          if (words[0] == "#include" && words.Length >= 2 && !words[1].StartsWith("<") && !words[1].EndsWith(">"))
           {
             words[1] = words[1].Trim('\"');
             headerNames.Add(words[1]);
           }
           else if (words[0] == "BEGIN")
           {
-            if (!headerNames.Contains("resource.h"))
-              headerNames.Clear();
             return headerNames;
           }
         }
