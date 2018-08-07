@@ -100,7 +100,9 @@
                 DisplayMemberPath="DisplayName" 
                 SelectedItem="{Binding SelectedRcFile}"
                 IsEnabled="{Binding AddMode}"
-                Grid.Row="4" Grid.Column="1"  VerticalAlignment="Center" >
+                Grid.Row="4" 
+                Grid.Column="1"  
+                VerticalAlignment="Center" >
         <ComboBox.ItemContainerStyle>
           <Style>
             <Setter Property="Control.ToolTip" Value="{Binding FilePath}" />
