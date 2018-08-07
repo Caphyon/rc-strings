@@ -164,7 +164,7 @@
                 <Condition Binding="{Binding IsEditable, RelativeSource={RelativeSource AncestorType={x:Type ComboBox}}}" Value="false"/>
               </MultiDataTrigger.Conditions>
               <Setter Property="Background" TargetName="templateRoot" Value="{StaticResource TextBlockBackground}"/>
-              <Setter Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource ComboBox.Disabled.Border}"/>
+              <Setter Property="BorderBrush" Value="{StaticResource ComboBoxBorder}" />
             </MultiDataTrigger>
             <MultiDataTrigger>
               <MultiDataTrigger.Conditions>
@@ -189,7 +189,7 @@
       </Grid.ColumnDefinitions>
       <Popup x:Name="PART_Popup" AllowsTransparency="true" Grid.ColumnSpan="2" IsOpen="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Margin="1" PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}" Placement="Bottom">
         <Themes:SystemDropShadowChrome x:Name="shadow" Color="Transparent" MaxHeight="{TemplateBinding MaxDropDownHeight}" MinWidth="{Binding ActualWidth, ElementName=templateRoot}">
-          <Border x:Name="dropDownBorder" BorderBrush="{StaticResource ComboBoxPopupBorder}" BorderThickness="1" Background="{StaticResource PanelBackground}">
+          <Border x:Name="dropDownBorder" BorderBrush="{StaticResource ComboBoxPopupBorder}" BorderThickness="{TemplateBinding BorderThickness}" Background="{StaticResource PanelBackground}">
             <ScrollViewer x:Name="DropDownScrollViewer">
               <Grid x:Name="grid" RenderOptions.ClearTypeHint="Enabled">
                 <Canvas x:Name="canvas" HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">
@@ -298,7 +298,7 @@
     <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
     <Setter Property="Background" Value="{StaticResource PanelBackground}"/>
     <Setter Property="BorderBrush" Value="{StaticResource PropertyGridBorderBrush}"/>
-    <Setter Property="Foreground" Value="Gray"/>
+    <Setter Property="Foreground" Value="{StaticResource TextBlockForeground}"/>
     <Setter Property="BorderThickness" Value="1"/>
     <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
     <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
@@ -312,6 +312,9 @@
         <Setter Property="IsTabStop" Value="false"/>
         <Setter Property="Padding" Value="2"/>
         <Setter Property="Template" Value="{StaticResource ComboBoxEditableTemplate}"/>
+      </Trigger>
+      <Trigger Property="IsEnabled"  Value="false">
+        <Setter Property="Foreground" Value="Gray"/>
       </Trigger>
     </Style.Triggers>
   </Style>
