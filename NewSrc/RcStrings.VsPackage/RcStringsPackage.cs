@@ -417,7 +417,7 @@ namespace Caphyon.RcStrings.VsPackage
       foreach (EnvDTE.Project project in solutionProjects)
         rcFiles.AddRange(GetRcFilesFromProject(project));
 
-      rcFiles.RemoveAll((rcFile) => !HeaderNamesExtractor.ExtractHeaderNames(rcFile.FilePath, CodePageExtractor.GetCodePage(rcFile.FilePath)).Contains("resource.h"));
+      rcFiles.RemoveAll((rcFile) => !HeaderNamesExtractor.ExtractHeaderNames(rcFile.FilePath, CodePageExtractor.GetCodePage(rcFile.FilePath)).Any());
 
       return rcFiles;
     }

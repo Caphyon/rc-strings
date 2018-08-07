@@ -25,7 +25,7 @@ namespace StringEnhancer
     private void ParseLine(string aLine)
     {
       aLine = aLine.TrimStart();
-      if (aLine.StartsWith("#if"))
+      if (aLine.StartsWith("#if") && (aLine.Contains("INVOKED") || aLine.Contains("STATIC")))
       {
         ++mIgnoreValue;
       }

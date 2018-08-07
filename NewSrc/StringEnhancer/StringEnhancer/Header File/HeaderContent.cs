@@ -13,6 +13,8 @@ namespace StringEnhancer
     {
       var searchedItem = new HeaderItem { ID = IDNormalizer.CopyNormalizeHexaID(aID) };
 
+      if (!SortedHeaderResults.ContainsKey(aHeaderPath))
+        SortedHeaderResults.Add(aHeaderPath, new List<HeaderItem>());
       var foundIndex = SortedHeaderResults[aHeaderPath].BinarySearch(0, SortedHeaderResults[aHeaderPath].Count, searchedItem, new HeaderResultComparerByID());
 
       if (foundIndex >= 0) return Constants.kDuplicateID;
