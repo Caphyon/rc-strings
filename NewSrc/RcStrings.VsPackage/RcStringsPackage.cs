@@ -108,6 +108,15 @@ namespace Caphyon.RcStrings.VsPackage
       }
     }
 
+    public bool ShowGhostFile
+    {
+      get
+      {
+        RcStringsOptionPage optionPage = (RcStringsOptionPage) GetDialogPage(typeof(RcStringsOptionPage));
+        return optionPage.ShowGhostFile;
+      }
+    }
+
     #endregion
 
     #region Ctor
@@ -252,7 +261,7 @@ namespace Caphyon.RcStrings.VsPackage
 
       // Change the name of the dialog
       EditStringResourceDialog dialog = new EditStringResourceDialog((IServiceProvider)this, rcFiles,
-        mSelectedRcFile, mSelectedWord, mReplaceString, mReplaceWithCodeFormated)
+        mSelectedRcFile, mSelectedWord, mReplaceString, mReplaceWithCodeFormated, ShowGhostFile)
       {
         Owner = mDteWindow
       };
@@ -325,7 +334,7 @@ namespace Caphyon.RcStrings.VsPackage
         EditStringResourceDialog dialog = new EditStringResourceDialog(
           (IServiceProvider)this, new List<RcFile>() { result.Item2.RcFile },
           result.Item2.RcFile, mSelectedWord,
-          mReplaceString, mReplaceWithCodeFormated, stringResource)
+          mReplaceString, mReplaceWithCodeFormated, ShowGhostFile, stringResource)
         {
           Owner = mDteWindow
         };
@@ -368,7 +377,7 @@ namespace Caphyon.RcStrings.VsPackage
 
       foreach (var rcFile in rcFiles)
       {
-        StringResourceContext context = new StringResourceContext(rcFile);
+        StringResourceContext context = new StringResourceContext(rcFile, ShowGhostFile);
         RCFileItem stringResource = context.GetStringResourceByName(mSelectedWord);
         if (stringResource != null)
           return new Tuple<RCFileItem, StringResourceContext>(stringResource, context);

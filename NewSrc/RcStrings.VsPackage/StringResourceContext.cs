@@ -27,6 +27,7 @@ namespace Caphyon.RcStrings.VsPackage
     private string mWriteHeaderPath;
 
     private string kDefaultResourceHeaderFileName = "resource.h";
+    private bool mShowGhostFile;
 
     #endregion
 
@@ -44,9 +45,10 @@ namespace Caphyon.RcStrings.VsPackage
     /// Automatically loads the data from the RC file
     /// </summary>
     /// <param name="aRcFile"></param>
-    public StringResourceContext(RcFile aRcFile)
+    public StringResourceContext(RcFile aRcFile, bool aShowGhostFile)
     {
       RcFile = aRcFile;
+      mShowGhostFile = aShowGhostFile;
 
       var rcFilePath = RcFile.FilePath;
       mCodePage = CodePageExtractor.GetCodePage(rcFilePath);
@@ -78,7 +80,7 @@ namespace Caphyon.RcStrings.VsPackage
       mHeaderWriter = new HeaderWriter(headerPath);
       //RCFileEditor.EditValue("test_name", "edited_test_value", mRCFileContent, mHeaderContent.NameToID);
 
-      mRCFileWriter = new RCFileWriter(mRCFileContent, rcFilePath);
+      mRCFileWriter = new RCFileWriter(mRCFileContent, rcFilePath, mShowGhostFile);
     }
     #endregion
 
