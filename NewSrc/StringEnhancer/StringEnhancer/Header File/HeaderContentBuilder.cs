@@ -60,6 +60,9 @@ namespace StringEnhancer
 
           mHeaderContent.SortedHeaderResults[aPath].Add(obj);
         }
+
+        if (mHeaderContent.SortedHeaderResults.ContainsKey(aPath))
+          mHeaderContent.SortedHeaderResults[aPath].Sort(new HeaderResultComparerByID());
       }
     }
   }
