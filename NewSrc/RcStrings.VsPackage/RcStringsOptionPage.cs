@@ -11,13 +11,13 @@ namespace Caphyon.RcStrings.VsPackage
     public bool RandomId { get; set; }
 
     [Category("String resource")]
-    [DisplayName("ID uniqueness per project")]
-    [Description("If set to True the ID will be generated uniquely for all RCs in the project. Otherwise the ID will be generated uniquely for selected RC.")]
+    [DisplayName("Unique ID per project")]
+    [Description("If set to True the ID will be uniquely generated for all the RC files in the same project. Otherwise the ID will be uniquely generated just for the selected RC file.")]
     public bool IDUniquenessPerProject { get; set; } = true;
 
     [Category("String resource")]
-    [DisplayName("Show Ghost Entries File")]
-    [Description("If set to True the Ghost Entries File will be showed whenever an add operation is executed. Otherwise, it will not.")]
+    [DisplayName("Show ghost entries files")]
+    [Description("If set to True the found strings from a RC file which don't have a corresponding ID in a header file will be showed for every \"Add\" command. Otherwise they will not be showed.")]
     public bool ShowGhostFile { get; set; } = true;
   }
 }
