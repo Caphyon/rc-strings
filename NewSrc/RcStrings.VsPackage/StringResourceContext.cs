@@ -45,6 +45,7 @@ namespace Caphyon.RcStrings.VsPackage
     /// Automatically loads the data from the RC file
     /// </summary>
     /// <param name="aRcFile"></param>
+    /// <param name="aShowGhostFile"></param>
     public StringResourceContext(RcFile aRcFile, bool aShowGhostFile)
     {
       RcFile = aRcFile;
@@ -64,6 +65,10 @@ namespace Caphyon.RcStrings.VsPackage
       mRCFileContent = mRCFileContentBuilder.GetResult();
 
       var headerNames = HeaderNamesExtractor.ExtractHeaderNames(RcFile.FilePath, mCodePage);
+
+      if (!headerNames.Any())
+        return;
+
       var rcFileDirectory = Path.GetDirectoryName(RcFile.FilePath);
       var headerPath = Path.Combine(rcFileDirectory, headerNames.FirstOrDefault(
                                                                 headerName => headerName.Contains("resource.h") 
