@@ -244,60 +244,69 @@ namespace Caphyon.RcStrings.VsPackage
 
       if (AddMode)
       {
-        if (string.IsNullOrEmpty(ResourceName) ||
-          ResourceName.Contains(" "))
+        if (string.IsNullOrEmpty(ResourceName))
+        {
+          if (!Errors.ContainsKey(nameof(ResourceName)))
+            Errors[nameof(ResourceName)] = new List<string>();
+
+          Errors[nameof(ResourceName)].Add("Name can not be empty.");
+        }
+
+        if (ResourceName.Contains(" "))
+        {
+          if (!Errors.ContainsKey(nameof(ResourceName)))
+            Errors[nameof(ResourceName)] = new List<string>();
+
+          Errors[nameof(ResourceName)].Add("Name can not contain whitespaces.");
+        }
+
+        if (ResourceName.Length > ParseConstants.kMaximumResourceNameLength)
         {
           if (!Errors.ContainsKey(nameof(ResourceName)))
             Errors[nameof(ResourceName)] = new List<string>();
 
           Errors[nameof(ResourceName)].Add(string.Format(
-            $"Oh Snap! Your name field can't contain whitespaces!"));
+            $"Name can not be longer than {ParseConstants.kMaximumResourceNameLength} characters."));
         }
 
-        if (string.IsNullOrEmpty(ResourceName) ||
-          ResourceName.Length > ParseConstants.kMaximumResourceNameLength)
+        if (ResourceContext.ResourceNameExists(ResourceName))
         {
           if (!Errors.ContainsKey(nameof(ResourceName)))
             Errors[nameof(ResourceName)] = new List<string>();
 
-          Errors[nameof(ResourceName)].Add(string.Format(
-            $"Name with maximum length of {ParseConstants.kMaximumResourceNameLength} is required!"));
+          Errors[nameof(ResourceName)].Add("Another resource with this name already exists.");
         }
 
-        if (AddMode && (string.IsNullOrEmpty(ResourceName) ||
-          ResourceContext.ResourceNameExists(ResourceName)))
-        {
-          if (!Errors.ContainsKey(nameof(ResourceName)))
-            Errors[nameof(ResourceName)] = new List<string>();
-
-          Errors[nameof(ResourceName)].Add(string.Format($"Looks like the name \"{ResourceName}\" already exists!"));
-        }
-
-        if (ResourceId == StringEnhancer.Constants.kInvalidID)
+        if (string.IsNullOrEmpty(ResourceIdTemp))
         {
           if (!Errors.ContainsKey(nameof(ResourceIdTemp)))
             Errors[nameof(ResourceIdTemp)] = new List<string>();
 
-          Errors[nameof(ResourceIdTemp)].Add(string.Format($"Invalid ID! (Must be integer)"));
+          Errors[nameof(ResourceIdTemp)].Add("ID can not be empty.");
         }
-        else if (string.IsNullOrEmpty(ResourceId.Value) ||
-          (ResourceContext.IdExists(ResourceId) && AddMode))
+        else if (ResourceId == StringEnhancer.Constants.kInvalidID)
         {
           if (!Errors.ContainsKey(nameof(ResourceIdTemp)))
             Errors[nameof(ResourceIdTemp)] = new List<string>();
 
-          Errors[nameof(ResourceIdTemp)].Add(string.Format($"Unique ID is required!"));
+          Errors[nameof(ResourceIdTemp)].Add("Integer or hexadecimal format is required.");
+        }
+        else if (ResourceContext.IdExists(ResourceId))
+        {
+          if (!Errors.ContainsKey(nameof(ResourceIdTemp)))
+            Errors[nameof(ResourceIdTemp)] = new List<string>();
+
+          Errors[nameof(ResourceIdTemp)].Add("Another resource with this ID already exists.");
         }
       }
 
-      if (string.IsNullOrEmpty(ResourceValue) ||
-        ResourceValue.Length > ParseConstants.kMaximumResourceValueLength)
+      if (ResourceValue.Length > ParseConstants.kMaximumResourceValueLength)
       {
         if (!Errors.ContainsKey(nameof(ResourceValue)))
           Errors[nameof(ResourceValue)] = new List<string>();
 
         Errors[nameof(ResourceValue)].Add(
-          string.Format($"Value with maximum length of {ParseConstants.kMaximumResourceValueLength} characters is required!"));
+          string.Format($"Value can not be longer than {ParseConstants.kMaximumResourceValueLength} characters."));
       }
     }
     #endregion
