@@ -237,7 +237,7 @@ namespace Caphyon.RcStrings.VsPackage
     // Add new resource string
     private void SetResourceCommandClick(object sender, EventArgs e)
     {
-      List<RcFile> rcFiles = GetRCFilesFromSolution();
+      List<RcFile> rcFiles = GetRCFilesFromSolution(true);
       IDGenerator.RandomID = RandomIdOption;
 
       if (UserSettings != null && mSelectedRcFile == null)
@@ -373,7 +373,7 @@ namespace Caphyon.RcStrings.VsPackage
     /// </returns>
     private Tuple<RCFileItem, StringResourceContext> FindStringResourceByName(string aResourceName)
     {
-      List<RcFile> rcFiles = GetRCFilesFromSolution();
+      List<RcFile> rcFiles = GetRCFilesFromSolution(false);
 
       foreach (var rcFile in rcFiles)
       {
@@ -410,14 +410,22 @@ namespace Caphyon.RcStrings.VsPackage
     /// Scan every project in the solution for .rc files.
     /// </summary>
     /// <returns></returns>
-    private List<RcFile> GetRCFilesFromSolution()
+    private List<RcFile> GetRCFilesFromSolution(bool aAddMode)
     {
       List<RcFile> rcFiles = new List<RcFile>();
       List<EnvDTE.Project> solutionProjects = AutomationUtil.GetAllProjects(mDte);
       foreach (EnvDTE.Project project in solutionProjects)
         rcFiles.AddRange(GetRcFilesFromProject(project));
 
-      rcFiles.RemoveAll((rcFile) => !HeaderNamesExtractor.ExtractHeaderNames(rcFile.FilePath, CodePageExtractor.GetCodePage(rcFile.FilePath)).Any());
+      if (aAddMode)
+        rcFiles.RemoveAll((rcFile) => !HeaderNamesExtractor.ExtractHeaderNames(rcFile.FilePath, CodePageExtractor.GetCodePage(rcFile.FilePath)).Any());
+
+      //if (invalidRcs > 0)
+      //{
+      //  VsShellUtilities.ShowMessageBox((IServiceProvider) this,
+      //    $"There are {invalidRcs} RC files without any header included!", "Error", 
+      //    OLEMSGICON.OLEMSGICON_WARNING, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+      //}
 
       return rcFiles;
     }
