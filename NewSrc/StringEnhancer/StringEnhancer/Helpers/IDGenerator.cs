@@ -11,7 +11,7 @@ namespace StringEnhancer
 
     public IDGenerator()
     {
-      emptyIDs = new SortedSet<int>(Enumerable.Range(0, Constants.kMaxID + 1));
+      emptyIDs = new SortedSet<int>(Enumerable.Range(Constants.kMinID, Constants.kMaxID - Constants.kMinID + 1));
     }
 
     public void RemoveExistingFromHeader(HeaderContent aHeaderContent, string aHeaderPath)
