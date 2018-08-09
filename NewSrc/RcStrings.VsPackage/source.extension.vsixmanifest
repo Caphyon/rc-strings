@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="Caphyon.RcStrings.992db791-b2c8-4150-8359-431f4067be9e" Version="1.2.0" Language="en-US" Publisher="Caphyon" />
+        <Identity Id="Caphyon.RcStrings.992db791-b2c8-4150-8359-431f4067be9e" Version="1.3.0" Language="en-US" Publisher="Caphyon" />
         <DisplayName>RC Strings</DisplayName>
         <Description xml:space="preserve">This is an extension which enables you to add strings to RC (Win32 projects) string table from the context menu of Code editor. 
 </Description>
