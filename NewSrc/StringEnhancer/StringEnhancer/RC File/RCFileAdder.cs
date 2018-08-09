@@ -47,6 +47,7 @@ namespace StringEnhancer
           {
             Name = aTestItem.Name,
             Value = aTestItem.Value,
+            ID = aTestItem.ID,
             PrintStyle = printStyle
           });
 
@@ -62,6 +63,7 @@ namespace StringEnhancer
         {
           Name = aTestItem.Name,
           Value = aTestItem.Value,
+          ID = aTestItem.ID,
           PrintStyle = printStyle
         });
 

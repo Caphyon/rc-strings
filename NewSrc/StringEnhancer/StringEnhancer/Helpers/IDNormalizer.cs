@@ -6,6 +6,9 @@ namespace StringEnhancer
   {
     public static HeaderId NormalizeHexaID(HeaderId aID)
     {
+      if (!IDValidator.IsInValidRange(aID))
+        aID.Value = Constants.kInvalidID.Value;
+
       if (IDValidator.IsHexaRepresentation(aID))
         aID.Value = Convert.ToInt32(aID.Value, 16).ToString();
 

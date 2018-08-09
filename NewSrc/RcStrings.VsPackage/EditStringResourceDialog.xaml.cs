@@ -284,12 +284,15 @@ namespace Caphyon.RcStrings.VsPackage
 
           Errors[nameof(ResourceIdTemp)].Add("ID can not be empty.");
         }
-        else if (ResourceId == StringEnhancer.Constants.kInvalidID)
+        else if (ResourceId.Value == StringEnhancer.Constants.kInvalidID.Value)
         {
           if (!Errors.ContainsKey(nameof(ResourceIdTemp)))
             Errors[nameof(ResourceIdTemp)] = new List<string>();
-
-          Errors[nameof(ResourceIdTemp)].Add("Integer or hexadecimal format is required.");
+          
+          if (IDValidator.IsValidInteger(ResourceIdTemp) || IDValidator.IsHexaRepresentation(ResourceIdTemp) && !IDValidator.IsInValidRange(ResourceIdTemp))
+            Errors[nameof(ResourceIdTemp)].Add($"ID can not be less than {StringEnhancer.Constants.kMinID} or greater than {StringEnhancer.Constants.kMaxID}.");
+          else
+            Errors[nameof(ResourceIdTemp)].Add("Integer or hexadecimal format is required.");
         }
         else if (ResourceContext.IdExists(ResourceId))
         {
