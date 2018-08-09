@@ -73,7 +73,7 @@ namespace StringEnhancer
           var currentItem = aStringTableContent[idx][i];
           aWriteFile.WriteLine(currentItem.Serialize());
 
-          if (currentItem.ID == Constants.kNotFoundID)
+          if (currentItem.ID.Value == Constants.kNotFoundID.Value)
           {
             if (isUnusedFileEmpty)
             {

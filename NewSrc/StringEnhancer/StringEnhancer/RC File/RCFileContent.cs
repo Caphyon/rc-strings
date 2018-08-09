@@ -11,7 +11,7 @@ namespace StringEnhancer
 
     public RCFileItem GetStringLineForName(string aStringResourceName, HeaderId aStringResourceID)
     {
-      if (aStringResourceID == Constants.kNotFoundID)
+      if (aStringResourceID.Value == Constants.kNotFoundID.Value)
       {
         foreach (var idx in StringTableContent.Keys)
         {

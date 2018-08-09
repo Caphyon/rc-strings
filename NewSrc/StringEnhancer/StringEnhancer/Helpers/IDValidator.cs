@@ -1,18 +1,19 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace StringEnhancer
 {
   public static class IDValidator
   {
     public static bool IsValid(HeaderId aID, HeaderContent aHeaderContent) =>
-      IsValid(aID.Value, aHeaderContent) || aID == Constants.kNotFoundID;
+      IsValid(aID.Value, aHeaderContent);
     public static bool IsValid(string aString, HeaderContent aHeaderContent) =>
-      !IsRecurrentCase(aString, aHeaderContent) && IsValidWithoutRecurrenceCheck(aString);
+      !IsRecurrentCase(aString, aHeaderContent) && IsValidWithoutRecurrenceCheck(aString) || aString == Constants.kNotFoundID.Value;
 
     public static bool IsValidWithoutRecurrenceCheck(HeaderId aID) =>
       IsValidWithoutRecurrenceCheck(aID.Value);
     public static bool IsValidWithoutRecurrenceCheck(string aString) =>
-      !IsEmpty(aString) && aString != Constants.kInvalidID.Value && (IsHexaRepresentation(aString) || IsValidInteger(aString));
+      !IsEmpty(aString) && aString != Constants.kInvalidID.Value && IsInValidRange(aString) && (IsHexaRepresentation(aString) || IsValidInteger(aString));
 
     public static bool IsEmpty(HeaderId aID) => IsEmpty(aID.Value);
     public static bool IsEmpty(string aString) => (aString.Length == 0);
@@ -20,7 +21,19 @@ namespace StringEnhancer
     public static bool IsValidInteger(HeaderId aID) =>
       IsValidInteger(aID.Value);
     public static bool IsValidInteger(string aString) =>
-      int.TryParse(aString, out var intRepr) && (intRepr >= 0 && intRepr <= Constants.kMaxID);
+      int.TryParse(aString, out _);
+
+    public static bool IsInValidRange(HeaderId aID) =>
+      IsInValidRange(aID.Value);
+    public static bool IsInValidRange(string aString)
+    {
+      int intRepr;
+      if (IsHexaRepresentation(aString)) intRepr = Convert.ToInt32(aString, 16);
+      else if (IsValidInteger(aString)) intRepr = int.Parse(aString);
+      else return false;
+
+      return (intRepr >= Constants.kMinID && intRepr <= Constants.kMaxID);
+    }
 
     public static bool IsRecurrentCase(HeaderId aID, HeaderContent aHeaderContent) =>
       IsRecurrentCase(aID.Value, aHeaderContent);
