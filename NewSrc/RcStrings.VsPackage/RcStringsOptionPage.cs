@@ -18,6 +18,6 @@ namespace Caphyon.RcStrings.VsPackage
     [Category("String resource")]
     [DisplayName("Show ghost entries files")]
     [Description("If set to True the found strings from a RC file which don't have a corresponding ID in a header file will be showed for every \"Add\" command. Otherwise they will not be showed.")]
-    public bool ShowGhostFile { get; set; } = true;
+    public bool ShowGhostFile { get; set; } = false;
   }
 }
