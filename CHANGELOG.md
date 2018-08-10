@@ -1,6 +1,4 @@
-ChangeLog
-=========
-Changelog of RC Strings extension
+# Version History
 
 ### RC Strings 1.3.0
 *August 10, 2018*
