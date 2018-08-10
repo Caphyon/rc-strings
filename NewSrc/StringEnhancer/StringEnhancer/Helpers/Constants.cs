@@ -9,6 +9,6 @@
     public static HeaderId kNotFoundID = new HeaderId("NOT_FOUND");
     public const int kNotDiscovered = -1;
     public static readonly char[] kSplitTokens = { ' ', '\t' };
-    public const int kMinID = 1;
+    public const int kMinID = 0;
   }
 }
