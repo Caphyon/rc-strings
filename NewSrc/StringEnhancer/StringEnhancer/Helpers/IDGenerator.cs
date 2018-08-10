@@ -24,6 +24,8 @@ namespace StringEnhancer
       {
         emptyIDs.Remove(Convert.ToInt32(headerItem.ID.Value));
       }
+
+      emptyIDs.Remove(0);
     }
 
     public void RemoveExistingFromRC(string aRCPath)
