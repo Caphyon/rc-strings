@@ -1,5 +1,6 @@
 ﻿using StringEnhancer;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -35,7 +36,7 @@ namespace Caphyon.RcStrings.VsPackage
     #region Properties
 
     public RcFile RcFile { get; private set; }
-    public int GetId => mIDGenerator.Generate();
+
     public HeaderContent HeaderContent { get; private set; }
     private string DefaultHeaderFile { get; }
     #endregion
@@ -172,6 +173,16 @@ namespace Caphyon.RcStrings.VsPackage
         return null;
 
       return mRCFileContent.GetStringLineForName(aStringResourceName, currentResourceID);
+    }
+
+    public string GenerateId(RcFile aSelectedRcFile, IEnumerable<RcFile> aRcFiles, bool aUniquePerProject)
+    {
+      List<string> rcPaths = (from rcFile in aRcFiles where rcFile.Project.ProjectName == aSelectedRcFile.Project.ProjectName select rcFile.FilePath).ToList();
+
+      IDGenerator idGenerator = new IDGenerator();
+
+      if (aUniquePerProject) return idGenerator.GenerateUniquePerProject(rcPaths).ToString();
+      else return mIDGenerator.Generate().ToString();
     }
 
     #endregion

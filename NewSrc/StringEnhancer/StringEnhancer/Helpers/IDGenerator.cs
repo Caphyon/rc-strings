@@ -40,6 +40,16 @@ namespace StringEnhancer
       }
     }
 
+    public int GenerateUniquePerProject(IReadOnlyList<string> aRcPaths)
+    {
+      foreach (var path in aRcPaths)
+      {
+        RemoveExistingFromRC(path);
+      }
+
+      return Generate();
+    }
+
     public int Generate()
     {
       if (RandomID)
