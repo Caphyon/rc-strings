@@ -57,6 +57,7 @@ namespace Caphyon.RcStrings.VsPackage
       {
         mResourceName = value;
         ReplaceWithCode = string.Format(ReplaceStringCodeFormated, mResourceName);
+        OnPropertyChanged("ResourceName");
       }
     }
     public bool ReplaceCode
@@ -100,7 +101,8 @@ namespace Caphyon.RcStrings.VsPackage
           context = new StringResourceContext(mSelectedRcFile, ShowGhostFile);
           mRcFilesContexts[mSelectedRcFile] = context;
         }
-        ResourceIdTemp = context.GetId.ToString();
+
+        GenerateNewResourceIdTemp();
       }
     }
     public string ResourceIdTemp
@@ -123,6 +125,7 @@ namespace Caphyon.RcStrings.VsPackage
     }
 
     public bool ShowGhostFile { get; set; }
+    public bool UniqueIdPerProject { get; set; }
 
     private Dictionary<string, List<string>> Errors { get; } = new Dictionary<string, List<string>>();
     
@@ -133,13 +136,14 @@ namespace Caphyon.RcStrings.VsPackage
     #region Ctor
 
     public EditStringResourceDialog(IServiceProvider aServiceProvider, List<RcFile> aRcFiles, RcFile aSelectedRcFile,
-      string aSelectedText, bool aReplaceCode, string aReplaceWithCodeFormated, bool aShowGhostFile, RCFileItem aStringResource = null)
+      string aSelectedText, bool aReplaceCode, string aReplaceWithCodeFormated, bool aShowGhostFile, bool aUniqueIdPerProject, RCFileItem aStringResource = null)
     {
       InitializeComponent();
       DataContext = this;
       mRcFilesContexts = new Dictionary<RcFile, StringResourceContext>();
       mServiceProvider = aServiceProvider;
       this.ShowGhostFile = aShowGhostFile;
+      this.UniqueIdPerProject = aUniqueIdPerProject;
       this.AddMode = (aStringResource == null);
       this.ReplaceStringCodeFormated = aReplaceWithCodeFormated;
       this.RcFiles = aRcFiles;
@@ -160,15 +164,23 @@ namespace Caphyon.RcStrings.VsPackage
         // Set resource value the text between quotation marks inclusive
         this.ReplaceCode = aReplaceCode;
         this.ResourceValue = @aSelectedText;
-        this.ResourceName = new NameGenerator(this.ResourceValue).Generate();
-        if (ResourceContext.ResourceNameExists(this.ResourceName))
-          this.ResourceName = string.Format("{0}{1}", this.ResourceName, this.ResourceIdTemp);
+        this.ResourceName = new NameGenerator(ResourceValue).Generate();
+        GenerateNewResourceIdTemp();
       }
-
     }
     #endregion
 
     #region Private methods
+
+    private void GenerateNewResourceIdTemp()
+    {
+      if (ResourceName == null) return;
+      while (ResourceIdTemp != null && ResourceName.EndsWith(ResourceIdTemp))
+        ResourceName = ResourceName.Remove(ResourceName.Length - ResourceIdTemp.Length);
+      ResourceIdTemp = mRcFilesContexts[mSelectedRcFile].GenerateId(mSelectedRcFile, RcFiles, UniqueIdPerProject);
+      while (ResourceContext.ResourceNameExists(ResourceName))
+        ResourceName = $"{ResourceName}{ResourceIdTemp}";
+    }
 
     private void btnCancel_Click(object sender, RoutedEventArgs e)
     {

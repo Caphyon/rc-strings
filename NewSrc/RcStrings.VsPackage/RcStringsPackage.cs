@@ -261,24 +261,10 @@ namespace Caphyon.RcStrings.VsPackage
 
       // Change the name of the dialog
       EditStringResourceDialog dialog = new EditStringResourceDialog((IServiceProvider)this, rcFiles,
-        mSelectedRcFile, mSelectedWord, mReplaceString, mReplaceWithCodeFormated, ShowGhostFile)
+        mSelectedRcFile, mSelectedWord, mReplaceString, mReplaceWithCodeFormated, ShowGhostFile, IDUniquenessPerProject)
       {
         Owner = mDteWindow
       };
-
-      if (IDUniquenessPerProject)
-      {
-        IDGenerator idGenerator = new IDGenerator();
-        foreach (var rcFile in rcFiles)
-        {
-          if (rcFile.Project.ProjectName == dialog.SelectedRcFile.Project.ProjectName)
-          {
-            idGenerator.RemoveExistingFromRC(rcFile.FilePath);
-          }
-        }
-
-        dialog.ResourceIdTemp = idGenerator.Generate().ToString();
-      }
 
       if (dialog.ShowModal() == true)
       {
@@ -334,7 +320,7 @@ namespace Caphyon.RcStrings.VsPackage
         EditStringResourceDialog dialog = new EditStringResourceDialog(
           (IServiceProvider)this, new List<RcFile>() { result.Item2.RcFile },
           result.Item2.RcFile, mSelectedWord,
-          mReplaceString, mReplaceWithCodeFormated, ShowGhostFile, stringResource)
+          mReplaceString, mReplaceWithCodeFormated, ShowGhostFile, IDUniquenessPerProject, stringResource)
         {
           Owner = mDteWindow
         };
