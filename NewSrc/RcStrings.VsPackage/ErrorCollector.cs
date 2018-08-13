@@ -34,41 +34,41 @@ namespace Caphyon.RcStrings.VsPackage
     #region Checking methods
     public void CheckName(StringResourceContext aResourceContext, string aResourceName)
     {
-      var errorString = mNameValidator.Validate(aResourceContext, aResourceName);
-      if (errorString == null) return;
+      var errorMessage = mNameValidator.Validate(aResourceContext, aResourceName);
+      if (errorMessage == null) return;
 
       var propertyName = "ResourceName";
 
       if (!Errors.ContainsKey(propertyName))
         Errors[propertyName] = new List<string>();
 
-      Errors[propertyName].Add(errorString);
+      Errors[propertyName].Add(errorMessage);
     }
 
     public void CheckId(StringResourceContext aResourceContext, string aResourceIdTemp, HeaderId aResourceId)
     {
-      var errorString = mIdValidator.Validate(aResourceContext, aResourceIdTemp, aResourceId);
-      if (errorString == null) return;
+      var errorMessage = mIdValidator.Validate(aResourceContext, aResourceIdTemp, aResourceId);
+      if (errorMessage == null) return;
 
       var propertyName = "ResourceIdTemp";
 
       if (!Errors.ContainsKey(propertyName))
         Errors[propertyName] = new List<string>();
 
-      Errors[propertyName].Add(errorString);
+      Errors[propertyName].Add(errorMessage);
     }
 
     public void CheckValue(string aResourceValue)
     {
-      var errorString = mValueValidator.Validate(aResourceValue);
-      if (errorString == null) return;
+      var errorMessage = mValueValidator.Validate(aResourceValue);
+      if (errorMessage == null) return;
 
       var propertyName = "ResourceValue";
 
       if (!Errors.ContainsKey(propertyName))
         Errors[propertyName] = new List<string>();
 
-      Errors[propertyName].Add(errorString);
+      Errors[propertyName].Add(errorMessage);
     }
     #endregion
   }
