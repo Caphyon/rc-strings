@@ -77,6 +77,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AutomationUtil.cs" />
+    <Compile Include="IdValidatorUi.cs" />
     <Compile Include="RcStringsOptionPage.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -94,6 +95,7 @@
     <Compile Include="StringResourceContext.cs" />
     <Compile Include="SilentFileChanger.cs" />
     <Compile Include="SilentFileChangerGuard.cs" />
+    <Compile Include="UiConstants.cs" />
     <Compile Include="UserSettings.cs" />
     <Compile Include="VCppProject.cs" />
     <Compile Include="Vs15SolutionLoader.cs" />
