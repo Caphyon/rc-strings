@@ -127,10 +127,6 @@ namespace Caphyon.RcStrings.VsPackage
     public bool ShowGhostFile { get; set; }
     public bool UniqueIdPerProject { get; set; }
 
-    private Dictionary<string, List<string>> Errors { get; } = new Dictionary<string, List<string>>();
-    
-    private bool HasError => Errors.Any();
-
     #endregion
 
     #region Ctor
@@ -195,7 +191,7 @@ namespace Caphyon.RcStrings.VsPackage
       }
       if (HasError)
       {
-        VsShellUtilities.ShowMessageBox(mServiceProvider, Errors.First().Value.First(), "Invalid input",
+        VsShellUtilities.ShowMessageBox(mServiceProvider, mErrorCollector.First().Value.First(), "Invalid input",
           OLEMSGICON.OLEMSGICON_CRITICAL, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
         return;
       }
@@ -239,90 +235,29 @@ namespace Caphyon.RcStrings.VsPackage
     #region IDataErrorInfo Implementation
 
     public string Error => null;
+    private bool HasError => mErrorCollector.HasAnyErrors();
+    private readonly ErrorCollector mErrorCollector = new ErrorCollector();
 
     public string this[string PropertyName]
     {
       get
       {
         CollectErrors();
-        return Errors.ContainsKey(PropertyName) ?
-          String.Join("\n", Errors[PropertyName]) : string.Empty;
+        return mErrorCollector.HasError(PropertyName);
       }
     }
 
     private void CollectErrors()
     {
-      Errors.Clear();
+      mErrorCollector.Clear();
 
       if (AddMode)
       {
-        if (string.IsNullOrEmpty(ResourceName))
-        {
-          if (!Errors.ContainsKey(nameof(ResourceName)))
-            Errors[nameof(ResourceName)] = new List<string>();
-
-          Errors[nameof(ResourceName)].Add("Name can not be empty.");
-        }
-
-        if (ResourceName.Contains(" "))
-        {
-          if (!Errors.ContainsKey(nameof(ResourceName)))
-            Errors[nameof(ResourceName)] = new List<string>();
-
-          Errors[nameof(ResourceName)].Add("Name can not contain whitespaces.");
-        }
-
-        if (ResourceName.Length > ParseConstants.kMaximumResourceNameLength)
-        {
-          if (!Errors.ContainsKey(nameof(ResourceName)))
-            Errors[nameof(ResourceName)] = new List<string>();
-
-          Errors[nameof(ResourceName)].Add(string.Format(
-            $"Name can not be longer than {ParseConstants.kMaximumResourceNameLength} characters."));
-        }
-
-        if (ResourceContext.ResourceNameExists(ResourceName))
-        {
-          if (!Errors.ContainsKey(nameof(ResourceName)))
-            Errors[nameof(ResourceName)] = new List<string>();
-
-          Errors[nameof(ResourceName)].Add("Another resource with this name already exists.");
-        }
-
-        if (string.IsNullOrEmpty(ResourceIdTemp))
-        {
-          if (!Errors.ContainsKey(nameof(ResourceIdTemp)))
-            Errors[nameof(ResourceIdTemp)] = new List<string>();
-
-          Errors[nameof(ResourceIdTemp)].Add("ID can not be empty.");
-        }
-        else if (ResourceId.Value == StringEnhancer.Constants.kInvalidID.Value || !IdValidatorUi.IsInValidRange(ResourceId))
-        {
-          if (!Errors.ContainsKey(nameof(ResourceIdTemp)))
-            Errors[nameof(ResourceIdTemp)] = new List<string>();
-          
-          if (IDValidator.IsValidInteger(ResourceIdTemp) || IDValidator.IsHexaRepresentation(ResourceIdTemp) && !IdValidatorUi.IsInValidRange(ResourceIdTemp))
-            Errors[nameof(ResourceIdTemp)].Add($"ID can not be less than {UiConstants.kMinId} or greater than {UiConstants.kMaxId}.");
-          else
-            Errors[nameof(ResourceIdTemp)].Add("Integer or hexadecimal format is required.");
-        }
-        else if (ResourceContext.IdExists(ResourceId))
-        {
-          if (!Errors.ContainsKey(nameof(ResourceIdTemp)))
-            Errors[nameof(ResourceIdTemp)] = new List<string>();
-
-          Errors[nameof(ResourceIdTemp)].Add("Another resource with this ID already exists.");
-        }
+        mErrorCollector.CheckName(ResourceContext, ResourceName);
+        mErrorCollector.CheckId(ResourceContext, ResourceIdTemp, ResourceId);
       }
 
-      if (ResourceValue.Length > ParseConstants.kMaximumResourceValueLength)
-      {
-        if (!Errors.ContainsKey(nameof(ResourceValue)))
-          Errors[nameof(ResourceValue)] = new List<string>();
-
-        Errors[nameof(ResourceValue)].Add(
-          string.Format($"Value can not be longer than {ParseConstants.kMaximumResourceValueLength} characters."));
-      }
+      mErrorCollector.CheckValue(ResourceValue);
     }
     #endregion
   }
