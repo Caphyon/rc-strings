@@ -19,6 +19,8 @@
         <ResourceDictionary Source="ScrollBarStyles.xaml" />
       </ResourceDictionary.MergedDictionaries>
 
+      <local:InverseBooleanConverter x:Key="inverter" />
+
       <Style TargetType="TextBox" BasedOn="{StaticResource vsTextBoxStyle}">
         <Style.Triggers>
           <Trigger Property="Validation.HasError" Value="True">
@@ -186,7 +188,9 @@
                 Click="btnAdd_Click"
                 x:Name="btnAdd"
                 IsDefault="True"
+                IsEnabled="{Binding HasError, Converter={StaticResource inverter}}"
                 />
+
         <Button Content="_Cancel" 
                 Width="60" 
                 Margin="10 0 0 0"

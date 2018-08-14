@@ -232,7 +232,7 @@ namespace Caphyon.RcStrings.VsPackage
     #region IDataErrorInfo Implementation
 
     public string Error => null;
-    private bool HasError => mErrorCollector.HasAnyErrors();
+    public bool HasError => mErrorCollector.HasAnyErrors();
     private readonly ErrorCollector mErrorCollector = new ErrorCollector();
 
     public string this[string aPropertyName]
