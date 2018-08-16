@@ -77,6 +77,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AutomationUtil.cs" />
+    <Compile Include="SelectionFormatter.cs" />
     <Compile Include="ValidatorsUi\ErrorCollector.cs" />
     <Compile Include="ValidatorsUi\IdValidatorUi.cs" />
     <Compile Include="ValidatorsUi\NameValidatorUi.cs" />
