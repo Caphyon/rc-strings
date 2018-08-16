@@ -77,9 +77,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AutomationUtil.cs" />
-    <Compile Include="ErrorCollector.cs" />
-    <Compile Include="IdValidatorUi.cs" />
-    <Compile Include="NameValidatorUi.cs" />
+    <Compile Include="ValidatorsUi\ErrorCollector.cs" />
+    <Compile Include="ValidatorsUi\IdValidatorUi.cs" />
+    <Compile Include="ValidatorsUi\NameValidatorUi.cs" />
     <Compile Include="RcStringsOptionPage.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -97,9 +97,9 @@
     <Compile Include="StringResourceContext.cs" />
     <Compile Include="SilentFileChanger.cs" />
     <Compile Include="SilentFileChangerGuard.cs" />
-    <Compile Include="UiConstants.cs" />
+    <Compile Include="ValidatorsUi\UiConstants.cs" />
     <Compile Include="UserSettings.cs" />
-    <Compile Include="ValueValidatorUi.cs" />
+    <Compile Include="ValidatorsUi\ValueValidatorUi.cs" />
     <Compile Include="VCppProject.cs" />
     <Compile Include="Vs15SolutionLoader.cs" />
     <Compile Include="VsColor.cs" />
@@ -107,7 +107,9 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="Key.snk" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -271,6 +273,7 @@
       <Name>RcStrings.StringEnhancer</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
