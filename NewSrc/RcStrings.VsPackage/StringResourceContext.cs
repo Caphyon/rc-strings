@@ -72,7 +72,7 @@ namespace Caphyon.RcStrings.VsPackage
 
       var rcFileDirectory = Path.GetDirectoryName(RcFile.FilePath);
       var headerPath = Path.Combine(rcFileDirectory, headerNames.FirstOrDefault(
-                                                                headerName => headerName.Contains("resource.h") 
+                                                                headerName => headerName.ToLower().Contains("resource.h")
                                                                               && File.Exists(Path.Combine(rcFileDirectory, headerName))
                                                                 ) ?? headerNames.FirstOrDefault(
                                                                 headerName => File.Exists(Path.Combine(rcFileDirectory, headerName))
