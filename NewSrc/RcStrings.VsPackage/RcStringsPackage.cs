@@ -42,7 +42,7 @@ namespace Caphyon.RcStrings.VsPackage
   [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)] // Info on this package for Help/About
   [Guid(RcStringsPackage.kPackageGuidString)]
   [ProvideMenuResource("Menus.ctmenu", 1)]
-  [ProvideOptionPage(typeof(RcStringsOptionPage), "RC Strings", "RC Strings Page", 0, 0, true)]
+  [ProvideOptionPage(typeof(RcStringsOptionPage), "RC Strings", "General", 0, 0, true)]
   [ProvideAutoLoad(UIContextGuids.SolutionExists)]
   [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
   public sealed class RcStringsPackage : Package
