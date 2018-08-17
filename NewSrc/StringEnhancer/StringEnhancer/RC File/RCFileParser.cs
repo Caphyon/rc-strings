@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 
 namespace StringEnhancer
 {
@@ -35,7 +36,7 @@ namespace StringEnhancer
 
         if (aLine.Length == 0) return;
 
-        mResult.Name = aLine.Split(Constants.kSplitTokens)[0];
+        mResult.Name = aLine.Split(Constants.kSplitTokens, StringSplitOptions.RemoveEmptyEntries)[0];
 
         if (aLine == "BEGIN") return;
         if (aLine == "END") aIsInStringTable = false;
