@@ -6,7 +6,7 @@
 Improvements:
 
 * Add UI option for treating unused resources detected when the resources are found in the current RC but do not have a corresponding ID in any of the headers
-* Add autoselect current word if nothing is selected
+* Add auto-select current word if nothing is selected
 
 Bugs:
 
@@ -23,7 +23,7 @@ Bugs:
 
 Improvements:
 
-* Allow multiline selection
+* Allow multi-line selection
 * Add support for writing in hexadecimal format
 * Add support for any kind of resources from RC file
 * Add UI option for ID per project generation
