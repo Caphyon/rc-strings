@@ -36,7 +36,9 @@ namespace StringEnhancer
 
         if (aLine.Length == 0) return;
 
-        mResult.Name = aLine.Split(Constants.kSplitTokens, StringSplitOptions.RemoveEmptyEntries)[0];
+        var words = aLine.Split(Constants.kSplitTokens, StringSplitOptions.RemoveEmptyEntries);
+        if (words.Length == 0) return;
+        mResult.Name = words[0];
 
         if (aLine == "BEGIN") return;
         if (aLine == "END") aIsInStringTable = false;
