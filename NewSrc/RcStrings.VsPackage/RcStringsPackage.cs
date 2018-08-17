@@ -202,7 +202,7 @@ namespace Caphyon.RcStrings.VsPackage
       if (EditorSelection.IsEmpty)
         mDte.ExecuteCommand("Edit.SelectCurrentWord");
 
-      mSelectedWord = EditorSelection.Text;
+      mSelectedWord = SelectionFormatter.Format(EditorSelection.Text.Trim());
     }
 
     private void SolutionEvent_BeforeClosing()
