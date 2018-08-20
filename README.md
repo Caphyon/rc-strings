@@ -6,7 +6,7 @@ Code editor.
 
 ### Download 
 
-The latest version of this extension is available at [Visual Studio Gallery](https://marketplace.visualstudio.com/items?itemName=vs-publisher-690586.RCStrings).
+The latest version of this extension is available at [Visual Studio Gallery](https://marketplace.visualstudio.com/items?itemName=caphyon.RCStrings).
 
 ### How to use
 
