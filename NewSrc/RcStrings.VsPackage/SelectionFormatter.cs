@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+using System;
 using Microsoft.VisualStudio.Shell;
 
 namespace Caphyon.RcStrings.VsPackage
@@ -12,6 +13,22 @@ namespace Caphyon.RcStrings.VsPackage
   {
     public static string Format(string aEditorSelection)
     {
+      var result = aEditorSelection.Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries);
+
+      for (var index = 0; index < result.Length; ++index)
+      {
+        if (result.Length == 1)
+          result[index] = result[index].Trim(' ');
+        else if (index == 0)
+          result[index] = result[index].Trim(' ').TrimSuffix("\"");
+        else if (index == result.Length - 1)
+          result[index] = result[index].Trim(' ').TrimPrefix("\"");
+        else
+          result[index] = result[index].Trim(' ', '\"');
+      }
+
+      aEditorSelection = string.Join("", result);
+
       if (aEditorSelection.StartsWith("_T(") && aEditorSelection.EndsWith(")"))
         aEditorSelection = FormatForText(aEditorSelection.Substring(2));
       else if (aEditorSelection.StartsWith("TEXT(") && aEditorSelection.EndsWith(")"))
