@@ -24,7 +24,7 @@ namespace Caphyon.RcStrings.VsPackage
         else if (index == result.Length - 1)
           result[index] = result[index].Trim(' ').TrimPrefix("\"");
         else
-          result[index] = result[index].Trim(' ', '\"');
+          result[index] = result[index].Trim(' ').TrimPrefix("\"").TrimSuffix("\"");
       }
 
       aEditorSelection = string.Join("", result);
