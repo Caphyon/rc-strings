@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
 
 namespace StringEnhancer
@@ -36,26 +37,40 @@ namespace StringEnhancer
 
         if (aLine.Length == 0) return;
 
-        var words = aLine.Split(Constants.kSplitTokens, StringSplitOptions.RemoveEmptyEntries);
+        var words = aLine.Split(Constants.kSplitTokens);
         if (words.Length == 0) return;
         mResult.Name = words[0];
 
         if (aLine == "BEGIN") return;
         if (aLine == "END") aIsInStringTable = false;
 
-        var firstQuote = aLine.IndexOf('\"');
-        var lastQuote = aLine.LastIndexOf('\"');
+        var stringBuilder = new StringBuilder();
+        var word = string.Join(" ", words, 1, words.Length - 1).Trim(Constants.kSplitTokens);
 
-        if (firstQuote != -1 && lastQuote != -1)
+        if (words.Length == 1)
         {
-          mResult.Value = aLine.Substring(firstQuote, lastQuote - firstQuote + 1);
+          mResult.PrintStyle = StringTablePrintStyle.NewLine;
+          stringBuilder.Append(mFileStream.ReadLine()?.TrimStart(Constants.kSplitTokens) ?? "");
+        }
+        else if (!word.EndsWith("\\"))
+        {
           mResult.PrintStyle = StringTablePrintStyle.Joined;
+          stringBuilder.Append(word);
         }
         else
         {
-          mResult.Value = mFileStream.ReadLine()?.TrimStart(Constants.kSplitTokens);
-          mResult.PrintStyle = StringTablePrintStyle.NewLine;
+          mResult.PrintStyle = StringTablePrintStyle.Joined;
+          stringBuilder.Append(word);
+
+          while (word.EndsWith("\\"))
+          {
+            stringBuilder.Length--;
+            word = mFileStream.ReadLine()?.TrimStart(Constants.kSplitTokens) ?? "\"";
+            stringBuilder.Append(word);
+          }
         }
+
+        mResult.Value = stringBuilder.ToString();
       }
     }
 
