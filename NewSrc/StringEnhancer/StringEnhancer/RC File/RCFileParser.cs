@@ -32,13 +32,15 @@ namespace StringEnhancer
 
       if (aIsInStringTable)
       {
-        mResult = new RCFileItem();
         aLine = aLine.Trim();
 
         if (aLine.Length == 0) return;
 
         var words = aLine.Split(Constants.kSplitTokens);
-        if (words.Length == 0) return;
+        if (words.Length == 0 || words[0].StartsWith("\"") || words[0].EndsWith("\""))
+          return;
+
+        mResult = new RCFileItem();
         mResult.Name = words[0];
 
         if (aLine == "BEGIN") return;
