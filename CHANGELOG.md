@@ -1,5 +1,22 @@
 # Version History
 
+### RC Strings 1.4.0
+*August 21, 2018*
+
+Improvements:
+* Value formatting now includes support for multi-line string separation and string literals. 
+	Current supported string literals are:
+	- `L"string"`
+	- `R"(string)"`
+	- `_T("string")`
+	- `TEXT("string")`
+	- other combinations of the literals above
+
+Bugs:
+* Id could be 0
+* Could not find resource.h if it was not lower-case only
+* Missing value crashed the extension
+
 ### RC Strings 1.3.0
 *August 10, 2018*
 
@@ -14,7 +31,7 @@ Bugs:
 * Fix header path detection
 * Header name was mandatory "resource.h"
 * Fix UI input validation
-* Consecutive whitespaces were removed
+* Consecutive white-spaces were removed
 * Wrong resource placement in header file on add command
 * RC file name was not visible on edit command
 
