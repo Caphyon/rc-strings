@@ -15,7 +15,7 @@ Improvements:
 Bugs:
 * Id could be 0
 * Could not find resource.h if it was not lower-case only
-* Value could be null after parsing RC, which crashed the extension
+* Missing value crashed the extension
 
 ### RC Strings 1.3.0
 *August 10, 2018*
