@@ -23,7 +23,11 @@ namespace Caphyon.RcStrings.VsPackage
         string.Join("\n", Errors[aPropertyName]) : string.Empty;
     }
 
-    public void Clear() => Errors.Clear();
+    public void Clear(string aPropertyName)
+    {
+      if (Errors.ContainsKey(aPropertyName))
+        Errors[aPropertyName].Clear();
+    }
 
     public KeyValuePair<string, List<string>> First()
     {
