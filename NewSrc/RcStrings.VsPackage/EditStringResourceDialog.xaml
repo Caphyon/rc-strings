@@ -52,7 +52,6 @@
                Grid.Row="0" 
                VerticalAlignment="Center" 
                HorizontalAlignment="Stretch"
-               IsEnabled="{Binding AddMode}"
                x:Name="tbxResourceName"
                Text="{Binding ResourceName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"/>
 
