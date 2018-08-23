@@ -2,19 +2,15 @@
 {
   public class RcFile
   {
-    #region Propertries
+    #region Properties
 
-    public string FilePath { get; private set; }
+    public string FilePath { get; set; }
     public string FileName => System.IO.Path.GetFileName(FilePath);
     public VCppProject Project { get; set; }
-    public string DisplayName => string.Format("{0}: {1}", Project.ProjectName, FileName);
+    public string DisplayName => $"{Project.ProjectName}: {FileName}";
+    public bool IsSelectable { get; set; }
 
     #endregion
 
-    #region Ctor
-
-    public RcFile(string aFilePath) => FilePath = aFilePath;
-
-    #endregion
   }
 }

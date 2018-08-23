@@ -420,15 +420,11 @@ namespace Caphyon.RcStrings.VsPackage
       foreach (EnvDTE.Project project in solutionProjects)
         rcFiles.AddRange(GetRcFilesFromProject(project));
 
-      if (aAddMode)
-        rcFiles.RemoveAll((rcFile) => !HeaderNamesExtractor.ExtractHeaderNames(rcFile.FilePath, CodePageExtractor.GetCodePage(rcFile.FilePath)).Any());
-
-      //if (invalidRcs > 0)
-      //{
-      //  VsShellUtilities.ShowMessageBox((IServiceProvider) this,
-      //    $"There are {invalidRcs} RC files without any header included!", "Error", 
-      //    OLEMSGICON.OLEMSGICON_WARNING, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
-      //}
+      foreach (var rcFile in rcFiles)
+      {
+        rcFile.IsSelectable = HeaderNamesExtractor
+          .ExtractHeaderNames(rcFile.FilePath, CodePageExtractor.GetCodePage(rcFile.FilePath)).Any();
+      }
 
       return rcFiles;
     }
@@ -508,7 +504,7 @@ namespace Caphyon.RcStrings.VsPackage
           }
           string filePath = projItem.FileCount > 0 ? projItem.FileNames[0] : string.Empty;
           if (Path.GetExtension(filePath).ToLower() == ".rc")
-            outputItems.Add(new RcFile(filePath));
+            outputItems.Add(new RcFile(){FilePath = filePath});
         }
         catch { }
       }
