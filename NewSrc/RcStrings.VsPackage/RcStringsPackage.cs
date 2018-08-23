@@ -277,7 +277,7 @@ namespace Caphyon.RcStrings.VsPackage
             dialog.ResourceName, dialog.ResourceId);
 
           resourceContext.UpdateRCFile((IServiceProvider)this);
-          resourceContext.UpdateHeaderFile((IServiceProvider)this);
+          resourceContext.UpdateHeaderFile((IServiceProvider)this, true);
 
           // Replace selected text
           if (dialog.ReplaceCode)
@@ -330,10 +330,27 @@ namespace Caphyon.RcStrings.VsPackage
           try
           {
             // Save added string resource to RC file
-            stringResource.Value = $"\"{new EscapeSequences().Format(dialog.ResourceValue)}\"";
+            if (stringResource.Name != dialog.ResourceName)
+            {
+              HeaderWriter.SearchedName = stringResource.Name;
+              stringResource.Name = dialog.ResourceName;
+
+              // Rewrite updated string resource in header file
+              HeaderWriter.TestItem = new TestItem()
+              {
+                Name = stringResource.Name,
+                ID = stringResource.ID
+              };
+
+              context.UpdateHeaderFile((IServiceProvider)this, false);
+            }
+
+            var formattedNewValue = $"\"{new EscapeSequences().Format(dialog.ResourceValue)}\"";
+            stringResource.Value = formattedNewValue;
 
             // Rewrite updated string resource
             context.UpdateRCFile((IServiceProvider)this);
+            ReplaceSelectedCode(dialog.ReplaceWithCode);
           }
           catch (Exception ex)
           {

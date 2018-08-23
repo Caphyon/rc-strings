@@ -11,17 +11,18 @@ namespace StringEnhancer
 
     public static TestItem TestItem { get; set; }
     public static int FoundIndex { get; set; }
+    public static string SearchedName { get; set; }
 
     public HeaderWriter(string aHeaderPath)
     {
       mHeaderPath = aHeaderPath;
     }
 
-    public void Write(string aWritePath, Encoding aCodePage, int aNumberOfElementsInHeader)
+    public void WriteForAdd(string aWritePath, Encoding aCodePage, int aNumberOfElementsInHeader)
     {
       using (var writeFile = new StreamWriter(aWritePath, false, aCodePage))
       {
-        using (var lineParser = new LineParser(mHeaderPath))
+        using (var lineParser = new LineParser(mHeaderPath, aCodePage))
         {
           var lineCount = -1;
           var ignoreValue = 0;
@@ -70,6 +71,37 @@ namespace StringEnhancer
           while (lineParser.HasNext())
           {
             writeFile.WriteLine(lineParser.GetNext().Serialize());
+          }
+        }
+      }
+    }
+
+    public void WriteForEdit(string aWritePath, Encoding aCodePage)
+    {
+      using (var writeFile = new StreamWriter(aWritePath, false, aCodePage))
+      {
+        using (var lineParser = new LineParser(mHeaderPath, aCodePage))
+        {
+          while (lineParser.HasNext())
+          {
+            var line = lineParser.GetNext();
+
+            var words = line.Name.Split(Constants.kSplitTokens, StringSplitOptions.RemoveEmptyEntries);
+
+            if (words.Length == 0)
+            {
+              writeFile.WriteLine(line.Serialize());
+              continue;
+            }
+
+            if (words[0].Equals("#define") && words[1].Equals(SearchedName) && words[2].Equals(TestItem.ID.Value))
+            {
+              writeFile.WriteLine(TestItem.SerializeForHeader());
+            }
+            else
+            {
+              writeFile.WriteLine(line.Serialize());
+            }
           }
         }
       }
