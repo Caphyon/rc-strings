@@ -144,9 +144,10 @@ namespace Caphyon.RcStrings.VsPackage
       }
     }
 
-    public void UpdateHeaderFile(IServiceProvider aServiceProvider)
+    public void UpdateHeaderFile(IServiceProvider aServiceProvider, bool aAddMode)
     {
-      mHeaderWriter.Write(mWriteHeaderPath, mCodePage, mHeaderContent.SortedHeaderResults[DefaultHeaderFile].Count);
+      if (aAddMode) mHeaderWriter.WriteForAdd(mWriteHeaderPath, mCodePage, mHeaderContent.SortedHeaderResults[DefaultHeaderFile].Count);
+      else mHeaderWriter.WriteForEdit(mWriteHeaderPath, mCodePage);
 
       try
       {

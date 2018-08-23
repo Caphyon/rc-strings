@@ -26,7 +26,7 @@ namespace StringEnhancer
         var stringTableContent = mRCFileContent.StringTableContent;
         var stringTableIndexOrder = mRCFileContent.StringTableIndexOrder;
 
-        using (var lineParser = new LineParser(mRCPath))
+        using (var lineParser = new LineParser(mRCPath, aCodePage))
         {
           WriteUntilStringTables(writeFile, lineParser);
           WriteStringTables(writeFile, stringTableContent, stringTableIndexOrder);

@@ -26,6 +26,7 @@ namespace Caphyon.RcStrings.VsPackage
     private RcFile mSelectedRcFile;
     private string mResourceIdTemp;
     private string mInitialStringValue;
+    private string mInitialStringName;
     private IServiceProvider mServiceProvider;
 
     #endregion
@@ -60,6 +61,7 @@ namespace Caphyon.RcStrings.VsPackage
         OnPropertyChanged("ResourceName");
       }
     }
+
     public bool ReplaceCode
     {
       get => mReplaceCode;
@@ -93,7 +95,7 @@ namespace Caphyon.RcStrings.VsPackage
       set
       {
         mSelectedRcFile = value;
-        if (mSelectedRcFile == null || !AddMode)
+        if (mSelectedRcFile == null)
           return;
 
         if (!mRcFilesContexts.TryGetValue(mSelectedRcFile, out StringResourceContext context))
@@ -149,6 +151,7 @@ namespace Caphyon.RcStrings.VsPackage
       if (!AddMode)
       {
         this.mInitialStringValue = aStringResource.Value;
+        this.mInitialStringName = aStringResource.Name;
         this.ResourceName = aStringResource.Name;
         this.ResourceIdTemp = aStringResource.ID.Value;
         this.ReplaceCode = false;
@@ -157,11 +160,11 @@ namespace Caphyon.RcStrings.VsPackage
       }
       else
       {
-        // Set resource value the text between quotation marks inclusive
         this.ReplaceCode = aReplaceCode;
         this.ResourceValue = @aSelectedText;
         this.ResourceName = new NameGenerator(ResourceValue).Generate();
         GenerateNewResourceIdTemp();
+        this.mInitialStringName = ResourceName;
       }
     }
     #endregion
@@ -184,7 +187,7 @@ namespace Caphyon.RcStrings.VsPackage
     }
     private void btnAdd_Click(object sender, RoutedEventArgs e)
     {
-      if (!AddMode && ResourceValue == mInitialStringValue)
+      if (!AddMode && ResourceValue == mInitialStringValue && ResourceName == mInitialStringName)
       {
         CloseWindow(false);
         return;
@@ -193,12 +196,6 @@ namespace Caphyon.RcStrings.VsPackage
       {
         VsShellUtilities.ShowMessageBox(mServiceProvider, mErrorCollector.First().Value.First(), "Invalid input",
           OLEMSGICON.OLEMSGICON_CRITICAL, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
-        return;
-      }
-      if (AddMode && ResourceId != StringEnhancer.Constants.kInvalidID && ResourceContext.IdExists(ResourceId))
-      {
-        VsShellUtilities.ShowMessageBox(mServiceProvider, string.Format("String Id {0} already exists.", ResourceId),
-          "Invalid input", OLEMSGICON.OLEMSGICON_CRITICAL, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
         return;
       }
       CloseWindow(true);
@@ -238,27 +235,37 @@ namespace Caphyon.RcStrings.VsPackage
     private bool HasError => mErrorCollector.HasAnyErrors();
     private readonly ErrorCollector mErrorCollector = new ErrorCollector();
 
-    public string this[string PropertyName]
+    public string this[string aPropertyName]
     {
       get
       {
-        CollectErrors();
-        return mErrorCollector.HasError(PropertyName);
+        CollectErrors(aPropertyName);
+        return mErrorCollector.HasError(aPropertyName);
       }
     }
 
-    private void CollectErrors()
+    private void CollectErrors(string aPropertyName)
     {
-      mErrorCollector.Clear();
+      mErrorCollector.Clear(aPropertyName);
 
-      if (AddMode)
+      if (aPropertyName == "ResourceIdTemp")
       {
-        mErrorCollector.CheckName(ResourceContext, ResourceName);
-        mErrorCollector.CheckId(ResourceContext, ResourceIdTemp, ResourceId);
+        if (AddMode)
+        {
+          mErrorCollector.CheckId(ResourceContext, ResourceIdTemp, ResourceId);
+        }
       }
-
-      mErrorCollector.CheckValue(ResourceValue);
+      else if (aPropertyName == "ResourceName")
+      {
+        if (ResourceName != mInitialStringName)
+          mErrorCollector.CheckName(ResourceContext, ResourceName);
+      }
+      else if (aPropertyName == "ResourceValue")
+      {
+        mErrorCollector.CheckValue(ResourceValue);
+      }
     }
+
     #endregion
   }
 }
