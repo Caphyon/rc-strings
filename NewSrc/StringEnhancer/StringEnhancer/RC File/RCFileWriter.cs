@@ -26,7 +26,7 @@ namespace StringEnhancer
         var stringTableContent = mRCFileContent.StringTableContent;
         var stringTableIndexOrder = mRCFileContent.StringTableIndexOrder;
 
-        using (var lineParser = new LineParser(mRCPath))
+        using (var lineParser = new LineParser(mRCPath, aCodePage))
         {
           WriteUntilStringTables(writeFile, lineParser);
           WriteStringTables(writeFile, stringTableContent, stringTableIndexOrder);
@@ -87,7 +87,7 @@ namespace StringEnhancer
                                           "////////////////////////////////////////////////////////////////////////////////////////////////\r\n");
             }
 
-            // Write in unused_content.txt file if adding
+            // WriteForAdd in unused_content.txt file if adding
             var objPrintStyle = currentItem.PrintStyle;
             currentItem.PrintStyle = StringTablePrintStyle.Debug;
             unusedContentFile.WriteLine(currentItem.Serialize());

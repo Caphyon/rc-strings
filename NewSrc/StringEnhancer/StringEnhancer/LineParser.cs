@@ -5,6 +5,7 @@ namespace StringEnhancer
   public class LineParser : AbstractParser<LineParserResult>
   {
     public LineParser(string aPath) : base(aPath, Encoding.GetEncoding(0)) { }
+    public LineParser(string aPath, Encoding aCodePage) : base(aPath, aCodePage) { }
 
     protected override void DoParse()
     {

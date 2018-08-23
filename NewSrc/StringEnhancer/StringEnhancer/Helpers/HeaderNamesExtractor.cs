@@ -9,9 +9,8 @@ namespace StringEnhancer
     public static IEnumerable<string> ExtractHeaderNames(string aPath, Encoding aCodePage)
     {
       var headerNames = new List<string>();
-      using (var lineParser = new LineParser(aPath))
+      using (var lineParser = new LineParser(aPath, aCodePage))
       {
-
         while (lineParser.HasNext())
         {
           var line = lineParser.GetNext();
