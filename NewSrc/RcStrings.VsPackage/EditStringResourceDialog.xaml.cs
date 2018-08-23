@@ -160,7 +160,6 @@ namespace Caphyon.RcStrings.VsPackage
       }
       else
       {
-        this.mInitialStringName = "";
         this.ReplaceCode = aReplaceCode;
         this.ResourceValue = @aSelectedText;
         this.ResourceName = new NameGenerator(ResourceValue).Generate();
