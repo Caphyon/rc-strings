@@ -87,7 +87,7 @@ namespace StringEnhancer
                                           "////////////////////////////////////////////////////////////////////////////////////////////////\r\n");
             }
 
-            // WriteForAdd in unused_content.txt file if adding
+            // Write in unused_content.txt file if adding
             var objPrintStyle = currentItem.PrintStyle;
             currentItem.PrintStyle = StringTablePrintStyle.Debug;
             unusedContentFile.WriteLine(currentItem.Serialize());
