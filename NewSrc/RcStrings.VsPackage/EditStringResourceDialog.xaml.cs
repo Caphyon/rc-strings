@@ -267,5 +267,10 @@ namespace Caphyon.RcStrings.VsPackage
     }
 
     #endregion
+
+    private void RcFilesComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+    {
+
+    }
   }
 }

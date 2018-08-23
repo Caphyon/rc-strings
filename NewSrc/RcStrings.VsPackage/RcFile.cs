@@ -1,4 +1,6 @@
-﻿namespace Caphyon.RcStrings.VsPackage
+﻿using System.Windows.Media.Imaging;
+
+namespace Caphyon.RcStrings.VsPackage
 {
   public class RcFile
   {
@@ -9,6 +11,7 @@
     public VCppProject Project { get; set; }
     public string DisplayName => $"{Project.ProjectName}: {FileName}";
     public bool IsSelectable { get; set; }
+    public BitmapImage Image { get; set; }
 
     #endregion
 

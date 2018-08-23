@@ -1,5 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+                    xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
   <ResourceDictionary.MergedDictionaries>
     <ResourceDictionary Source="Colors.xaml" />
   </ResourceDictionary.MergedDictionaries>
@@ -294,7 +296,32 @@
       </Trigger>
     </ControlTemplate.Triggers>
   </ControlTemplate>
-  <Style TargetType="{x:Type ComboBox}">
+
+  <DataTemplate x:Key="RcFilesComboBoxItemTemplate">
+    <Grid>
+      <TextBlock Text="{Binding DisplayName}" HorizontalAlignment="Left"/>
+      <Image Source="{Binding Image}" Height="17" HorizontalAlignment="Right"/>
+    </Grid>
+  </DataTemplate>
+
+  <system:String x:Key="RcNotAvailableToolTip">
+    This RC can not be selected as it has no headers available for the adding operation
+  </system:String>
+
+  <Style x:Key="RcFilesComboBoxItemStyle" TargetType="{x:Type ComboBoxItem}">
+    <Setter Property="ToolTipService.ShowOnDisabled" Value="True"/>
+    <Setter Property="ToolTip" Value="{Binding FilePath}" />
+    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    <Style.Triggers>
+      <DataTrigger Binding="{Binding IsSelectable}" Value="False">
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="IsEnabled" Value="False"/>
+        <Setter Property="ToolTip" Value="{StaticResource RcNotAvailableToolTip}"/>
+      </DataTrigger>
+    </Style.Triggers>
+  </Style>
+
+  <Style x:Key="RcFilesComboBoxStyle" TargetType="{x:Type ComboBox}">
     <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
     <Setter Property="Background" Value="{StaticResource PanelBackground}"/>
     <Setter Property="BorderBrush" Value="{StaticResource PropertyGridBorderBrush}"/>
@@ -307,6 +334,8 @@
     <Setter Property="ScrollViewer.PanningMode" Value="Both"/>
     <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
     <Setter Property="Template" Value="{StaticResource ComboBoxTemplate}"/>
+    <Setter Property="ItemContainerStyle" Value="{StaticResource RcFilesComboBoxItemStyle}"/>
+    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
     <Style.Triggers>
       <Trigger Property="IsEditable" Value="true">
         <Setter Property="IsTabStop" Value="false"/>
@@ -319,3 +348,4 @@
     </Style.Triggers>
   </Style>
 </ResourceDictionary>
+    

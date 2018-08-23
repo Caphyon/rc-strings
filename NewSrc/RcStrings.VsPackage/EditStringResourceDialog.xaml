@@ -94,27 +94,19 @@
                Text="{Binding ReplaceWithCode}" />
 
       <TextBlock Text="RC File" Grid.Row="4" VerticalAlignment="Center"/>
-      
-      <ComboBox IsReadOnly="True" 
-                ItemsSource="{Binding RcFiles}" 
-                DisplayMemberPath="DisplayName" 
+
+      <ComboBox x:Name="RcFilesComboBox"
+                Style="{StaticResource RcFilesComboBoxStyle}"
+                ItemTemplate="{StaticResource RcFilesComboBoxItemTemplate}"
+                IsReadOnly="True" 
+                ItemsSource="{Binding RcFiles}"
                 SelectedItem="{Binding SelectedRcFile}"
                 IsEnabled="{Binding AddMode}"
                 Grid.Row="4" 
                 Grid.Column="1"  
                 VerticalAlignment="Center" 
-                HorizontalAlignment="Stretch">
-        <ComboBox.ItemContainerStyle>
-          <Style>
-            <Setter Property="Control.ToolTip" Value="{Binding FilePath}" />
-            <Style.Triggers>
-              <DataTrigger Binding="{Binding IsSelectable }" Value="False" >
-                <Setter Property="ComboBoxItem.Focusable" Value="False"/>
-                <Setter Property="ComboBoxItem.IsEnabled" Value="False"/>
-              </DataTrigger>
-            </Style.Triggers>
-          </Style>
-        </ComboBox.ItemContainerStyle>
+                HorizontalAlignment="Stretch" 
+                SelectionChanged="RcFilesComboBox_SelectionChanged">
       </ComboBox>
 
       <StackPanel HorizontalAlignment="Right" 
@@ -137,7 +129,7 @@
                 Margin="10,0"
                 Click="btnCancel_Click" 
                 IsCancel="True"/>
-                
+
       </StackPanel>
     </Grid>
   </Grid>

@@ -18,6 +18,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
+using System.Windows.Media.Imaging;
 
 namespace Caphyon.RcStrings.VsPackage
 {
@@ -424,6 +425,14 @@ namespace Caphyon.RcStrings.VsPackage
       {
         rcFile.IsSelectable = HeaderNamesExtractor
           .ExtractHeaderNames(rcFile.FilePath, CodePageExtractor.GetCodePage(rcFile.FilePath)).Any();
+
+        rcFile.Image = new BitmapImage();
+        rcFile.Image.BeginInit();
+        if (rcFile.IsSelectable)
+          rcFile.Image.UriSource = new Uri("Resources/CheckedIcon.png", UriKind.Relative);
+        else
+          rcFile.Image.UriSource = new Uri("Resources/InvalidIcon.png", UriKind.Relative);
+        rcFile.Image.EndInit();
       }
 
       return rcFiles;
