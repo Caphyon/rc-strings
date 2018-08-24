@@ -426,12 +426,14 @@ namespace Caphyon.RcStrings.VsPackage
         rcFile.IsSelectable = HeaderNamesExtractor
           .ExtractHeaderNames(rcFile.FilePath, CodePageExtractor.GetCodePage(rcFile.FilePath)).Any();
 
+        if (rcFile.IsSelectable)
+        {
+          continue;
+        }
+
         rcFile.Image = new BitmapImage();
         rcFile.Image.BeginInit();
-        if (rcFile.IsSelectable)
-          rcFile.Image.UriSource = new Uri("Resources/CheckedIcon.png", UriKind.Relative);
-        else
-          rcFile.Image.UriSource = new Uri("Resources/InvalidIcon.png", UriKind.Relative);
+        rcFile.Image.UriSource = new Uri("Resources/InvalidIcon.png", UriKind.Relative);
         rcFile.Image.EndInit();
       }
 

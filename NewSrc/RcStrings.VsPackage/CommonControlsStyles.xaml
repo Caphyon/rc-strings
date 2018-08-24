@@ -300,7 +300,7 @@
   <DataTemplate x:Key="RcFilesComboBoxItemTemplate">
     <Grid>
       <TextBlock Text="{Binding DisplayName}" HorizontalAlignment="Left"/>
-      <Image Source="{Binding Image}" Height="17" HorizontalAlignment="Right"/>
+      <Image Source="{Binding Image}" Width="10" Height="10" HorizontalAlignment="Right"/>
     </Grid>
   </DataTemplate>
 
@@ -310,7 +310,6 @@
 
   <Style x:Key="RcFilesComboBoxItemStyle" TargetType="{x:Type ComboBoxItem}">
     <Setter Property="ToolTipService.ShowOnDisabled" Value="True"/>
-    <Setter Property="ToolTip" Value="{Binding FilePath}" />
     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
     <Style.Triggers>
       <DataTrigger Binding="{Binding IsSelectable}" Value="False">
