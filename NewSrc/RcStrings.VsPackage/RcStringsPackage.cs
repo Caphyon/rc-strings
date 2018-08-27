@@ -19,7 +19,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
-using Constants = StringEnhancer.Constants;
 
 namespace Caphyon.RcStrings.VsPackage
 {
@@ -338,7 +337,7 @@ namespace Caphyon.RcStrings.VsPackage
               stringResource.Name = dialog.ResourceName;
 
               // Write in header only if the resource is found in a header
-              if (!stringResource.ID.Value.Equals(Constants.kNotFoundID.Value))
+              if (!stringResource.ID.Value.Equals(StringEnhancer.Constants.kNotFoundID.Value))
               {
                 // Rewrite updated string resource in header file
                 HeaderWriter.TestItem = new TestItem()
