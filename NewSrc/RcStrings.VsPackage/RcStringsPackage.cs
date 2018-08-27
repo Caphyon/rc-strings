@@ -421,7 +421,14 @@ namespace Caphyon.RcStrings.VsPackage
       foreach (EnvDTE.Project project in solutionProjects)
         rcFiles.AddRange(GetRcFilesFromProject(project));
 
-      foreach (var rcFile in rcFiles)
+      DetectAndMarkInvalidRcFiles(rcFiles);
+
+      return rcFiles;
+    }
+
+    private void DetectAndMarkInvalidRcFiles(IEnumerable<RcFile> aRcFiles)
+    {
+      foreach (var rcFile in aRcFiles)
       {
         rcFile.IsSelectable = HeaderNamesExtractor
           .ExtractHeaderNames(rcFile.FilePath, CodePageExtractor.GetCodePage(rcFile.FilePath)).Any();
@@ -436,8 +443,6 @@ namespace Caphyon.RcStrings.VsPackage
         rcFile.Image.UriSource = new Uri("Resources/InvalidIcon.png", UriKind.Relative);
         rcFile.Image.EndInit();
       }
-
-      return rcFiles;
     }
 
     private List<RcFile> GetRcFilesFromProject(EnvDTE.Project aProject)
