@@ -18,6 +18,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
+using System.Windows.Media.Imaging;
 
 namespace Caphyon.RcStrings.VsPackage
 {
@@ -420,17 +421,28 @@ namespace Caphyon.RcStrings.VsPackage
       foreach (EnvDTE.Project project in solutionProjects)
         rcFiles.AddRange(GetRcFilesFromProject(project));
 
-      if (aAddMode)
-        rcFiles.RemoveAll((rcFile) => !HeaderNamesExtractor.ExtractHeaderNames(rcFile.FilePath, CodePageExtractor.GetCodePage(rcFile.FilePath)).Any());
-
-      //if (invalidRcs > 0)
-      //{
-      //  VsShellUtilities.ShowMessageBox((IServiceProvider) this,
-      //    $"There are {invalidRcs} RC files without any header included!", "Error", 
-      //    OLEMSGICON.OLEMSGICON_WARNING, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
-      //}
+      DetectAndMarkInvalidRcFiles(rcFiles);
 
       return rcFiles;
+    }
+
+    private void DetectAndMarkInvalidRcFiles(IEnumerable<RcFile> aRcFiles)
+    {
+      foreach (var rcFile in aRcFiles)
+      {
+        rcFile.IsSelectable = HeaderNamesExtractor
+          .ExtractHeaderNames(rcFile.FilePath, CodePageExtractor.GetCodePage(rcFile.FilePath)).Any();
+
+        if (rcFile.IsSelectable)
+        {
+          continue;
+        }
+
+        rcFile.Image = new BitmapImage();
+        rcFile.Image.BeginInit();
+        rcFile.Image.UriSource = new Uri("Resources/InvalidIcon.png", UriKind.Relative);
+        rcFile.Image.EndInit();
+      }
     }
 
     private List<RcFile> GetRcFilesFromProject(EnvDTE.Project aProject)
@@ -508,7 +520,7 @@ namespace Caphyon.RcStrings.VsPackage
           }
           string filePath = projItem.FileCount > 0 ? projItem.FileNames[0] : string.Empty;
           if (Path.GetExtension(filePath).ToLower() == ".rc")
-            outputItems.Add(new RcFile(filePath));
+            outputItems.Add(new RcFile(){FilePath = filePath});
         }
         catch { }
       }

@@ -36,12 +36,12 @@
         <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
       <Grid.RowDefinitions>
-        <RowDefinition Height="30"/>
-        <RowDefinition Height="30"/>
-        <RowDefinition Height="60*"/>
-        <RowDefinition Height="30"/>
-        <RowDefinition Height="30"/>
-        <RowDefinition Height="50"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="2.5*"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="1.5*"/>
       </Grid.RowDefinitions>
 
       <TextBlock Text="Name" Grid.Column="0" 
@@ -73,9 +73,9 @@
                  VerticalAlignment="Top" 
                  HorizontalAlignment="Left" />
       <DockPanel Grid.Column="1" Grid.Row="2" HorizontalAlignment="Stretch" >
-        <TextBox TextWrapping="Wrap"
+        <TextBox x:Name="tbxResourceValue"
+                 TextWrapping="Wrap"
                  Text="{Binding ResourceValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
-                 x:Name="tbxResourceValue"
                  ScrollViewer.VerticalScrollBarVisibility="Auto"/>
       </DockPanel>
 
@@ -94,19 +94,18 @@
                Text="{Binding ReplaceWithCode}" />
 
       <TextBlock Text="RC File" Grid.Row="4" VerticalAlignment="Center"/>
-      <ComboBox IsReadOnly="True" 
-                ItemsSource="{Binding RcFiles}" 
-                DisplayMemberPath="DisplayName" 
+
+      <ComboBox x:Name="RcFilesComboBox"
+                Style="{StaticResource RcFilesComboBoxStyle}"
+                ItemTemplate="{StaticResource RcFilesComboBoxItemTemplate}"
+                IsReadOnly="True" 
+                ItemsSource="{Binding RcFiles}"
                 SelectedItem="{Binding SelectedRcFile}"
                 IsEnabled="{Binding AddMode}"
                 Grid.Row="4" 
                 Grid.Column="1"  
-                VerticalAlignment="Center" >
-        <ComboBox.ItemContainerStyle>
-          <Style>
-            <Setter Property="Control.ToolTip" Value="{Binding FilePath}" />
-          </Style>
-        </ComboBox.ItemContainerStyle>
+                VerticalAlignment="Center" 
+                HorizontalAlignment="Stretch" >
       </ComboBox>
 
       <StackPanel HorizontalAlignment="Right" 
@@ -129,7 +128,7 @@
                 Margin="10,0"
                 Click="btnCancel_Click" 
                 IsCancel="True"/>
-                
+
       </StackPanel>
     </Grid>
   </Grid>
