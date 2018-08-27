@@ -105,8 +105,7 @@
                 Grid.Row="4" 
                 Grid.Column="1"  
                 VerticalAlignment="Center" 
-                HorizontalAlignment="Stretch" 
-                SelectionChanged="RcFilesComboBox_SelectionChanged">
+                HorizontalAlignment="Stretch" >
       </ComboBox>
 
       <StackPanel HorizontalAlignment="Right" 
