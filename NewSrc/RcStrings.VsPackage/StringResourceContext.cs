@@ -65,6 +65,9 @@ namespace Caphyon.RcStrings.VsPackage
       mRCFileContentBuilder.Build();
       mRCFileContent = mRCFileContentBuilder.GetResult();
 
+      mWriteRCPath = Path.GetTempFileName();
+      mRCFileWriter = new RCFileWriter(mRCFileContent, rcFilePath, mShowGhostFile);
+
       var headerNames = HeaderNamesExtractor.ExtractHeaderNames(RcFile.FilePath, mCodePage);
 
       if (!headerNames.Any())
@@ -86,19 +89,8 @@ namespace Caphyon.RcStrings.VsPackage
       mIDGenerator = new IDGenerator();
       mIDGenerator.RemoveExistingFromHeader(mHeaderContent, headerPath);
 
-      mWriteRCPath = Path.GetTempFileName();
       mWriteHeaderPath = Path.GetTempFileName();
-
-      if (!File.Exists(mWriteRCPath))
-        File.Create(mWriteRCPath);
-
-      if (!File.Exists(mWriteHeaderPath))
-        File.Create(mWriteHeaderPath);
-
       mHeaderWriter = new HeaderWriter(headerPath);
-      //RCFileEditor.EditValue("test_name", "edited_test_value", mRCFileContent, mHeaderContent.NameToID);
-
-      mRCFileWriter = new RCFileWriter(mRCFileContent, rcFilePath, mShowGhostFile);
     }
     #endregion
 

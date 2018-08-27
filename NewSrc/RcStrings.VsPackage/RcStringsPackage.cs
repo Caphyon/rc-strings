@@ -336,14 +336,18 @@ namespace Caphyon.RcStrings.VsPackage
               HeaderWriter.SearchedName = stringResource.Name;
               stringResource.Name = dialog.ResourceName;
 
-              // Rewrite updated string resource in header file
-              HeaderWriter.TestItem = new TestItem()
+              // Write in header only if the resource is found in a header
+              if (!stringResource.ID.Value.Equals(StringEnhancer.Constants.kNotFoundID.Value))
               {
-                Name = stringResource.Name,
-                ID = stringResource.ID
-              };
+                // Rewrite updated string resource in header file
+                HeaderWriter.TestItem = new TestItem()
+                {
+                  Name = stringResource.Name,
+                  ID = stringResource.ID
+                };
 
-              context.UpdateHeaderFile((IServiceProvider)this, false);
+                context.UpdateHeaderFile((IServiceProvider) this, false);
+              }
             }
 
             var formattedNewValue = $"\"{new EscapeSequences().Format(dialog.ResourceValue)}\"";
