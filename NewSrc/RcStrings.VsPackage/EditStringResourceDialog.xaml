@@ -1,17 +1,17 @@
-﻿<platformUI:DialogWindow x:Class="Caphyon.RcStrings.VsPackage.EditStringResourceDialog"
+﻿<platformUi:DialogWindow x:Class="Caphyon.RcStrings.VsPackage.EditStringResourceDialog"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Caphyon.RcStrings.VsPackage"
-             xmlns:platformUI="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.14.0"
+             xmlns:platformUi="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Shell.14.0"
              mc:Ignorable="d" 
              Height="300" Width="400"
              Title="Add String Resource"
              WindowStartupLocation="CenterOwner"
              ShowInTaskbar="False"
              Loaded="DialogWindow_Loaded">
-  <platformUI:DialogWindow.Resources>
+  <platformUi:DialogWindow.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Colors.xaml" />
@@ -27,8 +27,10 @@
           </Trigger>
         </Style.Triggers>
       </Style>
+
+      <local:VisibilityConverter x:Key="visibilityConverter"/>
     </ResourceDictionary>
-  </platformUI:DialogWindow.Resources>
+  </platformUi:DialogWindow.Resources>
   <Grid Background="{StaticResource WndowBackground}">
     <Grid Margin="10" Background="{StaticResource WndowBackground}">
       <Grid.ColumnDefinitions>
@@ -37,63 +39,128 @@
       </Grid.ColumnDefinitions>
       <Grid.RowDefinitions>
         <RowDefinition Height="*"/>
+        <RowDefinition Height="Auto"/>
         <RowDefinition Height="*"/>
+        <RowDefinition Height="Auto"/>
         <RowDefinition Height="2.5*"/>
+        <RowDefinition Height="Auto"/>
         <RowDefinition Height="*"/>
         <RowDefinition Height="*"/>
-        <RowDefinition Height="1.5*"/>
+        <RowDefinition Height="1.6*"/>
       </Grid.RowDefinitions>
 
-      <TextBlock Text="Name" Grid.Column="0" 
+      <TextBlock Text="Name" 
+                 Grid.Column="0" 
                  Grid.Row="0" 
                  VerticalAlignment="Center" 
-                 HorizontalAlignment="Left" />
+                 HorizontalAlignment="Left" 
+                 />
       <TextBox Grid.Column="1" 
                Grid.Row="0" 
                VerticalAlignment="Center" 
                HorizontalAlignment="Stretch"
                x:Name="tbxResourceName"
-               Text="{Binding ResourceName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"/>
+               Text="{Binding ResourceName, UpdateSourceTrigger=PropertyChanged, 
+                      Mode=TwoWay, 
+                      ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
+               />
+      <TextBlock Grid.Column="1" 
+                 Grid.Row="1"
+                 VerticalAlignment="Center"
+                 HorizontalAlignment="Stretch"
+                 Foreground="Red"
+                 Text="{Binding ElementName=tbxResourceName, 
+                        Path=(Validation.Errors)[0].ErrorContent}"
+                 Visibility="{Binding ElementName=tbxResourceName,
+                              Path=(Validation.HasError),
+                              Converter={StaticResource visibilityConverter}}"
+                 />
+
 
       <TextBlock Text="Id" 
                  Grid.Column="0" 
-                 Grid.Row="1"
+                 Grid.Row="2"
                  VerticalAlignment="Center" 
-                 HorizontalAlignment="Left" />
+                 HorizontalAlignment="Left"
+                 />
       <TextBox Grid.Column="1" 
-               Grid.Row="1" 
-               VerticalAlignment="Center" 
+               Grid.Row="2" 
+               VerticalAlignment="Center"
                HorizontalAlignment="Stretch"
+               x:Name="tbxResourceId"
                IsEnabled="{Binding AddMode}"
-               Text="{Binding ResourceIdTemp, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"/>
+               Text="{Binding ResourceIdTemp, 
+                      UpdateSourceTrigger=PropertyChanged, 
+                      Mode=TwoWay, 
+                      ValidatesOnDataErrors=True, 
+                      NotifyOnValidationError=True}"
+               />
+
+      <TextBlock Grid.Column="1" 
+                 Grid.Row="3"
+                 VerticalAlignment="Center"
+                 HorizontalAlignment="Stretch"
+                 Foreground="Red"
+                 Text="{Binding ElementName=tbxResourceId, 
+                        Path=(Validation.Errors)[0].ErrorContent}"
+                 Visibility="{Binding ElementName=tbxResourceId,
+                              Path=(Validation.HasError),
+                              Converter={StaticResource visibilityConverter}}"
+                 />
 
       <TextBlock Text="Value" 
                  Grid.Column="0" 
-                 Grid.Row="2"
+                 Grid.Row="4"
+                 Margin="0 7 0 0"
                  VerticalAlignment="Top" 
-                 HorizontalAlignment="Left" />
-      <DockPanel Grid.Column="1" Grid.Row="2" HorizontalAlignment="Stretch" >
+                 HorizontalAlignment="Left" 
+                 />
+      <DockPanel Grid.Column="1" 
+                 Grid.Row="4"
+                 Margin="0 7"
+                 HorizontalAlignment="Stretch">
         <TextBox x:Name="tbxResourceValue"
                  TextWrapping="Wrap"
-                 Text="{Binding ResourceValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
-                 ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+                 Text="{Binding ResourceValue, 
+                        UpdateSourceTrigger=PropertyChanged, 
+                        Mode=TwoWay, ValidatesOnDataErrors=True, 
+                        NotifyOnValidationError=True}"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                 />
       </DockPanel>
+
+      <TextBlock Grid.Column="1" 
+                 Grid.Row="5"
+                 VerticalAlignment="Center"
+                 HorizontalAlignment="Stretch"
+                 Foreground="Red"
+                 Text="{Binding ElementName=tbxResourceValue, 
+                        Path=(Validation.Errors)[0].ErrorContent}"
+                 Visibility="{Binding ElementName=tbxResourceValue,
+                              Path=(Validation.HasError),
+                              Converter={StaticResource visibilityConverter}}"
+                 />
 
       <CheckBox Content="Replace with" 
                 Grid.Column="0" 
-                Grid.Row="3"
+                Grid.Row="6"
                 VerticalAlignment="Center" 
                 HorizontalAlignment="Left" 
                 IsEnabled="{Binding AddMode}"
-                IsChecked="{Binding ReplaceCode}"/>
+                IsChecked="{Binding ReplaceCode}"
+                />
       <TextBox Grid.Column="1" 
-               Grid.Row="3" 
+               Grid.Row="6" 
                VerticalAlignment="Center" 
                HorizontalAlignment="Stretch"
                IsEnabled="{Binding ReplaceCode}"
-               Text="{Binding ReplaceWithCode}" />
+               Text="{Binding ReplaceWithCode}" 
+               />
 
-      <TextBlock Text="RC File" Grid.Row="4" VerticalAlignment="Center"/>
+      <TextBlock Text="RC File" 
+                 Grid.Row="7" 
+                 VerticalAlignment="Center"
+                 />
 
       <ComboBox x:Name="RcFilesComboBox"
                 Style="{StaticResource RcFilesComboBoxStyle}"
@@ -102,34 +169,32 @@
                 ItemsSource="{Binding RcFiles}"
                 SelectedItem="{Binding SelectedRcFile}"
                 IsEnabled="{Binding AddMode}"
-                Grid.Row="4" 
+                Grid.Row="7" 
                 Grid.Column="1"  
                 VerticalAlignment="Center" 
-                HorizontalAlignment="Stretch" >
-      </ComboBox>
+                HorizontalAlignment="Stretch" 
+                />
 
       <StackPanel HorizontalAlignment="Right" 
                   VerticalAlignment="Bottom" 
                   Orientation="Horizontal" 
-                  Grid.Row="5" 
-                  Grid.Column="1"  
-                  Grid.ColumnSpan="1"
-                  Margin="10">
-
+                  Grid.Row="8" 
+                  Grid.Column="1" >
         <Button Content="_Done" 
                 Width="60" 
                 Margin="10,0"
                 Click="btnAdd_Click"
                 x:Name="btnAdd"
-                IsDefault="True"/>
-
+                IsDefault="True"
+                />
         <Button Content="_Cancel" 
                 Width="60" 
-                Margin="10,0"
+                Margin="10 0 0 0"
                 Click="btnCancel_Click" 
-                IsCancel="True"/>
-
+                IsCancel="True"
+                />
       </StackPanel>
     </Grid>
   </Grid>
-</platformUI:DialogWindow>
+</platformUi:DialogWindow>
+
