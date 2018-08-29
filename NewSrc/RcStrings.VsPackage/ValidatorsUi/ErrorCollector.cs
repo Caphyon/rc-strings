@@ -26,7 +26,10 @@ namespace Caphyon.RcStrings.VsPackage
     public void Clear(string aPropertyName)
     {
       if (Errors.ContainsKey(aPropertyName))
+      {
         Errors[aPropertyName].Clear();
+        Errors.Remove(aPropertyName);
+      }
     }
 
     public KeyValuePair<string, List<string>> First()
