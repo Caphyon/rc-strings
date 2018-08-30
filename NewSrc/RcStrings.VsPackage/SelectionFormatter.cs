@@ -13,22 +13,19 @@ namespace Caphyon.RcStrings.VsPackage
   {
     public static string Format(string aEditorSelection)
     {
-      var result = aEditorSelection.Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries);
+      var result = aEditorSelection.Split(new[] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries);
 
       for (var index = 0; index < result.Length; ++index)
       {
-        if (result.Length == 1)
-          result[index] = result[index].Trim(' ');
-        else if (index == 0)
-          result[index] = result[index].Trim(' ').TrimSuffix("\"");
-        else if (index == result.Length - 1)
-          result[index] = result[index].Trim(' ').TrimPrefix("\"");
-        else
-          result[index] = result[index].Trim(' ').TrimPrefix("\"").TrimSuffix("\"");
+        result[index] = FormatLine(result[index].Trim());
       }
 
       aEditorSelection = string.Join("", result);
+      return aEditorSelection;
+    }
 
+    private static string FormatLine(string aEditorSelection)
+    {
       if (aEditorSelection.StartsWith("_T(") && aEditorSelection.EndsWith(")"))
         aEditorSelection = FormatForText(aEditorSelection.Substring(2));
       else if (aEditorSelection.StartsWith("TEXT(") && aEditorSelection.EndsWith(")"))
@@ -54,7 +51,7 @@ namespace Caphyon.RcStrings.VsPackage
     {
       if (aEditorSelection.StartsWith("\""))
           return FormatForQuotes(aEditorSelection);
-      return Format(aEditorSelection);
+      return FormatLine(aEditorSelection);
     }
 
     private static string FormatForR(string aEditorSelection)
@@ -66,7 +63,7 @@ namespace Caphyon.RcStrings.VsPackage
     {
       aEditorSelection = FormatForParanthesis(aEditorSelection);
       aEditorSelection = FormatForQuotes(aEditorSelection);
-      return Format(aEditorSelection);
+      return FormatLine(aEditorSelection);
     }
 
     private static string FormatForParanthesis(string aEditorSelection)
