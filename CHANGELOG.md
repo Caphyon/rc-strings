@@ -1,5 +1,17 @@
 # Version History
 
+### RC Strings 1.5.0
+*August 30, 2018*
+
+Improvements:
+* Add support for editing resource name
+* Disabled RCs are now displayed as well in the RC Files combobox
+* Improve aspect of input validation
+* The `Done` button is now disabled when invalid input is detected
+
+Bugs:
+* String literal formatting did not apply for every line in case of multiline selection
+
 ### RC Strings 1.4.0
 *August 21, 2018*
 
