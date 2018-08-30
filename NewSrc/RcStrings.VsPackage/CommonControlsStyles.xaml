@@ -15,6 +15,32 @@
     <Setter Property="Foreground" Value="{StaticResource ButtonForeground}" />
   </Style>
 
+  <ControlTemplate x:Key="DisabledButtonTemplate" TargetType="{x:Type Button}">
+    <Border x:Name="border" 
+            BorderBrush="{TemplateBinding BorderBrush}" 
+            BorderThickness="{TemplateBinding BorderThickness}" 
+            Background="{StaticResource ButtonBackground}"
+            Opacity="0.3"
+            SnapsToDevicePixels="true">
+      <ContentPresenter x:Name="contentPresenter" 
+                        Focusable="False" 
+                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                        Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" 
+                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+    </Border>
+  </ControlTemplate>
+
+  <Style TargetType="{x:Type Button}" x:Key="DisabledButtonStyle">
+    <Setter Property="Background" Value="{StaticResource ButtonBackground}"/>
+    <Setter Property="Foreground" Value="{StaticResource ButtonForeground}"/>
+    <Style.Triggers>
+      <Trigger Property="IsEnabled" Value="False">
+        <Setter Property="Template" Value="{StaticResource DisabledButtonTemplate}"/>
+      </Trigger>
+    </Style.Triggers>
+  </Style>
+
   <Style TargetType="{x:Type TextBox}" >
     <Setter Property="Background" Value="{StaticResource TextBlockBackground}" />
     <Setter Property="Foreground" Value="{StaticResource TextBlockForeground}" />

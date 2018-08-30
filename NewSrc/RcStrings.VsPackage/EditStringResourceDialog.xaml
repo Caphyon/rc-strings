@@ -189,6 +189,7 @@
                 x:Name="btnAdd"
                 IsDefault="True"
                 IsEnabled="{Binding HasError, Converter={StaticResource inverter}}"
+                Style="{StaticResource DisabledButtonStyle}"
                 />
 
         <Button Content="_Cancel" 
