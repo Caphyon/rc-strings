@@ -81,6 +81,7 @@
     <Compile Include="ValidatorsUi\ErrorCollector.cs" />
     <Compile Include="ValidatorsUi\IdValidatorUi.cs" />
     <Compile Include="ValidatorsUi\NameValidatorUi.cs" />
+    <Compile Include="InverseBooleanConverter.cs" />
     <Compile Include="RcStringsOptionPage.cs">
       <SubType>Component</SubType>
     </Compile>
