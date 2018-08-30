@@ -240,6 +240,7 @@ namespace Caphyon.RcStrings.VsPackage
       get
       {
         CollectErrors(aPropertyName);
+        OnPropertyChanged("HasError");
         return mErrorCollector.HasError(aPropertyName);
       }
     }
