@@ -4,12 +4,12 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using StringEnhancer;
 using Caphyon.RcStrings.VsPackage.Properties;
 using EnvDTE;
 using Microsoft.Build.Evaluation;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using StringEnhancer;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
@@ -113,7 +113,7 @@ namespace Caphyon.RcStrings.VsPackage
     {
       get
       {
-        RcStringsOptionPage optionPage = (RcStringsOptionPage) GetDialogPage(typeof(RcStringsOptionPage));
+        RcStringsOptionPage optionPage = (RcStringsOptionPage)GetDialogPage(typeof(RcStringsOptionPage));
         return optionPage.ShowGhostFile;
       }
     }
@@ -198,7 +198,7 @@ namespace Caphyon.RcStrings.VsPackage
 
     // Get the selected string from active document 
     private void UpdateQueryWord()
-    { 
+    {
       // Detect the query word if nothing is selected.
       if (EditorSelection.IsEmpty)
         mDte.ExecuteCommand("Edit.SelectCurrentWord");
@@ -238,39 +238,40 @@ namespace Caphyon.RcStrings.VsPackage
     // Add new resource string
     private void SetResourceCommandClick(object sender, EventArgs e)
     {
-      List<RcFile> rcFiles = GetRCFilesFromSolution(true);
-      IDGenerator.RandomID = RandomIdOption;
-
-      if (UserSettings != null && mSelectedRcFile == null)
+      try
       {
-        var userSolutionRc = UserSettings.SolutionsSelectedRc
-          .FirstOrDefault(src => src.SolutionName == SolutionName);
+        List<RcFile> rcFiles = GetRCFilesFromSolution(true);
+        IDGenerator.RandomID = RandomIdOption;
 
-        if (userSolutionRc != null)
+        if (UserSettings != null && mSelectedRcFile == null)
         {
-          var currentRcFile = rcFiles.FirstOrDefault(
-            rcf => rcf.FileName == userSolutionRc.SelectedRc &&
-            rcf.Project.ProjectName == userSolutionRc.ProjectName);
-          mSelectedRcFile = currentRcFile;
-          mReplaceWithCodeFormated = HandleEmptyReplaceWithField(userSolutionRc.ReplaceWith);
-          mReplaceString = userSolutionRc.IsReplacingWith;
+          var userSolutionRc = UserSettings.SolutionsSelectedRc
+            .FirstOrDefault(src => src.SolutionName == SolutionName);
+
+          if (userSolutionRc != null)
+          {
+            var currentRcFile = rcFiles.FirstOrDefault(
+              rcf => rcf.FileName == userSolutionRc.SelectedRc &&
+              rcf.Project.ProjectName == userSolutionRc.ProjectName);
+            mSelectedRcFile = currentRcFile;
+            mReplaceWithCodeFormated = HandleEmptyReplaceWithField(userSolutionRc.ReplaceWith);
+            mReplaceString = userSolutionRc.IsReplacingWith;
+          }
         }
-      }
 
-      if (rcFiles.Count == 0)
-        throw new Exception("No RC files detected");
+        if (rcFiles.Count == 0)
+          throw new Exception("No RC files detected");
 
-      // Change the name of the dialog
-      EditStringResourceDialog dialog = new EditStringResourceDialog(this, rcFiles, mSelectedRcFile, 
-        mSelectedWord, mReplaceString, mReplaceWithCodeFormated, ShowGhostFile, IDUniquenessPerProject)
-      {
-        Owner = mDteWindow
-      };
-
-      if (dialog.ShowModal() == true)
-      {
-        try
+        // Change the name of the dialog
+        EditStringResourceDialog dialog = new EditStringResourceDialog(this, rcFiles, mSelectedRcFile,
+          mSelectedWord, mReplaceString, mReplaceWithCodeFormated, ShowGhostFile, IDUniquenessPerProject)
         {
+          Owner = mDteWindow
+        };
+
+        if (dialog.ShowModal() == true)
+        {
+
           // Save added string resource to RC file
 
           StringResourceContext resourceContext = dialog.ResourceContext;
@@ -283,18 +284,19 @@ namespace Caphyon.RcStrings.VsPackage
           // Replace selected text
           if (dialog.ReplaceCode)
             ReplaceSelectedCode(dialog.ReplaceWithCode);
-        }
-        catch (Exception exception)
-        {
-          VsShellUtilities.ShowMessageBox((IServiceProvider)this, exception.Message, "Error",
-            OLEMSGICON.OLEMSGICON_CRITICAL, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
-        }
-      }
 
-      // Save current values
-      mReplaceString = dialog.ReplaceCode;
-      mReplaceWithCodeFormated = HandleEmptyReplaceWithField(dialog.ReplaceStringCodeFormated);
-      mSelectedRcFile = dialog.SelectedRcFile;
+        }
+
+        // Save current values
+        mReplaceString = dialog.ReplaceCode;
+        mReplaceWithCodeFormated = HandleEmptyReplaceWithField(dialog.ReplaceStringCodeFormated);
+        mSelectedRcFile = dialog.SelectedRcFile;
+      }
+      catch (Exception exception)
+      {
+        VsShellUtilities.ShowMessageBox((IServiceProvider)this, exception.Message, "Error",
+          OLEMSGICON.OLEMSGICON_CRITICAL, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+      }
     }
 
     private string HandleEmptyReplaceWithField(string replaceString) =>
@@ -318,7 +320,7 @@ namespace Caphyon.RcStrings.VsPackage
         RCFileItem stringResource = result.Item1;
         StringResourceContext context = result.Item2;
 
-        EditStringResourceDialog dialog = new EditStringResourceDialog( this, new List<RcFile>() { result.Item2.RcFile }, result.Item2.RcFile, 
+        EditStringResourceDialog dialog = new EditStringResourceDialog(this, new List<RcFile>() { result.Item2.RcFile }, result.Item2.RcFile,
           mSelectedWord, mReplaceString, mReplaceWithCodeFormated, ShowGhostFile, IDUniquenessPerProject, stringResource)
         {
           Owner = mDteWindow
@@ -344,7 +346,7 @@ namespace Caphyon.RcStrings.VsPackage
                   ID = stringResource.ID
                 };
 
-                context.UpdateHeaderFile((IServiceProvider) this, false);
+                context.UpdateHeaderFile((IServiceProvider)this, false);
               }
             }
 
@@ -522,7 +524,7 @@ namespace Caphyon.RcStrings.VsPackage
           }
           string filePath = projItem.FileCount > 0 ? projItem.FileNames[0] : string.Empty;
           if (Path.GetExtension(filePath).ToLower() == ".rc")
-            outputItems.Add(new RcFile(){FilePath = filePath});
+            outputItems.Add(new RcFile() { FilePath = filePath });
         }
         catch { }
       }
