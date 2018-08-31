@@ -177,6 +177,35 @@
                 HorizontalAlignment="Stretch" 
                 />
 
+      <Button x:Name="SettingsButton"
+              Width="15" Height="15"
+              HorizontalAlignment="Left"
+              VerticalAlignment="Bottom"
+              Margin="0 0 0 3"
+              Grid.Column ="0" Grid.Row="8"
+              Click="SettingsButton_Click">
+        <Button.Template>
+          <ControlTemplate TargetType="{x:Type Button}">
+            <Grid>
+              <ContentPresenter />
+              <Grid x:Name="StatusPanel" Background="White" Opacity="0"/>
+            </Grid>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="true">
+                <Setter TargetName="StatusPanel" Property="Opacity" Value="0.1"/>
+              </Trigger>
+              <Trigger Property="IsPressed" Value="true">
+                <Setter TargetName="StatusPanel" Property="Opacity" Value="0.3"/>
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Button.Template>
+        <Button.Content>
+          <Image Source="pack://application:,,,/RcStrings;component/Resources/gear-settings2.png" 
+                   Width ="15" Height="15" />
+        </Button.Content>
+      </Button>
+
       <StackPanel HorizontalAlignment="Right" 
                   VerticalAlignment="Bottom" 
                   Orientation="Horizontal" 

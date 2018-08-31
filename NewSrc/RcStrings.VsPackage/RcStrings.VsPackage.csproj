@@ -223,6 +223,9 @@
   <ItemGroup>
     <Resource Include="Resources\InvalidIcon.png" />
     <Resource Include="Resources\CheckedIcon.png" />
+    <Resource Include="Resources\settings.png" />
+    <Content Include="Resources\gear-settings %281%29.png" />
+    <Resource Include="Resources\gear-settings2.png" />
     <Content Include="Resources\LICENSE.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
@@ -230,6 +233,7 @@
     <Content Include="Resources\logo.ico">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <Content Include="Resources\options.png" />
     <Content Include="Resources\preview.png">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>

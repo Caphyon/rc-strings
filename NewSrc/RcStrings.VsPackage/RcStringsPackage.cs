@@ -261,8 +261,8 @@ namespace Caphyon.RcStrings.VsPackage
         throw new Exception("No RC files detected");
 
       // Change the name of the dialog
-      EditStringResourceDialog dialog = new EditStringResourceDialog((IServiceProvider)this, rcFiles,
-        mSelectedRcFile, mSelectedWord, mReplaceString, mReplaceWithCodeFormated, ShowGhostFile, IDUniquenessPerProject)
+      EditStringResourceDialog dialog = new EditStringResourceDialog(this, rcFiles, mSelectedRcFile, 
+        mSelectedWord, mReplaceString, mReplaceWithCodeFormated, ShowGhostFile, IDUniquenessPerProject)
       {
         Owner = mDteWindow
       };
@@ -318,10 +318,8 @@ namespace Caphyon.RcStrings.VsPackage
         RCFileItem stringResource = result.Item1;
         StringResourceContext context = result.Item2;
 
-        EditStringResourceDialog dialog = new EditStringResourceDialog(
-          (IServiceProvider)this, new List<RcFile>() { result.Item2.RcFile },
-          result.Item2.RcFile, mSelectedWord,
-          mReplaceString, mReplaceWithCodeFormated, ShowGhostFile, IDUniquenessPerProject, stringResource)
+        EditStringResourceDialog dialog = new EditStringResourceDialog( this, new List<RcFile>() { result.Item2.RcFile }, result.Item2.RcFile, 
+          mSelectedWord, mReplaceString, mReplaceWithCodeFormated, ShowGhostFile, IDUniquenessPerProject, stringResource)
         {
           Owner = mDteWindow
         };

@@ -27,7 +27,7 @@ namespace Caphyon.RcStrings.VsPackage
     private string mResourceIdTemp;
     private string mInitialStringValue;
     private string mInitialStringName;
-    private IServiceProvider mServiceProvider;
+    private Package mPackage;
 
     #endregion
 
@@ -82,7 +82,7 @@ namespace Caphyon.RcStrings.VsPackage
         }
         catch
         {
-          VsShellUtilities.ShowMessageBox(mServiceProvider, "Could not retrieve resource context!", "Error",
+          VsShellUtilities.ShowMessageBox(mPackage, "Could not retrieve resource context!", "Error",
             OLEMSGICON.OLEMSGICON_INFO, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
           return null;
         }
@@ -133,13 +133,13 @@ namespace Caphyon.RcStrings.VsPackage
 
     #region Ctor
 
-    public EditStringResourceDialog(IServiceProvider aServiceProvider, List<RcFile> aRcFiles, RcFile aSelectedRcFile,
+    public EditStringResourceDialog(Package aServiceProvider, List<RcFile> aRcFiles, RcFile aSelectedRcFile,
       string aSelectedText, bool aReplaceCode, string aReplaceWithCodeFormated, bool aShowGhostFile, bool aUniqueIdPerProject, RCFileItem aStringResource = null)
     {
       InitializeComponent();
       DataContext = this;
       mRcFilesContexts = new Dictionary<RcFile, StringResourceContext>();
-      mServiceProvider = aServiceProvider;
+      mPackage = aServiceProvider;
       this.ShowGhostFile = aShowGhostFile;
       this.UniqueIdPerProject = aUniqueIdPerProject;
       this.AddMode = (aStringResource == null);
@@ -194,7 +194,7 @@ namespace Caphyon.RcStrings.VsPackage
       }
       if (HasError)
       {
-        VsShellUtilities.ShowMessageBox(mServiceProvider, mErrorCollector.First().Value.First(), "Invalid input",
+        VsShellUtilities.ShowMessageBox(mPackage, mErrorCollector.First().Value.First(), "Invalid input",
           OLEMSGICON.OLEMSGICON_CRITICAL, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
         return;
       }
@@ -268,5 +268,10 @@ namespace Caphyon.RcStrings.VsPackage
     }
 
     #endregion
+
+    private void SettingsButton_Click(object sender, RoutedEventArgs e)
+    {
+      mPackage.ShowOptionPage(typeof(RcStringsOptionPage));
+    }
   }
 }
