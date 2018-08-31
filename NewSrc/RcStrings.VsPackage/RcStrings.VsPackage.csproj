@@ -104,7 +104,6 @@
     <Compile Include="ValidatorsUi\ValueValidatorUi.cs" />
     <Compile Include="VCppProject.cs" />
     <Compile Include="VisibilityConverter.cs" />
-    <Compile Include="Vs15SolutionLoader.cs" />
     <Compile Include="VsColor.cs" />
   </ItemGroup>
   <ItemGroup>
