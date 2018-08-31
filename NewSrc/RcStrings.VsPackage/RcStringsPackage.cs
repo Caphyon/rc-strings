@@ -59,15 +59,7 @@ namespace Caphyon.RcStrings.VsPackage
     private const int kIdStringResourcesMenuItem = 0x1100;
     private const string kCppProjectKind = "{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}";
     private const string kUnloadedProjectKind = "{67294A52-A4F0-11D2-AA88-00C04F688DDE}";
-    private string kVs15Version = "2017";
-    private Dictionary<string, string> mVsVersions = new Dictionary<string, string>
-    {
-      {"11.0", "2010"},
-      {"12.0", "2012"},
-      {"13.0", "2013"},
-      {"14.0", "2015"},
-      {"15.0", "2017"}
-    };
+
     #endregion
 
     #region Members
@@ -146,14 +138,6 @@ namespace Caphyon.RcStrings.VsPackage
 
       mDte = (EnvDTE.DTE)GetService(typeof(EnvDTE.DTE));
       mDteWindow = (System.Windows.Window)HwndSource.FromHwnd((IntPtr)mDte.MainWindow.HWnd).RootVisual;
-
-
-      mVsVersions.TryGetValue(mDte.Version, out string version);
-      if (kVs15Version == version)
-      {
-        Vs15SolutionLoader solutionLoader = new Vs15SolutionLoader(this);
-        solutionLoader.EnsureSolutionProjectsAreLoaded();
-      }
 
       var mSolutionEvent = mDte.Events.SolutionEvents;
       mSolutionEvent.BeforeClosing += SolutionEvent_BeforeClosing;
